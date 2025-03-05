@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GreenSpace.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GreenSpace.Infrastructure.FluentAPIs
+namespace GreenSpace.Infrastructure.FluentAPIs;
+
+public class ServiceTypeConfiguration : IEntityTypeConfiguration<ServiceType>
 {
-    internal class ServiceTypeConfiguration
+    public void Configure(EntityTypeBuilder<ServiceType> builder)
     {
+        builder.HasKey(e => e.ServiceTypeId);
+        builder.Property(e => e.ServiceTypeId).ValueGeneratedNever();
+        builder.Property(e => e.Name).HasMaxLength(100);
     }
 }

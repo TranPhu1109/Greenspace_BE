@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GreenSpace.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GreenSpace.Infrastructure.FluentAPIs
 {
-    internal class ImageConfiguration
+    public class ImageConfiguration : IEntityTypeConfiguration<Image>
     {
+        public void Configure(EntityTypeBuilder<Image> builder)
+        {
+            builder.HasKey(e => e.ImageId);
+
+        }
     }
 }

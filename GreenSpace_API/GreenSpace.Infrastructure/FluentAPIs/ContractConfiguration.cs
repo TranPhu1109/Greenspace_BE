@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GreenSpace.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using static Dapper.SqlMapper;
 
-namespace GreenSpace.Infrastructure.FluentAPIs
+namespace GreenSpace.Infrastructure.FluentAPIs;
+
+public class ContractConfiguration : IEntityTypeConfiguration<Contract>
 {
-    internal class ContractConfiguration
+    public void Configure(EntityTypeBuilder<Contract> builder)
     {
+        builder.HasKey(e => e.ContractId);
+        builder.Property(e => e.ContractId).ValueGeneratedNever();
+        builder.HasOne(d => d.User).WithMany(p => p.Contracts)
+            .HasForeignKey(d => d.UserId);
     }
 }

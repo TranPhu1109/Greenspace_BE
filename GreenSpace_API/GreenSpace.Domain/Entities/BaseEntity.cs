@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 namespace GreenSpace.Domain.Entities;
 public abstract class BaseEntity
 {
-    [Key]
-    public Guid Id { get; set; } = Guid.NewGuid();
     public DateTime CreationDate { get; set; } = DateTime.Now;
     public Guid? CreatedBy { get; set; } = Guid.Empty;
     public DateTime? ModificationDate { get; set; } = null;

@@ -51,7 +51,7 @@ namespace GreenSpace.Infrastructure
 
         public virtual DbSet<ServiceType> ServiceTypes { get; set; }
 
-        public virtual DbSet<Tasks> Tasks { get; set; }
+        public virtual DbSet<WorkTask> Tasks { get; set; }
 
         public virtual DbSet<User> Users { get; set; }
 

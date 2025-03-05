@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GreenSpace.Domain.Entities;
 
-public partial class Bill
+public partial class Bill : BaseEntity
 {
     public int BillId { get; set; }
 

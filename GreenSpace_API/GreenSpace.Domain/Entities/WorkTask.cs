@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GreenSpace.Domain.Entities;
 
-public partial class Tasks
+public partial class WorkTask
 {
     public int ServiceOrderId { get; set; }
 

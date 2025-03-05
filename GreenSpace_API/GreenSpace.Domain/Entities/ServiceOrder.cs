@@ -45,5 +45,5 @@ public partial class ServiceOrder
 
     public virtual ServiceType? ServiceType { get; set; }
 
-    public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
+    public virtual ICollection<WorkTask> WorkTask { get; set; } = new List<WorkTask>();
 }

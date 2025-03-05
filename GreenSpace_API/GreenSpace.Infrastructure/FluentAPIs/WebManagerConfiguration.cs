@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GreenSpace.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GreenSpace.Infrastructure.FluentAPIs
+namespace GreenSpace.Infrastructure.FluentAPIs;
+
+public class WebManagerConfiguration : IEntityTypeConfiguration<WebManager>
 {
-    internal class WebManagerConfiguration
+    public void Configure(EntityTypeBuilder<WebManager> builder)
     {
+        builder.HasNoKey();
     }
 }

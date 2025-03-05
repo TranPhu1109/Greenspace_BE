@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GreenSpace.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace GreenSpace.Infrastructure.FluentAPIs
+namespace GreenSpace.Infrastructure.FluentAPIs;
+
+public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
 {
-    internal class PaymentConfiguration
+    public void Configure(EntityTypeBuilder<Payment> builder)
     {
+        builder.HasKey(e => e.PaymentId);
+        builder.Property(e => e.PaymentId).ValueGeneratedNever();
+        builder.Property(e => e.PaymentMethod).HasMaxLength(100);
     }
 }

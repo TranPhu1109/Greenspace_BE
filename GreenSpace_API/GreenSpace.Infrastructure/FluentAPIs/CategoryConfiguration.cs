@@ -14,10 +14,7 @@ namespace GreenSpace.Infrastructure.FluentAPIs
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.HasKey(e => e.CategoryId).HasName("PK__Categori__19093A0B67B98BC0");
-
-            builder.Property(e => e.CategoryId).ValueGeneratedNever();
-            builder.Property(e => e.Name).HasMaxLength(100);
+            builder.HasKey(e => e.CategoryId);
         }
     }
 }
