@@ -8,7 +8,7 @@ public class BlogConfiguration : IEntityTypeConfiguration<Blog>
 {
     public void Configure(EntityTypeBuilder<Blog> builder)
     {
-        builder.HasKey(e => e.BlogId);
+        builder.HasKey(e => e.Id);
         builder.HasOne(d => d.Image).WithMany(p => p.Blogs).HasForeignKey(d => d.ImageId);
     }
 }

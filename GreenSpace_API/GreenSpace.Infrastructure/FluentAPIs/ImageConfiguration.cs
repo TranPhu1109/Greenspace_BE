@@ -8,8 +8,7 @@ namespace GreenSpace.Infrastructure.FluentAPIs
     {
         public void Configure(EntityTypeBuilder<Image> builder)
         {
-            builder.HasKey(e => e.ImageId);
-
+            builder.HasKey(e => e.Id);
         }
     }
 }

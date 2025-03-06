@@ -9,7 +9,7 @@ public class OrderDetailConfiguration : IEntityTypeConfiguration<OrderDetail>
     public void Configure(EntityTypeBuilder<OrderDetail> builder)
     {
         builder.HasKey(e => new { e.OrderId, e.ProductId });
-        builder.HasOne(d => d.Order).WithMany(p => p.OrderDetails).HasForeignKey(d => d.OrderId);
-        builder.HasOne(d => d.Product).WithMany(p => p.OrderDetails).HasForeignKey(d => d.ProductId);
+        builder.HasOne(d => d.Order).WithMany(p => p.OrderDetails).HasForeignKey(d => d.OrderId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(d => d.Product).WithMany(p => p.OrderDetails).HasForeignKey(d => d.ProductId).OnDelete(DeleteBehavior.Restrict);
     }
 }

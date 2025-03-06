@@ -14,7 +14,7 @@ namespace GreenSpace.Infrastructure.FluentAPIs
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.HasKey(e => e.CategoryId);
+            builder.HasKey(e => e.Id);
         }
     }
 }

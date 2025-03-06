@@ -1,33 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace GreenSpace.Domain.Entities;
 
-namespace GreenSpace.Domain.Entities;
-
-public partial class Order
+public class Order : BaseEntity
 {
-    public int OrderId { get; set; }
+    public Guid UserId { get; set; }
 
-    public Guid? UserId { get; set; }
+    public DateTime OrderDate { get; set; }
 
-    public DateTime? OrderDate { get; set; }
+    public double? TotalAmount { get; set; } = default!;
 
-    public double? TotalAmount { get; set; }
+    public Guid PaymentId { get; set; } = default!;
 
-    public int? PaymentId { get; set; }
-
-    public int? Status { get; set; }
+    public int Status { get; set; }
 
     public int? Ship { get; set; }
 
-    public string? Address { get; set; }
+    public string Address { get; set; } = string.Empty;
 
-    public string? Phone { get; set; }
+    public string? Phone { get; set; } = default!;
 
-    public virtual ICollection<Bill> Bills { get; set; } = new List<Bill>();
+    public ICollection<Bill> Bills { get; set; } = new List<Bill>();
 
-    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+    public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
-    public virtual Payment? Payment { get; set; }
+    public Payment? Payment { get; set; }
 
-    public virtual User? User { get; set; }
+    public User User { get; set; } = default!;
 }

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace GreenSpace.Domain.Entities;
 
-namespace GreenSpace.Domain.Entities;
-
-public partial class Document
+public class Document :BaseEntity
 {
-    public int DocumentId { get; set; }
-
-    public string? Document1 { get; set; }
+    public string Document1 { get; set; } = string.Empty;
 }

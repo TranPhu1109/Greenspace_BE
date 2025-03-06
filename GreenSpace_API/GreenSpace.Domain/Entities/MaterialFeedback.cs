@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace GreenSpace.Domain.Entities;
 
-namespace GreenSpace.Domain.Entities;
-
-public partial class MaterialFeedback
+public class MaterialFeedback :BaseEntity
 {
     public Guid UserId { get; set; }
 
-    public int ProductId { get; set; }
+    public Guid ProductId { get; set; }
 
-    public int? Rating { get; set; }
+    public int? Rating { get; set; } = null;
 
-    public string? Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
-    public virtual Material Product { get; set; } = null!;
+    public Material Product { get; set; } = null!;
 
-    public virtual User User { get; set; } = null!;
+    public User User { get; set; } = null!;
 }

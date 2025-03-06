@@ -8,11 +8,7 @@ public class ServiceOderConfiguration : IEntityTypeConfiguration<ServiceOrder>
 {
     public void Configure(EntityTypeBuilder<ServiceOrder> builder)
     {
-        builder.HasKey(e => e.ServiceOrderId);
-        builder.Property(e => e.ServiceOrderId).ValueGeneratedNever();
-        builder.Property(e => e.Address).HasMaxLength(200);
-        builder.Property(e => e.CusPhone).HasMaxLength(13);
-        builder.Property(e => e.Description);
+        builder.HasKey(e => e.Id);
         builder.HasOne(d => d.ServiceType).WithMany(p => p.ServiceOrders).HasForeignKey(d => d.ServiceTypeId);
     }
 }

@@ -10,8 +10,7 @@ public class ContractConfiguration : IEntityTypeConfiguration<Contract>
 {
     public void Configure(EntityTypeBuilder<Contract> builder)
     {
-        builder.HasKey(e => e.ContractId);
-        builder.Property(e => e.ContractId).ValueGeneratedNever();
+        builder.HasKey(e => e.Id);
         builder.HasOne(d => d.User).WithMany(p => p.Contracts)
             .HasForeignKey(d => d.UserId);
     }

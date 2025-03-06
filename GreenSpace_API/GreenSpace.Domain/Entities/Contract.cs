@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace GreenSpace.Domain.Entities;
 
-namespace GreenSpace.Domain.Entities;
-
-public partial class Contract
+public class Contract : BaseEntity
 {
-    public int ContractId { get; set; }
+    public Guid UserId { get; set; } 
 
-    public Guid? UserId { get; set; }
+    public string Description { get; set; } = string.Empty;
 
-    public string? Description { get; set; }
-
-    public virtual User? User { get; set; }
+    public User User { get; set; } = default!;
 }

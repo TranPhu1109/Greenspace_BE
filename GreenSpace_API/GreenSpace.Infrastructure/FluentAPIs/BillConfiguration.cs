@@ -8,9 +8,9 @@ public class BillConfiguration : IEntityTypeConfiguration<Bill>
 {
     public void Configure(EntityTypeBuilder<Bill> builder)
     {
-        builder.HasKey(e => e.BillId);
-        builder.HasOne(d => d.Order).WithMany(p => p.Bills).HasForeignKey(d => d.OrderId);
-        builder.HasOne(d => d.Payment).WithMany(p => p.Bills).HasForeignKey(d => d.PaymentId);
-        builder.HasOne(d => d.ServiceOrder).WithMany(p => p.Bills).HasForeignKey(d => d.ServiceOrderId);
+        builder.HasKey(e => e.Id);
+        builder.HasOne(d => d.Order).WithMany(p => p.Bills).HasForeignKey(d => d.OrderId).OnDelete(DeleteBehavior.NoAction);
+        builder.HasOne(d => d.Payment).WithMany(p => p.Bills).HasForeignKey(d => d.PaymentId).OnDelete(DeleteBehavior.NoAction);
+        builder.HasOne(d => d.ServiceOrder).WithMany(p => p.Bills).HasForeignKey(d => d.ServiceOrderId).OnDelete(DeleteBehavior.NoAction);
     }
 }

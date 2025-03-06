@@ -8,8 +8,7 @@ namespace GreenSpace.Infrastructure.FluentAPIs
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
-            builder.HasKey(e => e.RoleId);
-            builder.Property(e => e.RoleId).ValueGeneratedNever();
+            builder.HasKey(e => e.Id);
             builder.Property(e => e.RoleName);
         }
     }

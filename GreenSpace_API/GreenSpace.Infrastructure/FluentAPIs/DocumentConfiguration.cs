@@ -8,8 +8,7 @@ namespace GreenSpace.Infrastructure.FluentAPIs
     {
         public void Configure(EntityTypeBuilder<Document> builder)
         {
-            builder.HasKey(e => e.DocumentId);
-            builder.Property(e => e.DocumentId).ValueGeneratedNever();
+            builder.HasKey(e => e.Id);
             builder.Property(e => e.Document1);
         }
     }

@@ -1,41 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace GreenSpace.Domain.Entities;
 
-namespace GreenSpace.Domain.Entities;
-
-public partial class Material
+public class Material :BaseEntity
 {
-    public int ProductId { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-    public string? Name { get; set; }
+    public Guid CategoryId { get; set; }
 
-    public int? CategoryId { get; set; }
+    public double Price { get; set; } 
 
-    public double? Price { get; set; }
+    public int Stock { get; set; }
 
-    public int? Stock { get; set; }
+    public string Description { get; set; } = string.Empty;
 
-    public string? Description { get; set; }
+    public Guid ImageId { get; set; }
 
-    public int? ImageId { get; set; }
+    public int Size { get; set; }
 
-    public bool? IsDelete { get; set; }
+    public Category Category { get; set; } = default!;
 
-    public int? Size { get; set; }
+    public Image Image { get; set; } = default!;
 
-    public DateTime? CreatedAt { get; set; }
+    public ICollection<MaterialFeedback> MaterialFeedbacks { get; set; } = new List<MaterialFeedback>();
 
-    public DateTime? UpdatedAt { get; set; }
+    public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
-    public virtual Category? Category { get; set; }
+    public ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
 
-    public virtual Image? Image { get; set; }
-
-    public virtual ICollection<MaterialFeedback> MaterialFeedbacks { get; set; } = new List<MaterialFeedback>();
-
-    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-
-    public virtual ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
-
-    public virtual ICollection<ServiceOrderDetail> ServiceOrderDetails { get; set; } = new List<ServiceOrderDetail>();
+    public ICollection<ServiceOrderDetail> ServiceOrderDetails { get; set; } = new List<ServiceOrderDetail>();
 }

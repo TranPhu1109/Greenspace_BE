@@ -3,21 +3,21 @@ using System.Collections.Generic;
 
 namespace GreenSpace.Domain.Entities;
 
-public partial class RefreshToken
+public class RefreshToken 
 {
     public Guid UserId { get; set; }
 
     public string Token { get; set; } = null!;
 
-    public string? JwtId { get; set; }
+    public string JwtId { get; set; } = default!;
 
-    public bool? IsUsed { get; set; }
+    public bool IsUsed { get; set; }
 
-    public bool? IsRevoked { get; set; }
+    public bool IsRevoked { get; set; }
 
-    public DateTime? IssuedAt { get; set; }
+    public DateTime IssuedAt { get; set; } = DateTime.Now;
 
-    public DateTime? ExpiredAt { get; set; }
+    public DateTime? ExpiredAt { get; set; } = default!;
 
-    public virtual User User { get; set; } = null!;
+    public User User { get; set; } = null!;
 }

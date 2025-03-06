@@ -1,49 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace GreenSpace.Domain.Entities;
 
-namespace GreenSpace.Domain.Entities;
-
-public partial class ServiceOrder
+public class ServiceOrder :BaseEntity
 {
-    public int ServiceOrderId { get; set; }
+    public Guid UserId { get; set; }
 
-    public Guid? UserId { get; set; }
+    public Guid DesignIdeaId { get; set; }
 
-    public int? DesignIdeaId { get; set; }
+    public string Address { get; set; } = string.Empty;
 
-    public string? Address { get; set; }
+    public string CusPhone { get; set; } = string.Empty;
 
-    public string? CusPhone { get; set; }
+    public double EreaSize { get; set; } = default!;
 
-    public double? EreaSize { get; set; }
+    public double TotalCost { get; set; } = default!;
 
-    public double? TotalCost { get; set; }
+    public Guid PaymentId { get; set; }
 
-    public int? PaymentId { get; set; }
+    public Guid ServiceTypeId { get; set; }
 
-    public int? ServiceTypeId { get; set; }
+    public bool IsCustom { get; set; } = false;
 
-    public bool? IsCustom { get; set; }
+    public double DesignPrice { get; set; } = default!;
 
-    public double? DesignPrice { get; set; }
+    public double MasterPrice { get; set; } = default!;
 
-    public double? MasterPrice { get; set; }
+    public string Description { get; set; } = string.Empty;
 
-    public string? Description { get; set; }
+    public Guid ImageId { get; set; } = default!;
 
-    public int? ImageId { get; set; }
+    public int Status { get; set; } = default;
+    public User User { get; set; } = default!;
+    public ICollection<Bill> Bills { get; set; } = new List<Bill>();
 
-    public DateTime? CreatedAt { get; set; }
+    public ICollection<ServiceOrderDetail> ServiceOrderDetails { get; set; } = new List<ServiceOrderDetail>();
 
-    public DateTime? UpdatedAt { get; set; }
+    public ServiceType ServiceType { get; set; } = default!;
 
-    public int? Status { get; set; }
-
-    public virtual ICollection<Bill> Bills { get; set; } = new List<Bill>();
-
-    public virtual ICollection<ServiceOrderDetail> ServiceOrderDetails { get; set; } = new List<ServiceOrderDetail>();
-
-    public virtual ServiceType? ServiceType { get; set; }
-
-    public virtual ICollection<WorkTask> WorkTask { get; set; } = new List<WorkTask>();
+    public ICollection<WorkTask> WorkTask { get; set; } = new List<WorkTask>();
 }

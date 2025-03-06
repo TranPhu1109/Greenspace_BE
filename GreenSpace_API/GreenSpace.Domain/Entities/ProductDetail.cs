@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace GreenSpace.Domain.Entities;
 
-namespace GreenSpace.Domain.Entities;
-
-public partial class ProductDetail
+public class ProductDetail : BaseEntity
 {
-    public int ProductId { get; set; }
+    public Guid ProductId { get; set; }
 
-    public int DesignIdeaId { get; set; }
+    public Guid DesignIdeaId { get; set; }
 
-    public int? Quantity { get; set; }
+    public int Quantity { get; set; }
 
-    public double? Price { get; set; }
+    public double Price { get; set; }
 
-    public virtual DesignIdea DesignIdea { get; set; } = null!;
+    public DesignIdea DesignIdea { get; set; } = null!;
 
-    public virtual Material Product { get; set; } = null!;
+    public Material Product { get; set; } = null!;
 }

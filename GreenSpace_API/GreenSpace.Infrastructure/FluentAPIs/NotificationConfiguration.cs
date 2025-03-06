@@ -14,10 +14,8 @@ namespace GreenSpace.Infrastructure.FluentAPIs
     {
         public void Configure(EntityTypeBuilder<Notification> builder)
         {
-            builder.HasKey(e => e.NotificationId);
-            builder.Property(e => e.NotificationId).ValueGeneratedNever();
-            builder.Property(e => e.Message).HasMaxLength(200);
-            builder.Property(e => e.Title).HasMaxLength(100);
+            builder.HasKey(e => e.Id);
+            builder.Property(e => e.Id).ValueGeneratedOnAdd();
             builder.HasOne(d => d.User).WithMany(p => p.Notifications).HasForeignKey(d => d.UserId);
         }
     }

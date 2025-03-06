@@ -1,50 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GreenSpace.Domain.Entities
 {
     public class User : BaseEntity
     {
-        [Key]
-        public Guid UserId { get; set; }
+        public string? Name { get; set; } = string.Empty;
 
-        public string? Name { get; set; }
-
-        public string? Email { get; set; }
+        public string? Email { get; set; } = string.Empty;
 
         public string? Password { get; set; }
 
-        public int? RoleId { get; set; }
+        public Guid RoleId { get; set; }
 
-        public string? Phone { get; set; }
+        public string? Phone { get; set; } = default!;
 
-        public string? Address { get; set; }
-
-        public bool? Status { get; set; }
+        public string? Address { get; set; } = string.Empty;
 
         public string? AvatarUrl { get; set; }
 
-        public virtual ICollection<Contract> Contracts { get; set; } = new List<Contract>();
+        public ICollection<Contract> Contracts { get; set; } = new List<Contract>();
 
-        public virtual ICollection<MaterialFeedback> MaterialFeedbacks { get; set; } = new List<MaterialFeedback>();
+        public ICollection<MaterialFeedback> MaterialFeedbacks { get; set; } = new List<MaterialFeedback>();
 
-        public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
-        public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
 
-        public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+        public ICollection<ServiceOrder> ServiceOrders { get; set; } = new List<ServiceOrder>();
 
-        public virtual Role? Role { get; set; }
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 
-        public virtual ICollection<ServiceFeedback> ServiceFeedbacks { get; set; } = new List<ServiceFeedback>();
+        public Role Role { get; set; } = default!;
 
-        public virtual ICollection<WorkTask> WorkTask { get; set; } = new List<WorkTask>();
+        public ICollection<ServiceFeedback> ServiceFeedbacks { get; set; } = new List<ServiceFeedback>();
 
-        public virtual UsersWallet? UsersWallet { get; set; }
+        public ICollection<WorkTask> WorkTask { get; set; } = new List<WorkTask>();
+
+        public Guid WalletId { get; set; }
+        public UsersWallet UsersWallet { get; set; } = default!;
 
     }
 }

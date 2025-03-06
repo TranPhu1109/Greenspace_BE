@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace GreenSpace.Domain.Entities;
 
-namespace GreenSpace.Domain.Entities;
-
-public partial class ServiceType
+public class ServiceType : BaseEntity
 {
-    public int ServiceTypeId { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-    public string? Name { get; set; }
-
-    public string? Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     public virtual ICollection<ServiceOrder> ServiceOrders { get; set; } = new List<ServiceOrder>();
 }

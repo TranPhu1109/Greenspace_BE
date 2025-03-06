@@ -14,10 +14,8 @@ namespace GreenSpace.Infrastructure.FluentAPIs
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            builder.HasKey(e => e.OrderId);
-            builder.Property(e => e.OrderId).ValueGeneratedNever();
-            builder.Property(e => e.OrderDate);
-            builder.Property(e => e.Phone).HasMaxLength(15);
+            builder.HasKey(e => e.Id);
+            builder.Property(e => e.Id).ValueGeneratedOnAdd();
             builder.HasOne(d => d.Payment).WithMany(p => p.Orders).HasForeignKey(d => d.PaymentId);
             builder.HasOne(d => d.User).WithMany(p => p.Orders).HasForeignKey(d => d.UserId);
         }

@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace GreenSpace.Domain.Entities;
 
-namespace GreenSpace.Domain.Entities;
-
-public partial class DesignIdea
+public class DesignIdea : BaseEntity
 {
-    public int DesignIdeaId { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-    public string? Name { get; set; }
+    public string Description { get; set; } = string.Empty;
 
-    public string? Description { get; set; }
+    public double Price { get; set; } = default!;
 
-    public double? Price { get; set; }
+    public Guid ImageId { get; set; }
 
-    public int? ImageId { get; set; }
+    public Guid CategoryId { get; set; }
 
-    public int? CategoryId { get; set; }
+    public Category Category { get; set; } = default!;
 
-    public virtual Category? Category { get; set; }
+    public Image Image { get; set; } = default!;
 
-    public virtual Image? Image { get; set; }
+    public ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
 
-    public virtual ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
-
-    public virtual ICollection<ServiceFeedback> ServiceFeedbacks { get; set; } = new List<ServiceFeedback>();
+    public ICollection<ServiceFeedback> ServiceFeedbacks { get; set; } = new List<ServiceFeedback>();
 }

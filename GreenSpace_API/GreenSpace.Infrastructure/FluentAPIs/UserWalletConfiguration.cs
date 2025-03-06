@@ -9,9 +9,7 @@ public class UserWalletConfiguration : IEntityTypeConfiguration<UsersWallet>
 {
     public void Configure(EntityTypeBuilder<UsersWallet> builder)
     {
-        builder.HasKey(e => e.UserId);
-        builder.Property(e => e.UserId).ValueGeneratedNever();
-        builder.Property(e => e.WalletAccount).HasMaxLength(100);
+        builder.HasKey(e => e.Id);
         builder.HasOne(d => d.User).WithOne(p => p.UsersWallet).HasForeignKey<UsersWallet>(d => d.UserId);
     }
 }
