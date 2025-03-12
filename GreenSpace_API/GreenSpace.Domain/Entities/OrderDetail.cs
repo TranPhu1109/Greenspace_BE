@@ -12,5 +12,5 @@ public class OrderDetail : BaseEntity
 
     public Order Order { get; set; } = null!;
 
-    public Material Product { get; set; } = null!;
+    public Product Product { get; set; } = null!;
 }

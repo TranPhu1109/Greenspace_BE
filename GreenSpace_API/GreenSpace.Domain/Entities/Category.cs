@@ -9,5 +9,5 @@ public class Category : BaseEntity
 
     public ICollection<DesignIdea> DesignIdeas { get; set; } = new List<DesignIdea>();
 
-    public ICollection<Material> Materials { get; set; } = new List<Material>();
+    public ICollection<Product> Products { get; set; } = new List<Product>();
 }

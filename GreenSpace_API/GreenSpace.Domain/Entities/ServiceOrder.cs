@@ -27,6 +27,8 @@ public class ServiceOrder :BaseEntity
     public string Description { get; set; } = string.Empty;
 
     public Guid ImageId { get; set; } = default!;
+    public Guid RecordDesignId { get; set; } = default!;
+    public Guid RecordSketchId { get; set; } = default!;
 
     public int Status { get; set; } = default;
     public User User { get; set; } = default!;
@@ -37,4 +39,6 @@ public class ServiceOrder :BaseEntity
     public ServiceType ServiceType { get; set; } = default!;
 
     public ICollection<WorkTask> WorkTask { get; set; } = new List<WorkTask>();
+    public ICollection<ServiceFeedback> ServiceFeedbacks { get; set; } = new List<ServiceFeedback>();
+    public Image Image { get; set; } = default!;
 }

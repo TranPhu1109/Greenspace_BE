@@ -12,5 +12,5 @@ public class ProductDetail : BaseEntity
 
     public DesignIdea DesignIdea { get; set; } = null!;
 
-    public Material Product { get; set; } = null!;
+    public Product Product { get; set; } = null!;
 }

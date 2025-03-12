@@ -8,7 +8,7 @@ public class TasksConfiguration : IEntityTypeConfiguration<WorkTask>
 {
     public void Configure(EntityTypeBuilder<WorkTask> builder)
     {
-        builder.HasKey(e => new { e.ServiceOrderId, e.UserId });
+        builder.HasKey(e => e.Id);
         builder.HasOne(d => d.ServiceOrder).WithMany(p => p.WorkTask).HasForeignKey(d => d.ServiceOrderId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(d => d.User).WithMany(p => p.WorkTask).HasForeignKey(d => d.UserId).OnDelete(DeleteBehavior.Restrict);
     }

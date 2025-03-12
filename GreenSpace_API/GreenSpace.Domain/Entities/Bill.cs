@@ -13,9 +13,9 @@ public class Bill : BaseEntity
 
     public string Description { get; set; } = string.Empty;
 
-    public virtual Order? Order { get; set; }
+    public Order? Order { get; set; }
 
-    public virtual Payment? Payment { get; set; }
+    public Payment? Payment { get; set; }
 
-    public virtual ServiceOrder? ServiceOrder { get; set; }
+    public ServiceOrder? ServiceOrder { get; set; }
 }

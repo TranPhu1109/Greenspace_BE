@@ -20,7 +20,7 @@ namespace GreenSpace.Domain.Entities
 
         public ICollection<Contract> Contracts { get; set; } = new List<Contract>();
 
-        public ICollection<MaterialFeedback> MaterialFeedbacks { get; set; } = new List<MaterialFeedback>();
+        public ICollection<ProductFeedback> MaterialFeedbacks { get; set; } = new List<ProductFeedback>();
 
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 

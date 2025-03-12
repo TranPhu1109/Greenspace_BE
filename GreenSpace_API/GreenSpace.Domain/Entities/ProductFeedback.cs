@@ -1,6 +1,6 @@
 ﻿namespace GreenSpace.Domain.Entities;
 
-public class MaterialFeedback :BaseEntity
+public class ProductFeedback :BaseEntity
 {
     public Guid UserId { get; set; }
 
@@ -10,7 +10,7 @@ public class MaterialFeedback :BaseEntity
 
     public string Description { get; set; } = string.Empty;
 
-    public Material Product { get; set; } = null!;
+    public Product Product { get; set; } = null!;
 
     public User User { get; set; } = null!;
 }

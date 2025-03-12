@@ -160,7 +160,7 @@ namespace GreenSpace.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
                     ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -257,11 +257,11 @@ namespace GreenSpace.Infrastructure.Migrations
                 name: "ProductDetails",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DesignIdeaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -270,7 +270,7 @@ namespace GreenSpace.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductDetails", x => new { x.ProductId, x.DesignIdeaId });
+                    table.PrimaryKey("PK_ProductDetails", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ProductDetails_DesignIdeas_DesignIdeaId",
                         column: x => x.DesignIdeaId,
@@ -311,11 +311,11 @@ namespace GreenSpace.Infrastructure.Migrations
                 name: "MaterialFeedbacks",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -324,7 +324,7 @@ namespace GreenSpace.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MaterialFeedbacks", x => new { x.UserId, x.ProductId });
+                    table.PrimaryKey("PK_MaterialFeedbacks", x => x.Id);
                     table.ForeignKey(
                         name: "FK_MaterialFeedbacks_Materials_ProductId",
                         column: x => x.ProductId,
@@ -404,34 +404,14 @@ namespace GreenSpace.Infrastructure.Migrations
                 name: "RefreshTokens",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Token = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     JwtId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsUsed = table.Column<bool>(type: "bit", nullable: false),
                     IsRevoked = table.Column<bool>(type: "bit", nullable: false),
                     IssuedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExpiredAt = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RefreshTokens", x => new { x.UserId, x.Token });
-                    table.ForeignKey(
-                        name: "FK_RefreshTokens_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ServiceFeedbacks",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DesignIdeaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Rating = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExpiredAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -440,19 +420,13 @@ namespace GreenSpace.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServiceFeedbacks", x => new { x.UserId, x.DesignIdeaId });
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ServiceFeedbacks_DesignIdeas_DesignIdeaId",
-                        column: x => x.DesignIdeaId,
-                        principalTable: "DesignIdeas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ServiceFeedbacks_Users_UserId",
+                        name: "FK_RefreshTokens_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -483,6 +457,12 @@ namespace GreenSpace.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ServiceOrders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ServiceOrders_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ServiceOrders_ServiceTypes_ServiceTypeId",
                         column: x => x.ServiceTypeId,
@@ -527,11 +507,11 @@ namespace GreenSpace.Infrastructure.Migrations
                 name: "OrderDetails",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: true),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -540,7 +520,7 @@ namespace GreenSpace.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderDetails", x => new { x.OrderId, x.ProductId });
+                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
                     table.ForeignKey(
                         name: "FK_OrderDetails_Materials_ProductId",
                         column: x => x.ProductId,
@@ -592,15 +572,16 @@ namespace GreenSpace.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ServiceOrderDetails",
+                name: "RecordDesigns",
                 columns: table => new
                 {
-                    ServiceOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    TotalPrice = table.Column<double>(type: "float", nullable: false),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    phase = table.Column<int>(type: "int", nullable: false),
+                    isSelected = table.Column<bool>(type: "bit", nullable: false),
+                    ServiceOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ServiceOrderId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImageId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -609,7 +590,130 @@ namespace GreenSpace.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServiceOrderDetails", x => new { x.ServiceOrderId, x.ProductId });
+                    table.PrimaryKey("PK_RecordDesigns", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecordDesigns_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RecordDesigns_Images_ImageId1",
+                        column: x => x.ImageId1,
+                        principalTable: "Images",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_RecordDesigns_ServiceOrders_ServiceOrderId",
+                        column: x => x.ServiceOrderId,
+                        principalTable: "ServiceOrders",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_RecordDesigns_ServiceOrders_ServiceOrderId1",
+                        column: x => x.ServiceOrderId1,
+                        principalTable: "ServiceOrders",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RecordSketches",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    phase = table.Column<int>(type: "int", nullable: false),
+                    isSelected = table.Column<bool>(type: "bit", nullable: false),
+                    ServiceOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ServiceOrderId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImageId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModificatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecordSketches", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecordSketches_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RecordSketches_Images_ImageId1",
+                        column: x => x.ImageId1,
+                        principalTable: "Images",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_RecordSketches_ServiceOrders_ServiceOrderId",
+                        column: x => x.ServiceOrderId,
+                        principalTable: "ServiceOrders",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_RecordSketches_ServiceOrders_ServiceOrderId1",
+                        column: x => x.ServiceOrderId1,
+                        principalTable: "ServiceOrders",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServiceFeedbacks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DesignIdeaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ServiceOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModificatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceFeedbacks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ServiceFeedbacks_DesignIdeas_DesignIdeaId",
+                        column: x => x.DesignIdeaId,
+                        principalTable: "DesignIdeas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ServiceFeedbacks_ServiceOrders_ServiceOrderId",
+                        column: x => x.ServiceOrderId,
+                        principalTable: "ServiceOrders",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ServiceFeedbacks_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ServiceOrderDetails",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ServiceOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    TotalPrice = table.Column<double>(type: "float", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModificatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ServiceOrderDetails", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ServiceOrderDetails_Materials_ProductId",
                         column: x => x.ProductId,
@@ -628,10 +732,10 @@ namespace GreenSpace.Infrastructure.Migrations
                 name: "Tasks",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ServiceOrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ModificationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -640,7 +744,7 @@ namespace GreenSpace.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tasks", x => new { x.ServiceOrderId, x.UserId });
+                    table.PrimaryKey("PK_Tasks", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Tasks_ServiceOrders_ServiceOrderId",
                         column: x => x.ServiceOrderId,
@@ -696,6 +800,11 @@ namespace GreenSpace.Infrastructure.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MaterialFeedbacks_UserId",
+                table: "MaterialFeedbacks",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Materials_CategoryId",
                 table: "Materials",
                 column: "CategoryId");
@@ -709,6 +818,11 @@ namespace GreenSpace.Infrastructure.Migrations
                 name: "IX_Notifications_UserId",
                 table: "Notifications",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_OrderId",
+                table: "OrderDetails",
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_ProductId",
@@ -731,14 +845,84 @@ namespace GreenSpace.Infrastructure.Migrations
                 column: "DesignIdeaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductDetails_ProductId",
+                table: "ProductDetails",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecordDesigns_ImageId",
+                table: "RecordDesigns",
+                column: "ImageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecordDesigns_ImageId1",
+                table: "RecordDesigns",
+                column: "ImageId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecordDesigns_ServiceOrderId",
+                table: "RecordDesigns",
+                column: "ServiceOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecordDesigns_ServiceOrderId1",
+                table: "RecordDesigns",
+                column: "ServiceOrderId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecordSketches_ImageId",
+                table: "RecordSketches",
+                column: "ImageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecordSketches_ImageId1",
+                table: "RecordSketches",
+                column: "ImageId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecordSketches_ServiceOrderId",
+                table: "RecordSketches",
+                column: "ServiceOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RecordSketches_ServiceOrderId1",
+                table: "RecordSketches",
+                column: "ServiceOrderId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_UserId",
+                table: "RefreshTokens",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ServiceFeedbacks_DesignIdeaId",
                 table: "ServiceFeedbacks",
                 column: "DesignIdeaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ServiceFeedbacks_ServiceOrderId",
+                table: "ServiceFeedbacks",
+                column: "ServiceOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceFeedbacks_UserId",
+                table: "ServiceFeedbacks",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ServiceOrderDetails_ProductId",
                 table: "ServiceOrderDetails",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceOrderDetails_ServiceOrderId",
+                table: "ServiceOrderDetails",
+                column: "ServiceOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ServiceOrders_ImageId",
+                table: "ServiceOrders",
+                column: "ImageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ServiceOrders_ServiceTypeId",
@@ -749,6 +933,11 @@ namespace GreenSpace.Infrastructure.Migrations
                 name: "IX_ServiceOrders_UserId",
                 table: "ServiceOrders",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_ServiceOrderId",
+                table: "Tasks",
+                column: "ServiceOrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_UserId",
@@ -793,6 +982,12 @@ namespace GreenSpace.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductDetails");
+
+            migrationBuilder.DropTable(
+                name: "RecordDesigns");
+
+            migrationBuilder.DropTable(
+                name: "RecordSketches");
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");

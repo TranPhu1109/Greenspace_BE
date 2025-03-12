@@ -25,9 +25,9 @@ namespace GreenSpace.Infrastructure
 
         public  DbSet<Image> Images { get; set; }
 
-        public  DbSet<Material> Materials { get; set; }
+        public  DbSet<Product> Materials { get; set; }
 
-        public  DbSet<MaterialFeedback> MaterialFeedbacks { get; set; }
+        public  DbSet<ProductFeedback> MaterialFeedbacks { get; set; }
 
         public  DbSet<Notification> Notifications { get; set; }
 
@@ -58,6 +58,9 @@ namespace GreenSpace.Infrastructure
         public  DbSet<UsersWallet> UsersWallets { get; set; }
 
         public  DbSet<WebManager> WebManagers { get; set; }
+        public DbSet<RecordDesign> RecordDesigns { get; set; }
+        public DbSet<RecordSketch> RecordSketches { get; set; }
+
 
         #endregion
         protected override void OnModelCreating(ModelBuilder modelBuilder)

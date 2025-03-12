@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GreenSpace.Domain.Entities;
 
-public class RefreshToken 
+public class RefreshToken : BaseEntity
 {
     public Guid UserId { get; set; }
 

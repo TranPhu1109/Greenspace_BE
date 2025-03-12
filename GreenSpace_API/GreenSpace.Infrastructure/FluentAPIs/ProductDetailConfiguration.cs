@@ -8,7 +8,7 @@ namespace GreenSpace.Infrastructure.FluentAPIs
     {
         public void Configure(EntityTypeBuilder<ProductDetail> builder)
         {
-            builder.HasKey(e => new { e.ProductId, e.DesignIdeaId });
+            builder.HasKey(e => e.Id);
             builder.HasOne(d => d.DesignIdea).WithMany(p => p.ProductDetails).HasForeignKey(d => d.DesignIdeaId).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(d => d.Product).WithMany(p => p.ProductDetails).HasForeignKey(d => d.ProductId).OnDelete(DeleteBehavior.NoAction);
         }

@@ -12,7 +12,7 @@ public class ServiceOrderDetail : BaseEntity
 
     public double TotalPrice { get; set; }
 
-    public virtual Material Product { get; set; } = null!;
+    public virtual Product Product { get; set; } = null!;
 
     public virtual ServiceOrder ServiceOrder { get; set; } = null!;
 }

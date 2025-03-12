@@ -8,7 +8,7 @@ public class ServiceOrderDetailConfiguration : IEntityTypeConfiguration<ServiceO
 {
     public void Configure(EntityTypeBuilder<ServiceOrderDetail> builder)
     {
-        builder.HasKey(e => new { e.ServiceOrderId, e.ProductId });
+        builder.HasKey(e => e.Id);
         builder.HasOne(d => d.Product).WithMany(p => p.ServiceOrderDetails).HasForeignKey(d => d.ProductId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(d => d.ServiceOrder).WithMany(p => p.ServiceOrderDetails).HasForeignKey(d => d.ServiceOrderId).OnDelete(DeleteBehavior.Restrict);
     }

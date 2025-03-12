@@ -8,7 +8,7 @@ public class RefeshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
 {
     public void Configure(EntityTypeBuilder<RefreshToken> builder)
     {
-        builder.HasKey(e => new { e.UserId, e.Token });
+        builder.HasKey(e => e.Id);
         builder.HasOne(d => d.User).WithMany(p => p.RefreshTokens).HasForeignKey(d => d.UserId);
     }
 }

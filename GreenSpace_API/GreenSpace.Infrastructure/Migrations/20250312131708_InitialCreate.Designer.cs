@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GreenSpace.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250306211843_InitialCreate")]
+    [Migration("20250312131708_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -218,8 +218,7 @@ namespace GreenSpace.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -299,99 +298,6 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("GreenSpace.Domain.Entities.Material", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ImageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("ModificatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<int>("Size")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Stock")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("ImageId");
-
-                    b.ToTable("Materials");
-                });
-
-            modelBuilder.Entity("GreenSpace.Domain.Entities.MaterialFeedback", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("ModificatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("ModificationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Rating")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("MaterialFeedbacks");
                 });
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.Notification", b =>
@@ -490,10 +396,8 @@ namespace GreenSpace.Infrastructure.Migrations
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.OrderDetail", b =>
                 {
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CreatedBy")
@@ -501,9 +405,6 @@ namespace GreenSpace.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -514,13 +415,21 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<double?>("Price")
                         .HasColumnType("float");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
@@ -557,12 +466,13 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("GreenSpace.Domain.Entities.ProductDetail", b =>
+            modelBuilder.Entity("GreenSpace.Domain.Entities.Product", b =>
                 {
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("DesignIdeaId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CreatedBy")
@@ -571,7 +481,57 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("Materials");
+                });
+
+            modelBuilder.Entity("GreenSpace.Domain.Entities.ProductDetail", b =>
+                {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DesignIdeaId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -586,26 +546,185 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("ProductId", "DesignIdeaId");
+                    b.HasKey("Id");
 
                     b.HasIndex("DesignIdeaId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductDetails");
                 });
 
-            modelBuilder.Entity("GreenSpace.Domain.Entities.RefreshToken", b =>
+            modelBuilder.Entity("GreenSpace.Domain.Entities.ProductFeedback", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Rating")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(450)");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MaterialFeedbacks");
+                });
+
+            modelBuilder.Entity("GreenSpace.Domain.Entities.RecordDesign", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ImageId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ServiceOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ServiceOrderId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("isSelected")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("phase")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("ImageId1");
+
+                    b.HasIndex("ServiceOrderId");
+
+                    b.HasIndex("ServiceOrderId1");
+
+                    b.ToTable("RecordDesigns");
+                });
+
+            modelBuilder.Entity("GreenSpace.Domain.Entities.RecordSketch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ImageId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ServiceOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ServiceOrderId1")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("isSelected")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("phase")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("ImageId1");
+
+                    b.HasIndex("ServiceOrderId");
+
+                    b.HasIndex("ServiceOrderId1");
+
+                    b.ToTable("RecordSketches");
+                });
+
+            modelBuilder.Entity("GreenSpace.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("ExpiredAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsRevoked")
                         .HasColumnType("bit");
@@ -620,7 +739,22 @@ namespace GreenSpace.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "Token");
+                    b.Property<Guid?>("ModificatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokens");
                 });
@@ -660,10 +794,8 @@ namespace GreenSpace.Infrastructure.Migrations
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.ServiceFeedback", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DesignIdeaId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CreatedBy")
@@ -676,7 +808,7 @@ namespace GreenSpace.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("DesignIdeaId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -691,9 +823,19 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "DesignIdeaId");
+                    b.Property<Guid?>("ServiceOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("DesignIdeaId");
+
+                    b.HasIndex("ServiceOrderId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ServiceFeedbacks");
                 });
@@ -766,6 +908,8 @@ namespace GreenSpace.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ImageId");
+
                     b.HasIndex("ServiceTypeId");
 
                     b.HasIndex("UserId");
@@ -775,10 +919,8 @@ namespace GreenSpace.Infrastructure.Migrations
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.ServiceOrderDetail", b =>
                 {
-                    b.Property<Guid>("ServiceOrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CreatedBy")
@@ -786,9 +928,6 @@ namespace GreenSpace.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -802,15 +941,23 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("ServiceOrderId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("TotalPrice")
                         .HasColumnType("float");
 
-                    b.HasKey("ServiceOrderId", "ProductId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("ServiceOrderId");
 
                     b.ToTable("ServiceOrderDetails");
                 });
@@ -958,10 +1105,8 @@ namespace GreenSpace.Infrastructure.Migrations
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.WorkTask", b =>
                 {
-                    b.Property<Guid>("ServiceOrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CreatedBy")
@@ -969,9 +1114,6 @@ namespace GreenSpace.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -982,10 +1124,18 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("ServiceOrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.HasKey("ServiceOrderId", "UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceOrderId");
 
                     b.HasIndex("UserId");
 
@@ -1060,44 +1210,6 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Navigation("Image");
                 });
 
-            modelBuilder.Entity("GreenSpace.Domain.Entities.Material", b =>
-                {
-                    b.HasOne("GreenSpace.Domain.Entities.Category", "Category")
-                        .WithMany("Materials")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GreenSpace.Domain.Entities.Image", "Image")
-                        .WithMany("Materials")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Image");
-                });
-
-            modelBuilder.Entity("GreenSpace.Domain.Entities.MaterialFeedback", b =>
-                {
-                    b.HasOne("GreenSpace.Domain.Entities.Material", "Product")
-                        .WithMany("MaterialFeedbacks")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("GreenSpace.Domain.Entities.User", "User")
-                        .WithMany("MaterialFeedbacks")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("GreenSpace.Domain.Entities.Notification", b =>
                 {
                     b.HasOne("GreenSpace.Domain.Entities.User", "User")
@@ -1136,7 +1248,7 @@ namespace GreenSpace.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("GreenSpace.Domain.Entities.Material", "Product")
+                    b.HasOne("GreenSpace.Domain.Entities.Product", "Product")
                         .WithMany("OrderDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1147,6 +1259,25 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("GreenSpace.Domain.Entities.Product", b =>
+                {
+                    b.HasOne("GreenSpace.Domain.Entities.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GreenSpace.Domain.Entities.Image", "Image")
+                        .WithMany("Products")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Image");
+                });
+
             modelBuilder.Entity("GreenSpace.Domain.Entities.ProductDetail", b =>
                 {
                     b.HasOne("GreenSpace.Domain.Entities.DesignIdea", "DesignIdea")
@@ -1155,7 +1286,7 @@ namespace GreenSpace.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("GreenSpace.Domain.Entities.Material", "Product")
+                    b.HasOne("GreenSpace.Domain.Entities.Product", "Product")
                         .WithMany("ProductDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1164,6 +1295,79 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Navigation("DesignIdea");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("GreenSpace.Domain.Entities.ProductFeedback", b =>
+                {
+                    b.HasOne("GreenSpace.Domain.Entities.Product", "Product")
+                        .WithMany("MaterialFeedbacks")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GreenSpace.Domain.Entities.User", "User")
+                        .WithMany("MaterialFeedbacks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("GreenSpace.Domain.Entities.RecordDesign", b =>
+                {
+                    b.HasOne("GreenSpace.Domain.Entities.Image", null)
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GreenSpace.Domain.Entities.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId1");
+
+                    b.HasOne("GreenSpace.Domain.Entities.ServiceOrder", null)
+                        .WithMany()
+                        .HasForeignKey("ServiceOrderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("GreenSpace.Domain.Entities.ServiceOrder", "ServiceOrder")
+                        .WithMany("RecordDesigns")
+                        .HasForeignKey("ServiceOrderId1");
+
+                    b.Navigation("Image");
+
+                    b.Navigation("ServiceOrder");
+                });
+
+            modelBuilder.Entity("GreenSpace.Domain.Entities.RecordSketch", b =>
+                {
+                    b.HasOne("GreenSpace.Domain.Entities.Image", null)
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GreenSpace.Domain.Entities.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId1");
+
+                    b.HasOne("GreenSpace.Domain.Entities.ServiceOrder", null)
+                        .WithMany()
+                        .HasForeignKey("ServiceOrderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("GreenSpace.Domain.Entities.ServiceOrder", "ServiceOrder")
+                        .WithMany("RecordSketches")
+                        .HasForeignKey("ServiceOrderId1");
+
+                    b.Navigation("Image");
+
+                    b.Navigation("ServiceOrder");
                 });
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.RefreshToken", b =>
@@ -1185,6 +1389,10 @@ namespace GreenSpace.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("GreenSpace.Domain.Entities.ServiceOrder", null)
+                        .WithMany("ServiceFeedbacks")
+                        .HasForeignKey("ServiceOrderId");
+
                     b.HasOne("GreenSpace.Domain.Entities.User", "User")
                         .WithMany("ServiceFeedbacks")
                         .HasForeignKey("UserId")
@@ -1198,6 +1406,12 @@ namespace GreenSpace.Infrastructure.Migrations
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.ServiceOrder", b =>
                 {
+                    b.HasOne("GreenSpace.Domain.Entities.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GreenSpace.Domain.Entities.ServiceType", "ServiceType")
                         .WithMany("ServiceOrders")
                         .HasForeignKey("ServiceTypeId")
@@ -1210,6 +1424,8 @@ namespace GreenSpace.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Image");
+
                     b.Navigation("ServiceType");
 
                     b.Navigation("User");
@@ -1217,7 +1433,7 @@ namespace GreenSpace.Infrastructure.Migrations
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.ServiceOrderDetail", b =>
                 {
-                    b.HasOne("GreenSpace.Domain.Entities.Material", "Product")
+                    b.HasOne("GreenSpace.Domain.Entities.Product", "Product")
                         .WithMany("ServiceOrderDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1279,7 +1495,7 @@ namespace GreenSpace.Infrastructure.Migrations
                 {
                     b.Navigation("DesignIdeas");
 
-                    b.Navigation("Materials");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.DesignIdea", b =>
@@ -1295,18 +1511,7 @@ namespace GreenSpace.Infrastructure.Migrations
 
                     b.Navigation("DesignIdeas");
 
-                    b.Navigation("Materials");
-                });
-
-            modelBuilder.Entity("GreenSpace.Domain.Entities.Material", b =>
-                {
-                    b.Navigation("MaterialFeedbacks");
-
-                    b.Navigation("OrderDetails");
-
-                    b.Navigation("ProductDetails");
-
-                    b.Navigation("ServiceOrderDetails");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.Order", b =>
@@ -1323,6 +1528,17 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Navigation("Orders");
                 });
 
+            modelBuilder.Entity("GreenSpace.Domain.Entities.Product", b =>
+                {
+                    b.Navigation("MaterialFeedbacks");
+
+                    b.Navigation("OrderDetails");
+
+                    b.Navigation("ProductDetails");
+
+                    b.Navigation("ServiceOrderDetails");
+                });
+
             modelBuilder.Entity("GreenSpace.Domain.Entities.Role", b =>
                 {
                     b.Navigation("Users");
@@ -1331,6 +1547,12 @@ namespace GreenSpace.Infrastructure.Migrations
             modelBuilder.Entity("GreenSpace.Domain.Entities.ServiceOrder", b =>
                 {
                     b.Navigation("Bills");
+
+                    b.Navigation("RecordDesigns");
+
+                    b.Navigation("RecordSketches");
+
+                    b.Navigation("ServiceFeedbacks");
 
                     b.Navigation("ServiceOrderDetails");
 

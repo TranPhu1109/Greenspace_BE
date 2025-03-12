@@ -1,6 +1,6 @@
 ﻿namespace GreenSpace.Domain.Entities;
 
-public class Material :BaseEntity
+public class Product :BaseEntity
 {
     public string Name { get; set; } = string.Empty;
 
@@ -20,7 +20,7 @@ public class Material :BaseEntity
 
     public Image Image { get; set; } = default!;
 
-    public ICollection<MaterialFeedback> MaterialFeedbacks { get; set; } = new List<MaterialFeedback>();
+    public ICollection<ProductFeedback> MaterialFeedbacks { get; set; } = new List<ProductFeedback>();
 
     public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
