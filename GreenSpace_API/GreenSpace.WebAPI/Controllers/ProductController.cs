@@ -1,4 +1,5 @@
 ﻿using GreenSpace.Application.Features.Products.Commands;
+using GreenSpace.Application.Features.Products.Queries;
 using GreenSpace.Application.ViewModels.Products;
 using GreenSpace.Domain.Enum;
 using MediatR;
@@ -20,6 +21,41 @@ namespace GreenSpace.WebAPI.Controllers
             _mediator = mediator;
         }
 
+
+        #region Queries
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] int pageNumber = 0,
+                                             [FromQuery] int pageSize = 10)
+        => Ok(await _mediator.Send(new GetAllProductQuery { PageNumber = pageNumber, PageSize = pageSize }));
+
+
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        => Ok(await _mediator.Send(new GetProductByQuery { Id = id }));
+
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("search")]
+        public async Task<IActionResult> GetProductsByFilter([FromQuery] int pageNumber = 0,
+                                                             [FromQuery] int pageSize = 10,
+                                                             [FromQuery] string? category = null,
+                                                             [FromQuery] string? name = null,
+                                                             [FromQuery] float? minPrice = null,
+                                                             [FromQuery] float? maxPrice = null)
+        => Ok(await _mediator.Send(new GetProductByFillterQuery{PageNumber = pageNumber,PageSize = pageSize,Category = category,Name = name,MinPrice = minPrice,MaxPrice = maxPrice}));
+        #endregion
+
+        #region Commands
+
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
@@ -31,7 +67,7 @@ namespace GreenSpace.WebAPI.Controllers
             {
                 return BadRequest("Create Fail!");
             }
-            return Ok(result);
+            return CreatedAtAction(nameof(GetById), new { Id = result.Id }, result);
         }
 
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
@@ -46,8 +82,22 @@ namespace GreenSpace.WebAPI.Controllers
             {
                 return BadRequest("Update Fail!");
             }
-            return NoContent();
+            return Ok();
         }
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _mediator.Send(new DeleteProductCommand { Id = id });
+            if (!result)
+            {
+                return BadRequest("Delete Fail!");
+            }
+            return Ok();
+        }
+        #endregion
     }
 
 }

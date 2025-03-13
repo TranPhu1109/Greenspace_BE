@@ -9,6 +9,7 @@ namespace GreenSpace.Application.ViewModels.Products
 {
     public class ProductViewModel
     {
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public Guid CategoryId { get; set; }
         public double Price { get; set; }

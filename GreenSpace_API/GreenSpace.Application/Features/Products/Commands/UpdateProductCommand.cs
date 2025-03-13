@@ -61,20 +61,18 @@ namespace GreenSpace.Application.Features.Products.Commands
             public async Task<bool> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
             {
 
-                var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.UpdateModel.Id);
-                if (product is null)
-                    throw new NotFoundException($"Product with Id {request.UpdateModel.Id} does not exist!");
-
-                _mapper.Map(request.UpdateModel, product);
+                var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.UpdateModel.Id, p => p.Image);
+                if (product is null)throw new NotFoundException($"Product with Id {request.UpdateModel.Id} does not exist!");
 
                 //  cập nhật ảnh 
                 if (request.UpdateModel.Image is not null)
                 {
-                    product.Image.ImageUrl = !string.IsNullOrEmpty(request.UpdateModel.Image.ImageUrl) ? request.UpdateModel.Image.ImageUrl : product.Image.ImageUrl;
-                    product.Image.Image2 = !string.IsNullOrEmpty(request.UpdateModel.Image.Image2) ? request.UpdateModel.Image.Image2 : product.Image.Image2;
-                    product.Image.Image3 = !string.IsNullOrEmpty(request.UpdateModel.Image.Image3) ? request.UpdateModel.Image.Image3 : product.Image.Image3;
+                        product.Image.ImageUrl = !string.IsNullOrEmpty(request.UpdateModel.Image.ImageUrl) ? request.UpdateModel.Image.ImageUrl : product.Image.ImageUrl;
+                        product.Image.Image2 = !string.IsNullOrEmpty(request.UpdateModel.Image.Image2) ? request.UpdateModel.Image.Image2 : product.Image.Image2;
+                        product.Image.Image3 = !string.IsNullOrEmpty(request.UpdateModel.Image.Image3) ? request.UpdateModel.Image.Image3 : product.Image.Image3;                   
+                    
                 }
-
+                _mapper.Map(request.UpdateModel, product);
                 _unitOfWork.ProductRepository.Update(product);
                return await _unitOfWork.SaveChangesAsync();
             }

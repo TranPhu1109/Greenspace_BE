@@ -9,5 +9,6 @@ namespace GreenSpace.Application.Repositories
 {
     public interface IProductRepository : IGenericRepository<Product>
     {
+        Task<List<Product>> Search(string? cate, string? name, float? minPrice, float? maxPrice);
     }
 }
