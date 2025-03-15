@@ -17,6 +17,4 @@ public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     void SoftRemoveRange(List<TEntity> entities);
     Task<Pagination<TEntity>> ToPagination(int pageNumber = 0, int pageSize = 10);
 
-
-
 }

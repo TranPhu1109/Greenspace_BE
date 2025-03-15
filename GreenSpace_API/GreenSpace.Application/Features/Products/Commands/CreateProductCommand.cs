@@ -36,7 +36,6 @@ namespace GreenSpace.Application.Features.Products.Commands
 
                 RuleFor(x => x.CreateModel.CategoryId).NotNull().WithMessage("Category must not be null");
 
-
             }
         }
         public class CommandHandler : IRequestHandler<CreateProductCommand, ProductViewModel>
@@ -70,7 +69,6 @@ namespace GreenSpace.Application.Features.Products.Commands
                 // Tạo mới Product
                 var product = _mapper.Map<Product>(request.CreateModel);
                 product.Id = Guid.NewGuid();
-                product.CreationDate = DateTime.Now;
                 product.ImageId = image.Id; 
 
                 await _unitOfWork.ProductRepository.AddAsync(product);

@@ -1,22 +1,23 @@
-﻿using GreenSpace.Application.Features.Products.Commands;
+﻿using GreenSpace.Application.Features.DesignIdeas.Commands;
+using GreenSpace.Application.Features.DesignIdeas.Queries;
+using GreenSpace.Application.Features.Products.Commands;
 using GreenSpace.Application.Features.Products.Queries;
+using GreenSpace.Application.ViewModels.DesignIdea;
 using GreenSpace.Application.ViewModels.Products;
-using GreenSpace.Domain.Enum;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace GreenSpace.WebAPI.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class ProductController : ControllerBase
+    [ApiController]
+    public class DesignIdeaController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public ProductController(IMediator mediator)
+        public DesignIdeaController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -29,7 +30,7 @@ namespace GreenSpace.WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int pageNumber = 0,
                                              [FromQuery] int pageSize = 10)
-        => Ok(await _mediator.Send(new GetAllProductQuery { PageNumber = pageNumber, PageSize = pageSize }));
+        => Ok(await _mediator.Send(new GetAllDesignIdeaQuery { PageNumber = pageNumber, PageSize = pageSize }));
 
 
 
@@ -38,20 +39,20 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
-        => Ok(await _mediator.Send(new GetProductByQuery { Id = id }));
+        => Ok(await _mediator.Send(new GetDesignIdeaByQuery { Id = id }));
 
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet("search")]
-        public async Task<IActionResult> GetProductsByFilter([FromQuery] int pageNumber = 0,
+        public async Task<IActionResult> GetByFilter([FromQuery] int pageNumber = 0,
                                                              [FromQuery] int pageSize = 10,
                                                              [FromQuery] string? category = null,
                                                              [FromQuery] string? name = null,
                                                              [FromQuery] float? minPrice = null,
                                                              [FromQuery] float? maxPrice = null)
-        => Ok(await _mediator.Send(new GetProductByFillterQuery{PageNumber = pageNumber,PageSize = pageSize,Category = category,Name = name,MinPrice = minPrice,MaxPrice = maxPrice}));
+        => Ok(await _mediator.Send(new GetDesignIdeaByFillterQuery { PageNumber = pageNumber, PageSize = pageSize, Category = category, Name = name, MinPrice = minPrice, MaxPrice = maxPrice }));
         #endregion
 
         #region Commands
@@ -60,9 +61,9 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] ProductCreateModel model)
+        public async Task<IActionResult> Create([FromBody] DesignIdeaCreateModel model)
         {
-            var result = await _mediator.Send(new CreateProductCommand { CreateModel = model });
+            var result = await _mediator.Send(new CreateDesignIdeaCommand { CreateModel = model });
             if (result is null)
             {
                 return BadRequest("Create Fail!");
@@ -74,10 +75,10 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromForm] ProductUpdateModel model)
+        public async Task<IActionResult> Update(Guid id, [FromBody] DesignIdeaUpdateModel model)
         {
             if (id != model.Id) return BadRequest("Id is not match!");
-            var result = await _mediator.Send(new UpdateProductCommand { UpdateModel = model });
+            var result = await _mediator.Send(new UpdateDesignIdeaCommand { UpdateModel = model });
             if (!result)
             {
                 return BadRequest("Update Fail!");
@@ -90,7 +91,7 @@ namespace GreenSpace.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var result = await _mediator.Send(new DeleteProductCommand { Id = id });
+            var result = await _mediator.Send(new DeleteDesignIdeaCommand { Id = id });
             if (!result)
             {
                 return BadRequest("Delete Fail!");
@@ -99,5 +100,4 @@ namespace GreenSpace.WebAPI.Controllers
         }
         #endregion
     }
-
 }

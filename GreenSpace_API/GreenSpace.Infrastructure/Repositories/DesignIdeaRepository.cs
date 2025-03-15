@@ -10,18 +10,19 @@ using System.Threading.Tasks;
 
 namespace GreenSpace.Infrastructure.Repositories
 {
-    public class ProductRepository : GenericRepository<Product>, IProductRepository
+    public class DesignIdeaRepository : GenericRepository<DesignIdea>, IDesignIdeaRepository
     {
         protected readonly AppDbContext _context;
-        public ProductRepository(AppDbContext context, ICurrentTime timeService, IClaimsService claimsService) : base(context, timeService, claimsService)
+        public DesignIdeaRepository(AppDbContext context, ICurrentTime timeService, IClaimsService claimsService) : base(context, timeService, claimsService)
         {
             _context = context;
         }
-        public async Task<List<Product>> Search(string? cate, string? name, float? minPrice, float? maxPrice)
+        public async Task<List<DesignIdea>> Search(string? cate, string? name, float? minPrice, float? maxPrice)
         {
-            var query = _context.Materials
+            var query = _context.DesignIdeas
                 .Include(p => p.Category)
                 .Include(p => p.Image)
+                .Include(p => p.ProductDetails)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(cate))
@@ -36,9 +37,9 @@ namespace GreenSpace.Infrastructure.Repositories
             if (maxPrice.HasValue)
                 query = query.Where(p => p.Price <= maxPrice.Value);
 
-            return await query.ToListAsync(); 
+            return await query.ToListAsync();
         }
 
-    }
 
+    }
 }

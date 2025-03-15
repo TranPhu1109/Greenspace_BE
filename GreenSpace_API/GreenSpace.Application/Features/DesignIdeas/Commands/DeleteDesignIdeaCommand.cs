@@ -1,0 +1,42 @@
+﻿using FluentValidation;
+using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
+using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace GreenSpace.Application.Features.DesignIdeas.Commands
+{
+    public class DeleteDesignIdeaCommand : IRequest<bool>
+    {
+        public Guid Id { get; set; }
+        public class CommmandValidation : AbstractValidator<DeleteDesignIdeaCommand>
+        {
+            public CommmandValidation()
+            {
+                RuleFor(x => x.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
+
+            }
+        }
+
+        public class CommandHandler : IRequestHandler<DeleteDesignIdeaCommand, bool>
+        {
+            private readonly IUnitOfWork _unitOfWork;
+
+            public CommandHandler(IUnitOfWork unitOfWork)
+            {
+                _unitOfWork = unitOfWork;
+            }
+
+            public async Task<bool> Handle(DeleteDesignIdeaCommand request, CancellationToken cancellationToken)
+            {
+                var design = await _unitOfWork.DesignIdeaRepository.GetByIdAsync(request.Id);
+                if (design is null) throw new NotFoundException($"DesignIdea with Id-{request.Id} is not exist!");
+                _unitOfWork.DesignIdeaRepository.SoftRemove(design);
+                return await _unitOfWork.SaveChangesAsync();
+            }
+        }
+    }
+}

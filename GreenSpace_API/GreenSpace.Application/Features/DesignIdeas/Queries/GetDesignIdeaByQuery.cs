@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
+using GreenSpace.Application.ViewModels.DesignIdea;
 using GreenSpace.Application.ViewModels.Products;
-using GreenSpace.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,13 +11,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GreenSpace.Application.Features.Products.Queries
+namespace GreenSpace.Application.Features.DesignIdeas.Queries
 {
-    public class GetProductByQuery : IRequest<ProductViewModel>
+    public class GetDesignIdeaByQuery : IRequest<DesignIdeaViewModel>
     {
         public Guid Id { get; set; } = default!;
 
-        public class QueryValidation : AbstractValidator<GetProductByQuery>
+        public class QueryValidation : AbstractValidator<GetDesignIdeaByQuery>
         {
             public QueryValidation()
             {
@@ -25,7 +25,7 @@ namespace GreenSpace.Application.Features.Products.Queries
             }
         }
 
-        public class QueryHandler : IRequestHandler<GetProductByQuery, ProductViewModel>
+        public class QueryHandler : IRequestHandler<GetDesignIdeaByQuery, DesignIdeaViewModel>
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly IMapper _mapper;
@@ -37,11 +37,11 @@ namespace GreenSpace.Application.Features.Products.Queries
                 _mapper = mapper;
                 _logger = logger;
             }
-            public async Task<ProductViewModel> Handle(GetProductByQuery request, CancellationToken cancellationToken)
+            public async Task<DesignIdeaViewModel> Handle(GetDesignIdeaByQuery request, CancellationToken cancellationToken)
             {
-                var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.Id, x => x.Image, x => x.Category);
-                if (product is null) throw new NotFoundException($"Product with ID-{request.Id} is not exist!");
-                var result = _mapper.Map<ProductViewModel>(product);
+                var design = await _unitOfWork.DesignIdeaRepository.GetByIdAsync(request.Id, x => x.Image, x => x.Category,x => x.ProductDetails);
+                if (design is null) throw new NotFoundException($"DesignIdea with ID-{request.Id} is not exist!");
+                var result = _mapper.Map<DesignIdeaViewModel>(design);
                 return result;
             }
         }

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using GreenSpace.Application.ViewModels.DesignIdea;
 using GreenSpace.Application.ViewModels.Images;
+using GreenSpace.Application.ViewModels.ProductDetail;
 using GreenSpace.Application.ViewModels.Products;
 using GreenSpace.Domain.Entities;
 
@@ -17,6 +19,22 @@ public class MapperConfigurationProfile : Profile
            .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
            .ReverseMap();
         CreateMap<ImageCreateModel, Image>().ReverseMap();
+
+
+
+        CreateMap<DesignIdea, DesignIdeaCreateModel>().ReverseMap();
+        CreateMap<DesignIdea, DesignIdeaUpdateModel>()
+            .ForMember(dest => dest.ProductDetails, opt => opt.Ignore())
+            .ReverseMap()
+            .ForMember(dest => dest.ProductDetails, opt => opt.Ignore());
+        CreateMap<DesignIdea, DesignIdeaViewModel>()
+           .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Category.Name))
+           .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
+           .ForMember(dest => dest.ProductDetails, opt => opt.MapFrom(src => src.ProductDetails))
+           .ReverseMap();
+
+
+        CreateMap<ProductDetail, ProductDetailCreateModel>().ReverseMap();
         //CreateMap<Role, RoleViewModel>().ReverseMap();
 
 
