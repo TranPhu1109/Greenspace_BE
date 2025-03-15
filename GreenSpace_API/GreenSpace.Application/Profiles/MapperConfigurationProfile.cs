@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using GreenSpace.Application.ViewModels.Roles;
+using GreenSpace.Application.ViewModels.Users;
+using GreenSpace.Domain.Entities;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -6,9 +9,14 @@ public class MapperConfigurationProfile : Profile
 {
     public MapperConfigurationProfile()
     {
-        //CreateMap<Role, RoleViewModel>().ReverseMap();
+        CreateMap<Role, RoleViewModel>().ReverseMap();
 
-
+        CreateMap<User, UserViewModel>()
+            .ForMember(
+                x => x.RoleName,
+                opt => opt.MapFrom(x => x.Role.RoleName)
+            )
+            .ReverseMap();
         //#region User
         //CreateMap<User, UserViewModel>()
         //.ForMember(
@@ -16,7 +24,8 @@ public class MapperConfigurationProfile : Profile
         //opt => opt.MapFrom(x => x.Role.Name)
         //)
         //.ReverseMap();
-        //CreateMap<User, UserCreateModel>().ReverseMap();
+
+        CreateMap<User, UserCreateModel>().ReverseMap();
         //CreateMap<User, UserUpdateModel>()
         //    .ForMember(x => x.RoleName, opt => opt.Ignore())
         //    .ReverseMap();

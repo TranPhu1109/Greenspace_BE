@@ -14,6 +14,7 @@ using GreenSpace.Application.Features.User.Queries;
 using GreenSpace.Application.Services.Interfaces;
 using GreenSpace.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using GreenSpace.Application.Repositories;
 
 namespace GreenSpace.WebAPI;
 
@@ -64,8 +65,8 @@ public static class DependencyInjection
         List<Assembly> assemblies = new List<Assembly>
         {
             typeof(Program).Assembly,
-            Application.AssemblyReference.Assembly,
-            Infrastructure.AssemblyReference.Assembly
+            typeof(GreenSpace.Application.AssemblyReference).Assembly,
+            typeof(GreenSpace.Infrastructure.AssemblyReference).Assembly
         };
         builder.Services.AddSingleton(configuration);
         builder.Services.AddValidatorsFromAssemblies(assemblies: assemblies);
@@ -74,7 +75,7 @@ public static class DependencyInjection
    
         // Register To Handle Query/Command of MediatR
         builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetAllUserQuery).Assembly));
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
         builder.Services.AddScoped<IClaimsService, ClaimsService>();
         // Scan and register all interfaces --> implementations 
         builder.Services.Scan(scan => scan

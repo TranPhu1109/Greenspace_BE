@@ -9,15 +9,22 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _dbContext;
     public UnitOfWork(AppDbContext dbcontext, 
-    IUserRepository userRepository, IMapper mapper,
+    IUserRepository userRepository,
+    IRoleRepository roleRepository,
+    IWalletRepository walletRepository,
+    IMapper mapper,
     IConnectionConfiguration connectionConfiguration)
     {
         _dbContext = dbcontext;
         DirectionConnection = connectionConfiguration;
         UserRepository = userRepository;
+        RoleRepository  = roleRepository;
+        WalletRepository = walletRepository;
         Mapper = mapper;
     }
     public IUserRepository UserRepository { get; }
+    public IRoleRepository RoleRepository { get; }
+    public IWalletRepository WalletRepository { get; }
     public IMapper Mapper { get; }
 
     public IConnectionConfiguration DirectionConnection { get; }

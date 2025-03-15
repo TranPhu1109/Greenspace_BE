@@ -28,7 +28,7 @@ public class GetAllUserQuery : GetAllUserQueryModel, IRequest<PaginatedList<User
                 request.Filter.Remove("pageNumber");
             }
             using var connection = _connection.GetDbConnection();
-            var query = @"SELECT Id, name, [email], phoneNumber FROM [User];";
+            var query = @"SELECT Id, name, [email], Phone FROM [Users];";
 
             var result = await connection.QueryAsync<UserViewModel>(query) ?? new List<UserViewModel>();
             // Adding Fillter
