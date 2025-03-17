@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GreenSpace.Application.ViewModels.Category;
 using GreenSpace.Application.ViewModels.DesignIdea;
 using GreenSpace.Application.ViewModels.Images;
 using GreenSpace.Application.ViewModels.ProductDetail;
@@ -35,6 +36,10 @@ public class MapperConfigurationProfile : Profile
 
 
         CreateMap<ProductDetail, ProductDetailCreateModel>().ReverseMap();
+
+        CreateMap<Category, CategoryViewModel>().ReverseMap();
+        CreateMap<Category, CategoryCreateModel>().ReverseMap();
+        CreateMap<Category, CategoryUpdateModel>().ReverseMap();
         //CreateMap<Role, RoleViewModel>().ReverseMap();
 
 

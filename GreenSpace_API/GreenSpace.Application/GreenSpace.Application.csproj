@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Folder Include="Features\User\Commands\" />
-    <Folder Include="ViewModels\Category\" />
   </ItemGroup>
 
   <ItemGroup>
