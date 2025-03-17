@@ -12,7 +12,7 @@ public class UnitOfWork : IUnitOfWork
     public UnitOfWork(AppDbContext dbcontext, 
     IUserRepository userRepository, IMapper mapper,
     IConnectionConfiguration connectionConfiguration, IProductRepository productRepository,IImageRepository imageRepository,ICategoryRepository categoryRepository,
-      IDesignIdeaRepository designIdeaRepository, IProductDetailRepository productDetailRepository)
+      IDesignIdeaRepository designIdeaRepository, IProductDetailRepository productDetailRepository,IProductFeedbackRepository productFeedbackRepository)
     {
         _dbContext = dbcontext;
         DirectionConnection = connectionConfiguration;
@@ -23,6 +23,7 @@ public class UnitOfWork : IUnitOfWork
         CategoryRepository = categoryRepository;
         DesignIdeaRepository = designIdeaRepository;
         ProductDetailRepository = productDetailRepository;
+        ProductFeedbackRepository = productFeedbackRepository;
     }
     public IUserRepository UserRepository { get; }
     public IProductRepository ProductRepository { get; }
@@ -32,6 +33,7 @@ public class UnitOfWork : IUnitOfWork
 
     public IProductDetailRepository ProductDetailRepository { get; }
     public ICategoryRepository CategoryRepository { get; }
+    public IProductFeedbackRepository ProductFeedbackRepository { get; }
     public IMapper Mapper { get; }
 
     public IConnectionConfiguration DirectionConnection { get; }

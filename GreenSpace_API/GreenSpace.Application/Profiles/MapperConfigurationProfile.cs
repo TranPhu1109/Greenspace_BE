@@ -3,6 +3,7 @@ using GreenSpace.Application.ViewModels.Category;
 using GreenSpace.Application.ViewModels.DesignIdea;
 using GreenSpace.Application.ViewModels.Images;
 using GreenSpace.Application.ViewModels.ProductDetail;
+using GreenSpace.Application.ViewModels.ProductFeedback;
 using GreenSpace.Application.ViewModels.Products;
 using GreenSpace.Domain.Entities;
 
@@ -40,6 +41,12 @@ public class MapperConfigurationProfile : Profile
         CreateMap<Category, CategoryViewModel>().ReverseMap();
         CreateMap<Category, CategoryCreateModel>().ReverseMap();
         CreateMap<Category, CategoryUpdateModel>().ReverseMap();
+
+        CreateMap<ProductFeedback, ProductFeedbackViewModel>()
+             .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
+             .ForMember(x => x.ProductName, opt => opt.MapFrom(x => x.Product.Name))
+            .ReverseMap();
+        CreateMap<ProductFeedback, ProductFeedbackCreateModel>().ReverseMap();
         //CreateMap<Role, RoleViewModel>().ReverseMap();
 
 
