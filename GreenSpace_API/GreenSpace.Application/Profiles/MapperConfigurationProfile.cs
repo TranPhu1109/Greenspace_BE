@@ -17,18 +17,8 @@ public class MapperConfigurationProfile : Profile
                 opt => opt.MapFrom(x => x.Role.RoleName)
             )
             .ReverseMap();
-        //#region User
-        //CreateMap<User, UserViewModel>()
-        //.ForMember(
-        //x => x.RoleName,
-        //opt => opt.MapFrom(x => x.Role.Name)
-        //)
-        //.ReverseMap();
-
         CreateMap<User, UserCreateModel>().ReverseMap();
-        //CreateMap<User, UserUpdateModel>()
-        //    .ForMember(x => x.RoleName, opt => opt.Ignore())
-        //    .ReverseMap();
+        CreateMap<User, UserUpdateModel>().ReverseMap();
         //#endregion
 
         //#region Wallet
@@ -39,28 +29,7 @@ public class MapperConfigurationProfile : Profile
         //#endregion
 
 
-        //#region Carts
-        //CreateMap<CartEntity, CartCreateModel>().ReverseMap();
-        //CreateMap<CartEntity, CartViewModel>().ReverseMap()
-        //    .ForMember(x => x.Id, cfg => cfg.MapFrom(x => ObjectId.Parse(x.Id)))
-        //    .ForMember(x => x.Items, cfg => cfg.MapFrom(x => x.Items));
-        //CreateMap<CartEntity, CartUpdateModel>().ReverseMap()
-        //    .ForMember(x => x.Id, cfg => cfg.MapFrom(x => ObjectId.Parse(x.Id)))
-        //    .ForMember(x => x.Items, cfg => cfg.MapFrom(x => x.Items));
-        //CreateMap<CartItemCreateModel, CartItemEntity>().ReverseMap();
-        //CreateMap<CartItemEntity, CartItemViewModel>().ReverseMap();
-        //CreateMap<CartItemEntity, CartItemUpdateModel>().ReverseMap();
-        //#endregion
-        //#region Notifications
-        //CreateMap<NotificationEntity, NotificationViewModel>()
-        //    .ReverseMap()
-        //    .ForMember(x => x.Id, cfg => cfg.MapFrom(x => ObjectId.Parse(x.Id)));
-        //CreateMap<NotificationEntity, NotificationCreateModel>()
-        //.ReverseMap()
-        //    .ForMember(x => x.Source, cfg => cfg.MapFrom(x => (NotificationSourceEnum)x.Source));
-        //CreateMap<NotificationEntity, NotificationUpdateModel>()
-        //    .ReverseMap()
-        //    .ForMember(x => x.Id, cfg => cfg.MapFrom(x => ObjectId.Parse(x.Id)));
-        //#endregion
+
+
     }
 }

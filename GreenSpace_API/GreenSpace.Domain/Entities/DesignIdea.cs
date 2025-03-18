@@ -10,9 +10,9 @@ public class DesignIdea : BaseEntity
 
     public Guid ImageId { get; set; }
 
-    public Guid CategoryId { get; set; }
+    public Guid DesignIdeasCategoryId { get; set; }
 
-    public Category Category { get; set; } = default!;
+    public DesignIdeasCategory DesignIdeasCategory { get; set; } = default!;
 
     public Image Image { get; set; } = default!;
 

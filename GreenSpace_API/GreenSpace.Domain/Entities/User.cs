@@ -15,7 +15,8 @@ namespace GreenSpace.Domain.Entities
         public string? Phone { get; set; } = default!;
 
         public string? Address { get; set; } = string.Empty;
-
+        public string? FCMToken { get; set; } = default!;
+        public string? JWTToken { get; set; } = default!;
         public string? AvatarUrl { get; set; }
 
         public ICollection<Contract> Contracts { get; set; } = new List<Contract>();

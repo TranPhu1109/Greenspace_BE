@@ -12,6 +12,7 @@ namespace GreenSpace.Application.ViewModels.Users
         public string Name { get; set; } = default!;
         public string? Email { get; set; } = string.Empty;
         public string? Phone { get; set; } = default!;
+        public string? Address { get; set; } = string.Empty;
         public string RoleName { get; set; } = default!;
 
     }

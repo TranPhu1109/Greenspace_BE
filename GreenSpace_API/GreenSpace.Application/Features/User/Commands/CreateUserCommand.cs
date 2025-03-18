@@ -1,13 +1,9 @@
-﻿using FluentValidation;
+﻿using Firebase.Auth;
+using FluentValidation;
 using GreenSpace.Application.Features.User.Queries;
 using GreenSpace.Application.ViewModels.Users;
 using GreenSpace.Domain.Enum;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GreenSpace.Application.Features.User.Commands
 {
@@ -45,9 +41,9 @@ namespace GreenSpace.Application.Features.User.Commands
                     x.Phone!.ToLower() == request.Model.Phone!.ToLower());
                 if (isDup.Count() > 0)
                     throw new Exception($"Error: {nameof(CreateUserCommand)}_email or phone is duplicate!");
-                //var createToFirebase = await CreateUserToFirebaseAsync(
-                //    email: request.Model.Email ?? "",
-                // password: request.Model.Password ?? "");
+                var createToFirebase = await CreateUserToFirebaseAsync(
+                    email: request.Model.Email ?? "",
+                 password: request.Model.Password ?? "");
                 request.Model.RoleName = request.Model.RoleName ?? nameof(RoleEnum.Customer);
                 var role = await _unitOfWork.RoleRepository.FirstOrDefaultAsync(x => x.RoleName.ToLower() == request.Model.RoleName.ToLower())
                     ?? throw new Exception($"Error: {nameof(CreateUserCommand)}_no_role_found: role: {request.Model.RoleName}");
@@ -76,24 +72,24 @@ namespace GreenSpace.Application.Features.User.Commands
                     throw new Exception($"Error: {nameof(CreateUserCommand)}_Save Change Failed!");
                 }
             }
-            //private async Task<bool> CreateUserToFirebaseAsync(string email, string password)
-            //{
-            //    var auth = new FirebaseAuthProvider(new FirebaseConfig(apiKey: _appSettings.FirebaseSettings.ApiKeY));
-            //    try
-            //    {
-            //        var result = await auth.CreateUserWithEmailAndPasswordAsync(email: email, password: password);
-            //        if (result.User is not null)
-            //        {
-            //            return true;
-            //        }
-            //        return false;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        throw new Exception($"{ex}");
-            //    }
+            private async Task<bool> CreateUserToFirebaseAsync(string email, string password)
+            {
+                var auth = new FirebaseAuthProvider(new FirebaseConfig(apiKey: _appSettings.FirebaseSettings.ApiKeY));
+                try
+                {
+                    var result = await auth.CreateUserWithEmailAndPasswordAsync(email: email, password: password);
+                    if (result.User is not null)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"{ex}");
+                }
 
-            //}
+            }
 
             //private async Task<Guid> CreateWallet(Guid userId)
             //{

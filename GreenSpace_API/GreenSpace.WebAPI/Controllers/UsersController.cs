@@ -62,5 +62,33 @@ namespace GreenSpace.WebAPI.Controllers
             }
             else return BadRequest();
         }
+        /// <summary>
+        /// Cập nhật thông tin user
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UserUpdateModel model)
+        {
+            await _mediator.Send(new UpdateUserCommand { Model = model, Id = id });
+            return NoContent();
+        }
+        /// <summary>
+        /// Xoá User theo Id - Admin
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await _mediator.Send(new DeleteUserCommand { Id = id });
+            return NoContent();
+        }
     }
 }
