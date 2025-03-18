@@ -20,13 +20,13 @@ namespace GreenSpace.Infrastructure.Repositories
         public async Task<List<DesignIdea>> Search(string? cate, string? name, float? minPrice, float? maxPrice)
         {
             var query = _context.DesignIdeas
-                .Include(p => p.Category)
+                .Include(p => p.DesignIdeasCategory)
                 .Include(p => p.Image)
                 .Include(p => p.ProductDetails)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(cate))
-                query = query.Where(p => p.Category.Name.Contains(cate));
+                query = query.Where(p => p.DesignIdeasCategory.Name.Contains(cate));
 
             if (!string.IsNullOrEmpty(name))
                 query = query.Where(p => p.Name.Contains(name));

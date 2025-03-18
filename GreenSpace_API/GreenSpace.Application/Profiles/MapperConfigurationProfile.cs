@@ -5,6 +5,7 @@ using GreenSpace.Application.ViewModels.Images;
 using GreenSpace.Application.ViewModels.ProductDetail;
 using GreenSpace.Application.ViewModels.ProductFeedback;
 using GreenSpace.Application.ViewModels.Products;
+using GreenSpace.Application.ViewModels.Users;
 using GreenSpace.Domain.Entities;
 
 namespace GreenSpace.Application.Profiles;
@@ -30,7 +31,7 @@ public class MapperConfigurationProfile : Profile
             .ReverseMap()
             .ForMember(dest => dest.ProductDetails, opt => opt.Ignore());
         CreateMap<DesignIdea, DesignIdeaViewModel>()
-           .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Category.Name))
+           .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.DesignIdeasCategory.Name))
            .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
            .ForMember(dest => dest.ProductDetails, opt => opt.MapFrom(src => src.ProductDetails))
            .ReverseMap();

@@ -10,14 +10,17 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _dbContext;
     public UnitOfWork(AppDbContext dbcontext, 
-    IUserRepository userRepository, IMapper mapper,
-    IConnectionConfiguration connectionConfiguration, IProductRepository productRepository,IImageRepository imageRepository,ICategoryRepository categoryRepository,
-      IDesignIdeaRepository designIdeaRepository, IProductDetailRepository productDetailRepository,IProductFeedbackRepository productFeedbackRepository)
     IUserRepository userRepository,
-    IRoleRepository roleRepository,
-    IWalletRepository walletRepository,
     IMapper mapper,
-    IConnectionConfiguration connectionConfiguration)
+    IConnectionConfiguration connectionConfiguration, 
+    IProductRepository productRepository,
+    IImageRepository imageRepository,
+    ICategoryRepository categoryRepository,
+    IDesignIdeaRepository designIdeaRepository, 
+    IProductDetailRepository productDetailRepository,
+    IProductFeedbackRepository productFeedbackRepository,
+    IRoleRepository roleRepository,
+    IWalletRepository walletRepository)
     {
         _dbContext = dbcontext;
         DirectionConnection = connectionConfiguration;
