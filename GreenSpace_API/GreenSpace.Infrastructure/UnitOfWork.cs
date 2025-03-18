@@ -13,10 +13,17 @@ public class UnitOfWork : IUnitOfWork
     IUserRepository userRepository, IMapper mapper,
     IConnectionConfiguration connectionConfiguration, IProductRepository productRepository,IImageRepository imageRepository,ICategoryRepository categoryRepository,
       IDesignIdeaRepository designIdeaRepository, IProductDetailRepository productDetailRepository,IProductFeedbackRepository productFeedbackRepository)
+    IUserRepository userRepository,
+    IRoleRepository roleRepository,
+    IWalletRepository walletRepository,
+    IMapper mapper,
+    IConnectionConfiguration connectionConfiguration)
     {
         _dbContext = dbcontext;
         DirectionConnection = connectionConfiguration;
         UserRepository = userRepository;
+        RoleRepository  = roleRepository;
+        WalletRepository = walletRepository;
         Mapper = mapper;
         ProductRepository = productRepository;
         ImageRepository =  imageRepository ;
@@ -34,6 +41,8 @@ public class UnitOfWork : IUnitOfWork
     public IProductDetailRepository ProductDetailRepository { get; }
     public ICategoryRepository CategoryRepository { get; }
     public IProductFeedbackRepository ProductFeedbackRepository { get; }
+    public IRoleRepository RoleRepository { get; }
+    public IWalletRepository WalletRepository { get; }
     public IMapper Mapper { get; }
 
     public IConnectionConfiguration DirectionConnection { get; }
