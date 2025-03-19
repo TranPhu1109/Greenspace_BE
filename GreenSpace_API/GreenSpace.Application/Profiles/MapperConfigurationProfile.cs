@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GreenSpace.Application.ViewModels.Category;
 using GreenSpace.Application.ViewModels.DesignIdea;
+using GreenSpace.Application.ViewModels.DesignIdeasCategory;
 using GreenSpace.Application.ViewModels.Images;
 using GreenSpace.Application.ViewModels.ProductDetail;
 using GreenSpace.Application.ViewModels.ProductFeedback;
@@ -58,6 +59,10 @@ public class MapperConfigurationProfile : Profile
             .ReverseMap();
         CreateMap<User, UserCreateModel>().ReverseMap();
         CreateMap<User, UserUpdateModel>().ReverseMap();
+
+        CreateMap<DesignIdeasCategory, DesignIdeasCategoryViewModel>().ReverseMap();
+        CreateMap<DesignIdeasCategory, DesignIdeasCategoryCreateModel>().ReverseMap();
+        CreateMap<DesignIdeasCategory, DesignIdeasCategoryUpdateModel>().ReverseMap();
         //#endregion
 
         //#region Wallet

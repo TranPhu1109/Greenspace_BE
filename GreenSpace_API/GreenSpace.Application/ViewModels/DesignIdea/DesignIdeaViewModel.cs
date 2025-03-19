@@ -20,7 +20,7 @@ namespace GreenSpace.Application.ViewModels.DesignIdea
 
         public Guid ImageId { get; set; }
 
-        public Guid CategoryId { get; set; }
+        public Guid DesignIdeasCategoryId { get; set; }
 
         public string CategoryName { get; set; } = default!;
         public ImageCreateModel? Image { get; set; }

@@ -25,13 +25,12 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
             {
                 RuleFor(x => x.CreateModel.Name).NotNull().NotEmpty().WithMessage("Name must not be null or empty");
 
-                RuleFor(x => x.CreateModel.CategoryId).NotNull().WithMessage("CategoryId must not be empty");
+                RuleFor(x => x.CreateModel.DesignIdeasCategoryId).NotNull().WithMessage("CategoryId must not be empty");
 
                 RuleFor(x => x.CreateModel.Price).GreaterThan(0).WithMessage("Price must be greater than zero");
 
                 RuleFor(x => x.CreateModel.Description).NotNull().NotEmpty().WithMessage("Description must not be null or empty");
 
-                RuleFor(x => x.CreateModel.CategoryId).NotNull().WithMessage("Category must not be null");
             }
         }
         public class CommandHandler : IRequestHandler<CreateDesignIdeaCommand, DesignIdeaViewModel>

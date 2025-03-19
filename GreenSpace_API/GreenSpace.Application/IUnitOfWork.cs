@@ -17,4 +17,5 @@ public interface IUnitOfWork
     IDesignIdeaRepository DesignIdeaRepository { get; }
     IProductDetailRepository ProductDetailRepository { get; }
     IProductFeedbackRepository ProductFeedbackRepository { get; }
+    IDesignIdeasCategoryRepository DesignIdeasCategoryRepository { get; }
 }
