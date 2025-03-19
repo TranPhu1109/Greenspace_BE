@@ -10,13 +10,24 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _dbContext;
     public UnitOfWork(AppDbContext dbcontext, 
-    IUserRepository userRepository, IMapper mapper,
-    IConnectionConfiguration connectionConfiguration, IProductRepository productRepository,IImageRepository imageRepository,ICategoryRepository categoryRepository,
-      IDesignIdeaRepository designIdeaRepository, IProductDetailRepository productDetailRepository,IProductFeedbackRepository productFeedbackRepository,IServiceFeedbackRepositoy serviceFeedbackRepositoy)
+    IUserRepository userRepository,
+    IMapper mapper,
+    IConnectionConfiguration connectionConfiguration, 
+    IProductRepository productRepository,
+    IImageRepository imageRepository,
+    ICategoryRepository categoryRepository,
+    IDesignIdeaRepository designIdeaRepository, 
+    IProductDetailRepository productDetailRepository,
+    IProductFeedbackRepository productFeedbackRepository,
+    IRoleRepository roleRepository,
+    IWalletRepository walletRepository,
+    IDesignIdeasCategoryRepository designIdeasCategoryRepository)
     {
         _dbContext = dbcontext;
         DirectionConnection = connectionConfiguration;
         UserRepository = userRepository;
+        RoleRepository  = roleRepository;
+        WalletRepository = walletRepository;
         Mapper = mapper;
         ProductRepository = productRepository;
         ImageRepository =  imageRepository ;
@@ -25,6 +36,8 @@ public class UnitOfWork : IUnitOfWork
         ProductDetailRepository = productDetailRepository;
         ProductFeedbackRepository = productFeedbackRepository;
         ServiceFeedbackRepositoy = serviceFeedbackRepositoy;
+        DesignIdeasCategoryRepository = designIdeasCategoryRepository;
+
     }
     public IUserRepository UserRepository { get; }
     public IProductRepository ProductRepository { get; }
@@ -35,6 +48,9 @@ public class UnitOfWork : IUnitOfWork
     public IProductDetailRepository ProductDetailRepository { get; }
     public ICategoryRepository CategoryRepository { get; }
     public IProductFeedbackRepository ProductFeedbackRepository { get; }
+    public IRoleRepository RoleRepository { get; }
+    public IWalletRepository WalletRepository { get; }
+    public IDesignIdeasCategoryRepository DesignIdeasCategoryRepository { get; }
     public IServiceFeedbackRepositoy ServiceFeedbackRepositoy { get; }
     public IMapper Mapper { get; }
 

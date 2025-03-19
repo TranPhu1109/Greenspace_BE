@@ -7,7 +7,5 @@ public class Category : BaseEntity
 
     public string Description { get; set; } = string.Empty;
 
-    public ICollection<DesignIdea> DesignIdeas { get; set; } = new List<DesignIdea>();
-
     public ICollection<Product> Products { get; set; } = new List<Product>();
 }

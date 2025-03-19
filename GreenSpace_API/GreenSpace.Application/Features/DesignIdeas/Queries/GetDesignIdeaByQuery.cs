@@ -39,7 +39,7 @@ namespace GreenSpace.Application.Features.DesignIdeas.Queries
             }
             public async Task<DesignIdeaViewModel> Handle(GetDesignIdeaByQuery request, CancellationToken cancellationToken)
             {
-                var design = await _unitOfWork.DesignIdeaRepository.GetByIdAsync(request.Id, x => x.Image, x => x.Category,x => x.ProductDetails);
+                var design = await _unitOfWork.DesignIdeaRepository.GetByIdAsync(request.Id, x => x.Image, x => x.DesignIdeasCategory,x => x.ProductDetails);
                 if (design is null) throw new NotFoundException($"DesignIdea with ID-{request.Id} is not exist!");
                 var result = _mapper.Map<DesignIdeaViewModel>(design);
                 return result;

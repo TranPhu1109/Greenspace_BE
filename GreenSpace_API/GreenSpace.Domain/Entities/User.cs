@@ -4,18 +4,19 @@ namespace GreenSpace.Domain.Entities
 {
     public class User : BaseEntity
     {
-        public string? Name { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
-        public string? Email { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
 
-        public string? Password { get; set; }
+        public string Password { get; set; } = default!;
 
         public Guid RoleId { get; set; }
 
         public string? Phone { get; set; } = default!;
 
         public string? Address { get; set; } = string.Empty;
-
+        public string? FCMToken { get; set; } = default!;
+        public string? JWTToken { get; set; } = default!;
         public string? AvatarUrl { get; set; }
 
         public ICollection<Contract> Contracts { get; set; } = new List<Contract>();

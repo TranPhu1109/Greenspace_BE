@@ -188,9 +188,6 @@ namespace GreenSpace.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -200,6 +197,9 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("DesignIdeasCategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ImageId")
                         .HasColumnType("uniqueidentifier");
@@ -222,11 +222,45 @@ namespace GreenSpace.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("DesignIdeasCategoryId");
 
                     b.HasIndex("ImageId");
 
                     b.ToTable("DesignIdeas");
+                });
+
+            modelBuilder.Entity("GreenSpace.Domain.Entities.DesignIdeasCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DesignIdeasCategories");
                 });
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.Document", b =>
@@ -757,9 +791,6 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("RoleName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -999,10 +1030,17 @@ namespace GreenSpace.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FCMToken")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("JWTToken")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("ModificatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -1011,9 +1049,11 @@ namespace GreenSpace.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
@@ -1057,15 +1097,16 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("WalletAccount")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("WalletId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("WalletType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1176,9 +1217,9 @@ namespace GreenSpace.Infrastructure.Migrations
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.DesignIdea", b =>
                 {
-                    b.HasOne("GreenSpace.Domain.Entities.Category", "Category")
+                    b.HasOne("GreenSpace.Domain.Entities.DesignIdeasCategory", "DesignIdeasCategory")
                         .WithMany("DesignIdeas")
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("DesignIdeasCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1188,7 +1229,7 @@ namespace GreenSpace.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("DesignIdeasCategory");
 
                     b.Navigation("Image");
                 });
@@ -1460,8 +1501,6 @@ namespace GreenSpace.Infrastructure.Migrations
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.Category", b =>
                 {
-                    b.Navigation("DesignIdeas");
-
                     b.Navigation("Products");
                 });
 
@@ -1470,6 +1509,11 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Navigation("ProductDetails");
 
                     b.Navigation("ServiceFeedbacks");
+                });
+
+            modelBuilder.Entity("GreenSpace.Domain.Entities.DesignIdeasCategory", b =>
+                {
+                    b.Navigation("DesignIdeas");
                 });
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.Image", b =>

@@ -36,7 +36,7 @@ namespace GreenSpace.Application.Features.DesignIdeas.Queries
 
 
 
-                var designIdeas = await _unitOfWork.DesignIdeaRepository.GetAllAsync(x => x.Image, x => x.Category,x => x.ProductDetails);
+                var designIdeas = await _unitOfWork.DesignIdeaRepository.GetAllAsync(x => x.Image, x => x.DesignIdeasCategory,x => x.ProductDetails);
                 if (designIdeas.Count == 0) throw new NotFoundException("There are no designIdea in DB!");
                 var viewModels = _mapper.Map<List<DesignIdeaViewModel>>(designIdeas);
 

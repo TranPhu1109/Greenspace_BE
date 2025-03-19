@@ -8,6 +8,8 @@ public interface IUnitOfWork
     IMapper Mapper { get; }
     IConnectionConfiguration DirectionConnection { get; }
     IUserRepository UserRepository { get; }
+    IRoleRepository RoleRepository { get; }
+    IWalletRepository WalletRepository { get; }
     Task<bool> SaveChangesAsync();
     IProductRepository ProductRepository { get; }
     IImageRepository ImageRepository { get; }
@@ -15,5 +17,6 @@ public interface IUnitOfWork
     IDesignIdeaRepository DesignIdeaRepository { get; }
     IProductDetailRepository ProductDetailRepository { get; }
     IProductFeedbackRepository ProductFeedbackRepository { get; }
+    IDesignIdeasCategoryRepository DesignIdeasCategoryRepository { get; }
     IServiceFeedbackRepositoy ServiceFeedbackRepositoy { get; }
 }

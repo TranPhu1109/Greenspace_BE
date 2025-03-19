@@ -16,6 +16,7 @@ namespace GreenSpace.Infrastructure
         public  DbSet<Blog> Blogs { get; set; }
 
         public  DbSet<Category> Categories { get; set; }
+        public DbSet<DesignIdeasCategory> DesignIdeasCategories { get; set; }
 
         public  DbSet<Contract> Contracts { get; set; }
 

@@ -14,6 +14,9 @@ using GreenSpace.Application.Features.User.Queries;
 using GreenSpace.Application.Services.Interfaces;
 using GreenSpace.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using GreenSpace.Application.Repositories;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace GreenSpace.WebAPI;
 
@@ -25,24 +28,7 @@ public static class DependencyInjection
 
         const string serviceName = "GreenSpace_WebAPI";
         const string serviceVersion = "v1.0";
-        // Add Tracing
-        //builder.Services.AddOpenTelemetry()
-        //    .WithTracing(cfg =>
-        //        cfg.AddSource(serviceName)
-        //            .ConfigureResource(resource => resource.AddService(serviceName: serviceName,
-        //                serviceVersion: serviceVersion))
-        //            .AddAspNetCoreInstrumentation()
-        //            .AddSqlClientInstrumentation()
-        //            .AddHttpClientInstrumentation()
-        //            .AddOtlpExporter(ex =>
-        //            {
-        //                ex.Endpoint = new("http://jaeger:4317");
-        //                ex.ExportProcessorType = OpenTelemetry.ExportProcessorType.Simple;
-        //                ex.TimeoutMilliseconds = 30;
-        //                ex.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
-        //            })
-        //            .AddConsoleExporter());
-        //builder.Logging.AddSeq("http://seq:5341");
+
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddCors(options
         => options.AddDefaultPolicy(policy
@@ -64,8 +50,8 @@ public static class DependencyInjection
         List<Assembly> assemblies = new List<Assembly>
         {
             typeof(Program).Assembly,
-            Application.AssemblyReference.Assembly,
-            Infrastructure.AssemblyReference.Assembly
+            typeof(GreenSpace.Application.AssemblyReference).Assembly,
+            typeof(GreenSpace.Infrastructure.AssemblyReference).Assembly
         };
         builder.Services.AddSingleton(configuration);
         builder.Services.AddValidatorsFromAssemblies(assemblies: assemblies);
@@ -74,7 +60,7 @@ public static class DependencyInjection
    
         // Register To Handle Query/Command of MediatR
         builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(GetAllUserQuery).Assembly));
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
         builder.Services.AddScoped<IClaimsService, ClaimsService>();
         // Scan and register all interfaces --> implementations 
         builder.Services.Scan(scan => scan
@@ -86,49 +72,55 @@ public static class DependencyInjection
          .AsMatchingInterface()
          .WithScopedLifetime());
 
-        //builder.Services.AddSwaggerGen(opt =>
-        //{
-        //    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Green Space", Version = "v1" });
-        //    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        //    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-        //    opt.IncludeXmlComments(xmlPath);
-        //    opt.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
-        //    {
-        //        Name = "Authorization",
-        //        Description = "Bearer Generated JWT-Token",
-        //        In = ParameterLocation.Header,
-        //        Type = SecuritySchemeType.ApiKey,
-        //        Scheme = "Bearer"
-
-        //    });
-        //    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-        //                {
-        //                    {
-        //                        new OpenApiSecurityScheme
-        //                        {
-        //                            Reference = new OpenApiReference
-        //                            {
-        //                                Type = ReferenceType.SecurityScheme,
-        //                                Id = JwtBearerDefaults.AuthenticationScheme
-        //                            },
-        //                            Scheme = "oauth2",
-        //                            Name = "Bearer",
-        //                            In = ParameterLocation.Header,
-        //                        }, Array.Empty<string>()
-        //                    }
-        //                });
-        //});
-
-        builder.Services.AddSwaggerGen(c =>
+        builder.Services.AddSwaggerGen(opt =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo
+            opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Green Space", Version = "v1" });
+            //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            //opt.IncludeXmlComments(xmlPath);
+            opt.AddSecurityDefinition(name: "Bearer", securityScheme: new OpenApiSecurityScheme
             {
-                Title = "GreenSpace API",
-                Version = "v1",
-                Description = "API documentation for GreenSpace"
-            });
-        });
+                Name = "Authorization",
+                Description = "Bearer Generated JWT-Token",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer"
 
+            });
+            opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+                        {
+                            {
+                                new OpenApiSecurityScheme
+                                {
+                                    Reference = new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = JwtBearerDefaults.AuthenticationScheme
+                                    },
+                                    Scheme = "oauth2",
+                                    Name = "Bearer",
+                                    In = ParameterLocation.Header,
+                                }, Array.Empty<string>()
+                            }
+                        });
+        });
+        var key = Encoding.ASCII.GetBytes(configuration.JWTOptions.Secret);
+        builder.Services.AddAuthentication(x =>
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(x =>
+        {
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = true,
+                ValidIssuer = configuration.JWTOptions.Issuer,
+                ValidAudience = configuration.JWTOptions.Audience,
+                ValidateAudience = true
+            };
+        });
         builder.Services.AddSignalR();
         builder.Services.AddSingleton<PerformanceMiddleware>();
         builder.Services.AddSingleton<Stopwatch>();
