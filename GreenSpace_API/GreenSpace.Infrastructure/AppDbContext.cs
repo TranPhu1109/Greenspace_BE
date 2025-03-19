@@ -50,7 +50,7 @@ namespace GreenSpace.Infrastructure
 
         public  DbSet<ServiceOrderDetail> ServiceOrderDetails { get; set; }
 
-        public  DbSet<ServiceType> ServiceTypes { get; set; }
+ 
 
         public  DbSet<WorkTask> Tasks { get; set; }
 

@@ -9,6 +9,5 @@ public class ServiceOderConfiguration : IEntityTypeConfiguration<ServiceOrder>
     public void Configure(EntityTypeBuilder<ServiceOrder> builder)
     {
         builder.HasKey(e => e.Id);
-        builder.HasOne(d => d.ServiceType).WithMany(p => p.ServiceOrders).HasForeignKey(d => d.ServiceTypeId);
     }
 }
