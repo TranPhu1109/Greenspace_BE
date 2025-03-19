@@ -21,7 +21,8 @@ public class UnitOfWork : IUnitOfWork
     IProductFeedbackRepository productFeedbackRepository,
     IRoleRepository roleRepository,
     IWalletRepository walletRepository,
-    IDesignIdeasCategoryRepository designIdeasCategoryRepository)
+    IDesignIdeasCategoryRepository designIdeasCategoryRepository,
+    IServiceFeedbackRepositoy serviceFeedbackRepositoy)
     {
         _dbContext = dbcontext;
         DirectionConnection = connectionConfiguration;
