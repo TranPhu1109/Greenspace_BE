@@ -5,6 +5,7 @@ using GreenSpace.Application.ViewModels.Images;
 using GreenSpace.Application.ViewModels.ProductDetail;
 using GreenSpace.Application.ViewModels.ProductFeedback;
 using GreenSpace.Application.ViewModels.Products;
+using GreenSpace.Application.ViewModels.ServiceFeedbacks;
 using GreenSpace.Domain.Entities;
 
 namespace GreenSpace.Application.Profiles;
@@ -47,6 +48,12 @@ public class MapperConfigurationProfile : Profile
              .ForMember(x => x.ProductName, opt => opt.MapFrom(x => x.Product.Name))
             .ReverseMap();
         CreateMap<ProductFeedback, ProductFeedbackCreateModel>().ReverseMap();
+
+        CreateMap<ServiceFeedback, ServiceFeedbackViewModel>()
+             .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
+             .ForMember(x => x.DesignName, opt => opt.MapFrom(x => x.DesignIdea.Name))
+             .ReverseMap();
+        CreateMap<ServiceFeedback, ServiceFeedbackCreateModel>().ReverseMap();
         //CreateMap<Role, RoleViewModel>().ReverseMap();
 
 
