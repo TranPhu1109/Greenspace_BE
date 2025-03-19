@@ -6,6 +6,8 @@ using GreenSpace.Application.ViewModels.Images;
 using GreenSpace.Application.ViewModels.ProductDetail;
 using GreenSpace.Application.ViewModels.ProductFeedback;
 using GreenSpace.Application.ViewModels.Products;
+using GreenSpace.Application.ViewModels.ServiceFeedbacks;
+using GreenSpace.Application.ViewModels.Users;
 using GreenSpace.Domain.Entities;
 
 namespace GreenSpace.Application.Profiles;
