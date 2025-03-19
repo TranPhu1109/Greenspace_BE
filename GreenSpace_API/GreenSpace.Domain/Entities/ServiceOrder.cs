@@ -1,4 +1,6 @@
-﻿namespace GreenSpace.Domain.Entities;
+﻿using GreenSpace.Domain.Enum;
+
+namespace GreenSpace.Domain.Entities;
 
 public class ServiceOrder :BaseEntity
 {
@@ -11,7 +13,7 @@ public class ServiceOrder :BaseEntity
     public string CusPhone { get; set; } = string.Empty;
     public double? Length { get; set; } = default!;
     public double? Width { get; set; } = default!;
-
+    public string ServiceType { get; set; } = string.Empty;
     public double TotalCost { get; set; } = default!;
 
     public Guid? PaymentId { get; set; }

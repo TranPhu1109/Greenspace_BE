@@ -9,6 +9,7 @@ public class ProductFeedback :BaseEntity
     public int? Rating { get; set; } = null;
 
     public string Description { get; set; } = string.Empty;
+    public string Reply { get; set; } = string.Empty;
 
     public Product Product { get; set; } = null!;
 

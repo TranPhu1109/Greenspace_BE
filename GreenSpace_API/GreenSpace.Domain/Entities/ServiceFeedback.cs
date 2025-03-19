@@ -9,6 +9,7 @@ public class ServiceFeedback :BaseEntity
     public int Rating { get; set; } = default!;
 
     public string Description { get; set; } = string.Empty;
+    public string Reply { get; set; } = string.Empty;
 
     public DesignIdea DesignIdea { get; set; } = null!;
 
