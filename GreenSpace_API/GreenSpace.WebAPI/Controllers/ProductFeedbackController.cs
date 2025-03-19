@@ -2,9 +2,11 @@
 using GreenSpace.Application.Features.Categories.Queries;
 using GreenSpace.Application.Features.ProductFeedbacks.Commands;
 using GreenSpace.Application.Features.ProductFeedbacks.Queries;
+using GreenSpace.Application.Features.Products.Queries;
 using GreenSpace.Application.Features.Products.Queries.GreenSpace.Application.Features.Products.Queries;
 using GreenSpace.Application.ViewModels.Category;
 using GreenSpace.Application.ViewModels.ProductFeedback;
+using GreenSpace.Application.ViewModels.ServiceFeedbacks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,10 +30,9 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet]
-        public async Task<IActionResult> Get(
-                                            [FromQuery] int pageNumber = 0,
-                                            [FromQuery] int pageSize = 10)
-        => Ok(await _mediator.Send(new GetAllProductFeedbackQuery { }));
+        public async Task<IActionResult> Get([FromQuery] int pageNumber = 0,
+                                                 [FromQuery] int pageSize = 10)
+            => Ok(await _mediator.Send(new GetAllProductFeedbackQuery { PageNumber = pageNumber, PageSize = pageSize }));
 
 
 
@@ -79,7 +80,20 @@ namespace GreenSpace.WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { Id = result.Id }, result);
         }
 
-
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromForm] ProductFeedbackUpdateModel model)
+        {
+            if (id != model.Id) return BadRequest("Id is not match!");
+            var result = await _mediator.Send(new UpdateProductFeedBackCommand { UpdateModel = model });
+            if (!result)
+            {
+                return BadRequest("Update Fail!");
+            }
+            return Ok("Update Successfully");
+        }
 
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]

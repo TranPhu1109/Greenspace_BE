@@ -23,7 +23,7 @@ namespace GreenSpace.Application.Features.ProductFeedbacks.Queries
         {
             public QueryValidation()
             {
-                RuleFor(x => x.ProductId).NotNull().NotEmpty().WithMessage("User ID must not be null or empty");
+                RuleFor(x => x.ProductId).NotNull().NotEmpty().WithMessage("Product ID must not be null or empty");
             }
         }
 
@@ -45,7 +45,7 @@ namespace GreenSpace.Application.Features.ProductFeedbacks.Queries
                 var productFeedbacks = await _unitOfWork.ProductFeedbackRepository.WhereAsync(x => x.ProductId == request.ProductId);
                 if (productFeedbacks == null || !productFeedbacks.Any())
                 {
-                    throw new NotFoundException($"No productFeedback found for User ID {request.ProductId}.");
+                    throw new NotFoundException($"No productFeedback found for product ID {request.ProductId}.");
                 }
                 var viewModels = _mapper.Map<List<ProductFeedbackViewModel>>(productFeedbacks);
                 return PaginatedList<ProductFeedbackViewModel>.Create(

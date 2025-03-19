@@ -1,5 +1,6 @@
 ﻿using GreenSpace.Application.Features.ProductFeedbacks.Commands;
 using GreenSpace.Application.Features.ProductFeedbacks.Queries;
+using GreenSpace.Application.Features.Products.Queries;
 using GreenSpace.Application.Features.ServiceFeedbacks.Commands;
 using GreenSpace.Application.Features.ServiceFeedbacks.Queries;
 using GreenSpace.Application.ViewModels.ProductFeedback;
@@ -27,10 +28,9 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet]
-        public async Task<IActionResult> Get(
-                                            [FromQuery] int pageNumber = 0,
-                                            [FromQuery] int pageSize = 10)
-        => Ok(await _mediator.Send(new GetAllServiceFeedbackQuery { }));
+        public async Task<IActionResult> Get([FromQuery] int pageNumber = 0,
+                                                 [FromQuery] int pageSize = 10)
+            => Ok(await _mediator.Send(new GetAllServiceFeedbackQuery { PageNumber = pageNumber, PageSize = pageSize }));
 
 
 
@@ -78,7 +78,20 @@ namespace GreenSpace.WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { Id = result.Id }, result);
         }
 
-
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromForm] ServiceFeedbackUpdateModel model)
+        {
+            if (id != model.Id) return BadRequest("Id is not match!");
+            var result = await _mediator.Send(new UpdateServiceFeedBackCommand { UpdateModel = model });
+            if (!result)
+            {
+                return BadRequest("Update Fail!");
+            }
+            return Ok("Update Successfully");
+        }
 
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]

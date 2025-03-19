@@ -46,7 +46,7 @@ namespace GreenSpace.Application.Features.ServiceFeedbacks.Queries
                 var Feedbacks = await _unitOfWork.ServiceFeedbackRepositoy.WhereAsync(x => x.DesignIdeaId == request.DesignId);
                 if (Feedbacks == null || !Feedbacks.Any())
                 {
-                    throw new NotFoundException($"No productFeedback found for User ID {request.DesignId}.");
+                    throw new NotFoundException($"No productFeedback found for Design ID {request.DesignId}.");
                 }
                 var viewModels = _mapper.Map<List<ServiceFeedbackViewModel>>(Feedbacks);
                 return PaginatedList<ServiceFeedbackViewModel>.Create(

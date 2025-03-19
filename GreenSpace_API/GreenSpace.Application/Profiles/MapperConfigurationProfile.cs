@@ -50,12 +50,14 @@ public class MapperConfigurationProfile : Profile
              .ForMember(x => x.ProductName, opt => opt.MapFrom(x => x.Product.Name))
             .ReverseMap();
         CreateMap<ProductFeedback, ProductFeedbackCreateModel>().ReverseMap();
+        CreateMap<ProductFeedback, ProductFeedbackUpdateModel>().ReverseMap();
 
         CreateMap<ServiceFeedback, ServiceFeedbackViewModel>()
              .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
              .ForMember(x => x.DesignName, opt => opt.MapFrom(x => x.DesignIdea.Name))
              .ReverseMap();
         CreateMap<ServiceFeedback, ServiceFeedbackCreateModel>().ReverseMap();
+        CreateMap<ServiceFeedback, ServiceFeedbackUpdateModel>().ReverseMap();
         //CreateMap<Role, RoleViewModel>().ReverseMap();
 
         CreateMap<User, UserViewModel>()
