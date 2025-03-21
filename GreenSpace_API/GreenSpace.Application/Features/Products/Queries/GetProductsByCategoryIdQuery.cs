@@ -13,9 +13,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace GreenSpace.Application.Features.Products.Queries
-{
-    namespace GreenSpace.Application.Features.Products.Queries
     {
         public class GetProductsByCategoryIdQuery : IRequest<PaginatedList<ProductViewModel>>
         {
@@ -63,5 +62,5 @@ namespace GreenSpace.Application.Features.Products.Queries
                 }
             }
         }
-    }
 }
+

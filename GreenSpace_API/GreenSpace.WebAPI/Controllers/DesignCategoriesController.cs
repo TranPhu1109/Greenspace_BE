@@ -3,7 +3,6 @@ using GreenSpace.Application.Features.Categories.Queries;
 using GreenSpace.Application.Features.DesignIdeas.Queries;
 using GreenSpace.Application.Features.DesignIdeasCategories.Commands;
 using GreenSpace.Application.Features.DesignIdeasCategories.Queries;
-using GreenSpace.Application.Features.Products.Queries.GreenSpace.Application.Features.Products.Queries;
 using GreenSpace.Application.ViewModels.Category;
 using GreenSpace.Application.ViewModels.DesignIdeasCategory;
 using MediatR;

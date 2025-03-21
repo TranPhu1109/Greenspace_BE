@@ -3,7 +3,6 @@ using GreenSpace.Application.Features.Categories.Queries;
 using GreenSpace.Application.Features.ProductFeedbacks.Commands;
 using GreenSpace.Application.Features.ProductFeedbacks.Queries;
 using GreenSpace.Application.Features.Products.Queries;
-using GreenSpace.Application.Features.Products.Queries.GreenSpace.Application.Features.Products.Queries;
 using GreenSpace.Application.ViewModels.Category;
 using GreenSpace.Application.ViewModels.ProductFeedback;
 using GreenSpace.Application.ViewModels.ServiceFeedbacks;

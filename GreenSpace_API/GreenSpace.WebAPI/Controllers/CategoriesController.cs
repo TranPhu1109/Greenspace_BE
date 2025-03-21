@@ -1,6 +1,6 @@
 ﻿using GreenSpace.Application.Features.Categories.Commands;
 using GreenSpace.Application.Features.Categories.Queries;
-using GreenSpace.Application.Features.Products.Queries.GreenSpace.Application.Features.Products.Queries;
+using GreenSpace.Application.Features.Products.Queries;
 using GreenSpace.Application.ViewModels.Category;
 using GreenSpace.Domain.Enum;
 using MediatR;

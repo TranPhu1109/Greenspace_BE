@@ -6,6 +6,7 @@ using GreenSpace.Application.ViewModels.Images;
 using GreenSpace.Application.ViewModels.ProductDetail;
 using GreenSpace.Application.ViewModels.ProductFeedback;
 using GreenSpace.Application.ViewModels.Products;
+using GreenSpace.Application.ViewModels.RecordDesign;
 using GreenSpace.Application.ViewModels.RecordSketch;
 using GreenSpace.Application.ViewModels.ServiceFeedbacks;
 using GreenSpace.Application.ViewModels.ServiceOrder;
@@ -92,8 +93,15 @@ public class MapperConfigurationProfile : Profile
 
         CreateMap<ServiceOrderDetail, ServiceOrderDetailViewModel>().ReverseMap();
         CreateMap<ServiceOrderDetail, ServiceOrderDetailCreateModel>().ReverseMap();
-        CreateMap<RecordSketch, RecordSketchViewModel>().ReverseMap();
-        CreateMap<RecordDesign, RecordSketchViewModel>().ReverseMap();
+        CreateMap<RecordSketch, RecordSketchViewModel>()
+            .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
+            .ReverseMap();
+        CreateMap<RecordSketch, RecordSketchUpdateModel>().ReverseMap();
+
+        CreateMap<RecordDesign, RecordDesignUpdateModel>().ReverseMap();
+        CreateMap<RecordDesign, RecordDesignViewModel>()
+            .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
+            .ReverseMap();
         //#endregion
 
         //#region Wallet
