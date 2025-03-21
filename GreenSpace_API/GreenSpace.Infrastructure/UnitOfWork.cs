@@ -22,7 +22,11 @@ public class UnitOfWork : IUnitOfWork
     IRoleRepository roleRepository,
     IWalletRepository walletRepository,
     IDesignIdeasCategoryRepository designIdeasCategoryRepository,
-    IServiceFeedbackRepositoy serviceFeedbackRepositoy)
+    IServiceFeedbackRepositoy serviceFeedbackRepositoy,
+    IServiceOrderRepository serviceOrderRepository,
+    IServiceOrderDetailRepository serviceOrderDetailRepository,
+    IRecordDesignRepository recordDesignRepository,
+    IRecordSketchRepository recordSketchRepository)
     {
         _dbContext = dbcontext;
         DirectionConnection = connectionConfiguration;
@@ -38,6 +42,10 @@ public class UnitOfWork : IUnitOfWork
         ProductFeedbackRepository = productFeedbackRepository;
         ServiceFeedbackRepositoy = serviceFeedbackRepositoy;
         DesignIdeasCategoryRepository = designIdeasCategoryRepository;
+        ServiceOrderRepository = serviceOrderRepository;
+        ServiceOrderDetailRepository = serviceOrderDetailRepository;
+        RecordDesignRepository = recordDesignRepository;
+        RecordSketchRepository = recordSketchRepository;
 
     }
     public IUserRepository UserRepository { get; }
@@ -53,9 +61,15 @@ public class UnitOfWork : IUnitOfWork
     public IWalletRepository WalletRepository { get; }
     public IDesignIdeasCategoryRepository DesignIdeasCategoryRepository { get; }
     public IServiceFeedbackRepositoy ServiceFeedbackRepositoy { get; }
+    public IServiceOrderRepository ServiceOrderRepository { get; }
+    public IServiceOrderDetailRepository ServiceOrderDetailRepository { get; }
+
+    public IRecordDesignRepository RecordDesignRepository { get; }
+    public IRecordSketchRepository RecordSketchRepository { get; }
     public IMapper Mapper { get; }
 
     public IConnectionConfiguration DirectionConnection { get; }
+
 
     public async Task<bool> SaveChangesAsync() => (await _dbContext.SaveChangesAsync()) > 0;
 

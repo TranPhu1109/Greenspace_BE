@@ -6,9 +6,13 @@ using GreenSpace.Application.ViewModels.Images;
 using GreenSpace.Application.ViewModels.ProductDetail;
 using GreenSpace.Application.ViewModels.ProductFeedback;
 using GreenSpace.Application.ViewModels.Products;
+using GreenSpace.Application.ViewModels.RecordSketch;
 using GreenSpace.Application.ViewModels.ServiceFeedbacks;
+using GreenSpace.Application.ViewModels.ServiceOrder;
+using GreenSpace.Application.ViewModels.ServiceOrderDetail;
 using GreenSpace.Application.ViewModels.Users;
 using GreenSpace.Domain.Entities;
+using GreenSpace.Domain.Enum;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -40,6 +44,7 @@ public class MapperConfigurationProfile : Profile
 
 
         CreateMap<ProductDetail, ProductDetailCreateModel>().ReverseMap();
+        CreateMap<ProductDetail, ProductDetailViewModel>().ReverseMap();
 
         CreateMap<Category, CategoryViewModel>().ReverseMap();
         CreateMap<Category, CategoryCreateModel>().ReverseMap();
@@ -72,6 +77,23 @@ public class MapperConfigurationProfile : Profile
         CreateMap<DesignIdeasCategory, DesignIdeasCategoryViewModel>().ReverseMap();
         CreateMap<DesignIdeasCategory, DesignIdeasCategoryCreateModel>().ReverseMap();
         CreateMap<DesignIdeasCategory, DesignIdeasCategoryUpdateModel>().ReverseMap();
+
+        CreateMap<ServiceOrder, ServiceOrderViewModel>()
+               .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
+               .ForMember(dest => dest.ServiceOrderDetails, opt => opt.MapFrom(src => src.ServiceOrderDetails))
+               .ForMember(dest => dest.Status, opt => opt.MapFrom(src => ((ServiceOrderStatus)src.Status).ToString()))
+               .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
+               .ReverseMap(); 
+        CreateMap<ServiceOrder, ServiceOrderCreateModel>().ReverseMap();
+        CreateMap<ServiceOrder, ServiceOrderUpdateModel>()
+            .ForMember(dest => dest.ServiceOrderDetails, opt => opt.Ignore())
+            .ReverseMap()
+            .ForMember(dest => dest.ServiceOrderDetails, opt => opt.Ignore());
+
+        CreateMap<ServiceOrderDetail, ServiceOrderDetailViewModel>().ReverseMap();
+        CreateMap<ServiceOrderDetail, ServiceOrderDetailCreateModel>().ReverseMap();
+        CreateMap<RecordSketch, RecordSketchViewModel>().ReverseMap();
+        CreateMap<RecordDesign, RecordSketchViewModel>().ReverseMap();
         //#endregion
 
         //#region Wallet

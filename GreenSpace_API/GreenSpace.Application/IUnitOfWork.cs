@@ -19,4 +19,8 @@ public interface IUnitOfWork
     IProductFeedbackRepository ProductFeedbackRepository { get; }
     IDesignIdeasCategoryRepository DesignIdeasCategoryRepository { get; }
     IServiceFeedbackRepositoy ServiceFeedbackRepositoy { get; }
+    IServiceOrderRepository ServiceOrderRepository { get; }
+    IServiceOrderDetailRepository ServiceOrderDetailRepository { get; }
+    IRecordDesignRepository RecordDesignRepository { get; }
+    IRecordSketchRepository RecordSketchRepository { get; }
 }

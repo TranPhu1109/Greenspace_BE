@@ -25,6 +25,6 @@ namespace GreenSpace.Application.ViewModels.DesignIdea
         public string CategoryName { get; set; } = default!;
         public ImageCreateModel? Image { get; set; }
 
-        public List<ProductDetailCreateModel> ProductDetails { get; set; } = new List<ProductDetailCreateModel>();
+        public List<ProductDetailViewModel> ProductDetails { get; set; } = new List<ProductDetailViewModel>();
     }
 }
