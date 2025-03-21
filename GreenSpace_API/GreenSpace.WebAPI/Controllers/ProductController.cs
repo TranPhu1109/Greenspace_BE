@@ -60,7 +60,7 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] ProductCreateModel model)
+        public async Task<IActionResult> Create([FromBody] ProductCreateModel model)
         {
             var result = await _mediator.Send(new CreateProductCommand { CreateModel = model });
             if (result is null)
@@ -74,7 +74,7 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromForm] ProductUpdateModel model)
+        public async Task<IActionResult> Update(Guid id, [FromBody] ProductUpdateModel model)
         {
             if (id != model.Id) return BadRequest("Id is not match!");
             var result = await _mediator.Send(new UpdateProductCommand { UpdateModel = model });

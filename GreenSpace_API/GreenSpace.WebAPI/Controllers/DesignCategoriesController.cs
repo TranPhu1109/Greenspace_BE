@@ -59,7 +59,7 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] DesignIdeasCategoryCreateModel model)
+        public async Task<IActionResult> Create([FromBody] DesignIdeasCategoryCreateModel model)
         {
             var result = await _mediator.Send(new CreateDesignCategoryCommand { CreateModel = model });
             if (result is null)

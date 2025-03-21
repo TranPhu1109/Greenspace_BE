@@ -12,6 +12,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=db;Database=GreenSpace;User Id=sa;Password=z@123456;TrustServerCertificate=true;
+      - JWTOptions__Secret=kycO3oUsXa7qPo3Ipco2Ft8GdQJmS9eZ
+      - JWTOptions__Issuer=green-space
+      - JWTOptions__Audience=green-space-client
     depends_on:
       - db
     networks:
