@@ -1,4 +1,6 @@
-﻿using GreenSpace.Application.GlobalExceptionHandling;
+﻿using CloudinaryDotNet;
+using GreenSpace.Application.GlobalExceptionHandling;
+using GreenSpace.Application.Services;
 using GreenSpace.Application.SignalR;
 using GreenSpace.Infrastructure;
 using GreenSpace.WebAPI;
@@ -7,18 +9,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 await builder.AddWebAPIServicesAsync();
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.Listen(System.Net.IPAddress.Any, 8080); // Lắng nghe trên tất cả các interface
-});
+
 
 var app = builder.Build();
 app.UseCors();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Green Space API V1");
-    c.RoutePrefix = string.Empty; // Đặt Swagger UI tại root (http://localhost:8080)
-});
+
 
 app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 app.UseMiddleware<PerformanceMiddleware>();
@@ -33,6 +28,7 @@ app.UseAuthorization();
 ApplyMigration();
 app.MapControllers();
 app.MapHub<SignalrHub>("/hub");
+
 
 app.Run();
 

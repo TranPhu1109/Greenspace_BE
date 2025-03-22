@@ -38,3 +38,9 @@ public class EmailConfig
     public string Password { get; set; } = string.Empty;
     public string DisplayName { get; set; } = string.Empty;
 }
+public class CloudinarySettings
+{
+    public string CloudName { get; set; } = string.Empty;
+    public string ApiKey { get; set; } = string.Empty;
+    public string ApiSecret { get; set; } = string.Empty;
+}

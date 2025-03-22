@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using GreenSpace.Application.Repositories;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using CloudinaryDotNet;
+using GreenSpace.Application.Services;
 
 namespace GreenSpace.WebAPI;
 
@@ -121,6 +123,18 @@ public static class DependencyInjection
                 ValidateAudience = true
             };
         });
+        // Đọc cấu hình từ appsettings.json
+        var cloudinarySettings = builder.Configuration.GetSection("CloudinarySettings");
+        Account account = new Account(
+            cloudinarySettings["CloudName"],
+            cloudinarySettings["ApiKey"],
+            cloudinarySettings["ApiSecret"]
+        );
+        Cloudinary cloudinary = new Cloudinary(account);
+
+        builder.Services.AddSingleton(cloudinary);
+        builder.Services.AddSingleton<CloudinaryService>();
+
         builder.Services.AddSignalR();
         builder.Services.AddSingleton<PerformanceMiddleware>();
         builder.Services.AddSingleton<Stopwatch>();
