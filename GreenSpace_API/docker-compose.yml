@@ -1,0 +1,38 @@
+networks:
+  app-network:
+    driver: bridge
+services:
+  greenspace.webapi:
+    image: ${DOCKER_REGISTRY-}greenspacewebapi
+    build:
+      context: .
+      dockerfile: GreenSpace.WebAPI/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=GreenSpace;User Id=sa;Password=z@123456;TrustServerCertificate=true;
+      - JWTOptions__Secret=kycO3oUsXa7qPo3Ipco2Ft8GdQJmS9eZ
+      - JWTOptions__Issuer=green-space
+      - JWTOptions__Audience=green-space-client
+    depends_on:
+      - db
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "z@123456"
+    ports:
+      - "1444:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  sqlserver-data:
