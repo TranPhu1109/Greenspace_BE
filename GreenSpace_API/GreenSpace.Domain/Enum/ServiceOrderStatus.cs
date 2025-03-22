@@ -22,6 +22,8 @@ namespace GreenSpace.Domain.Enum
         DeliveredSuccessfully = 11,     // Đã giao hàng thành công
         CompleteOrder  = 12,             // Hoàn thành đơn hàng
         OrderCancelled  = 13,           // Đơn hàng đã bị hủy
-        Warning = 14
+        Warning = 14,                 // cảnh báo vượt 30%
+        Refund =15,
+        DoneRefund = 16
     }
 }

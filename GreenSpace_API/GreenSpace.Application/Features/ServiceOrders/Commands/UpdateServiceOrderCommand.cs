@@ -88,7 +88,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                                     Id = Guid.NewGuid(),
                                     ServiceOrderId = serviceOrder.Id,
                                     ImageId = oldImage.Id,
-                                    phase = 1,
+                                    phase = existRecord.Count + 1,
                                     isSelected = false
                                 };
 

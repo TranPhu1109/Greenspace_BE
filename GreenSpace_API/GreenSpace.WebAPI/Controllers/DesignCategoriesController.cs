@@ -58,14 +58,14 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] DesignIdeasCategoryCreateModel model)
+        public async Task<IActionResult> Create([FromBody] DesignIdeasCategoryCreateModel model)
         {
             var result = await _mediator.Send(new CreateDesignCategoryCommand { CreateModel = model });
             if (result is null)
             {
                 return BadRequest("Create Fail!");
             }
-            return CreatedAtAction(nameof(GetById), new { Id = result.Id }, result);
+            return CreatedAtAction(nameof(GetById), new { Id = result.Id }, new { Message = " created Successfully", Data = result });
         }
 
 
@@ -74,7 +74,7 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromForm] DesignIdeasCategoryUpdateModel model)
+        public async Task<IActionResult> Update(Guid id, [FromBody] DesignIdeasCategoryUpdateModel model)
         {
             if (id != model.Id) return BadRequest("Id is not match!");
             var result = await _mediator.Send(new UpdateDesignCategoryCommand { UpdateModel = model });

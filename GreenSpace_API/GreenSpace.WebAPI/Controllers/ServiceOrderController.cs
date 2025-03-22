@@ -31,6 +31,10 @@ namespace GreenSpace.WebAPI.Controllers
         public async Task<IActionResult> GetNoUsingIdea([FromQuery] int pageNumber = 0,
                                              [FromQuery] int pageSize = 10)
         => Ok(await _mediator.Send(new GetAllServiceOrderNoUsingIdeaQuery{ PageNumber = pageNumber, PageSize = pageSize }));
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet("UsingIdea")]
         public async Task<IActionResult> GetUsingIdea([FromQuery] int pageNumber = 0,
                                        [FromQuery] int pageSize = 10)
@@ -43,7 +47,29 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
-        => Ok(await _mediator.Send(new GetProductByQuery { Id = id }));
+        => Ok(await _mediator.Send(new GetServiceOrderByIdQuery { Id = id }));
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("UserID-NoUsingIdea/{id}")]
+        public async Task<IActionResult> GetNoUsingIdeaByUserID([FromRoute] Guid id,
+                                                                [FromQuery] int pageNumber = 0,
+                                                                [FromQuery] int pageSize = 10)
+        => Ok(await _mediator.Send(new GetAllServiceOrderNoUsingIdeaByUserIdQuery { UserId = id, PageNumber = pageNumber, PageSize = pageSize }));
+
+
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("UserID-UsingIdea/{id}")]
+        public async Task<IActionResult> GetUsingIdeaByUserID([FromRoute] Guid id,
+                                                               [FromQuery] int pageNumber = 0,
+                                                               [FromQuery] int pageSize = 10)
+  => Ok(await _mediator.Send(new GetAllServiceOrderUsingIdeaByUserIdQuery { UserId = id, PageNumber = pageNumber, PageSize = pageSize }));
+
+
 
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -80,8 +106,21 @@ namespace GreenSpace.WebAPI.Controllers
             {
                 return BadRequest("Create Fail!");
             }
-            //return CreatedAtAction(nameof(GetById), new { Id = result.Id }, result);
-            return Ok(result);
+            return CreatedAtAction(nameof(GetById), new { Id = result.Id }, new { Message = " created Successfully", Data = result });
+        }
+
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPost("NoUsing")]
+        public async Task<IActionResult> CreateNoUsingIdea([FromForm] ServiceOrderNoUsingCreateModel model)
+        {
+            var result = await _mediator.Send(new CreateServiceOrderNoIdeaCommand { CreateModel = model });
+            if (result is null)
+            {
+                return BadRequest("Create Fail!");
+            }
+            return CreatedAtAction(nameof(GetById), new { Id = result.Id }, new { Message = " created Successfully", Data = result });
         }
 
 

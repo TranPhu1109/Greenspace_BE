@@ -16,7 +16,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
 {
     public class CreateServiceOrderNoIdeaCommand : IRequest<ServiceOrderViewModel>
     {
-        public ServiceOrderCreateModel CreateModel { get; set; } = default!;
+        public ServiceOrderNoUsingCreateModel CreateModel { get; set; } = default!;
 
         public class CommandValidation : AbstractValidator<CreateServiceOrderNoIdeaCommand>
         {
@@ -24,7 +24,6 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
             {
                 RuleFor(x => x.CreateModel.UserId).NotNull().NotEmpty().WithMessage("userId  must not be null or empty");
 
-                RuleFor(x => x.CreateModel.DesignIdeaId).NotNull().WithMessage("DesignIdeaId must not be empty");
 
                 RuleFor(x => x.CreateModel.Address).NotNull().NotEmpty().WithMessage("Address must not be null or empty");
 

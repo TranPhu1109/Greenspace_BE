@@ -67,14 +67,14 @@ namespace GreenSpace.WebAPI.Controllers
             {
                 return BadRequest("Create Fail!");
             }
-            return CreatedAtAction(nameof(GetById), new { Id = result.Id }, result);
+            return CreatedAtAction(nameof(GetById), new { Id = result.Id }, new { Message = " created Successfully", Data = result });
         }
 
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromForm] ProductUpdateModel model)
+        public async Task<IActionResult> Update(Guid id, [FromBody] ProductUpdateModel model)
         {
             if (id != model.Id) return BadRequest("Id is not match!");
             var result = await _mediator.Send(new UpdateProductCommand { UpdateModel = model });
