@@ -127,8 +127,22 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [HttpPut("{id}")]
+        [HttpPut("Customer/{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] ServiceOrderUpdateModel model)
+        {
+            if (id != model.Id) return BadRequest("Id is not match!");
+            var result = await _mediator.Send(new UpdateServiceOrderForCustomerCommand { UpdateModel = model });
+            if (!result)
+            {
+                return BadRequest("Update Fail!");
+            }
+            return Ok("Update Successfully!");
+        }
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateForCustomer(Guid id, [FromBody] ServiceOrderUpdateModel model)
         {
             if (id != model.Id) return BadRequest("Id is not match!");
             var result = await _mediator.Send(new UpdateServiceOrderCommand { UpdateModel = model });

@@ -135,6 +135,11 @@ public static class DependencyInjection
         builder.Services.AddSingleton(cloudinary);
         builder.Services.AddSingleton<CloudinaryService>();
 
+        // Đọc cấu hình GHN từ appsettings.json
+        builder.Services.Configure<GhnSettings>(builder.Configuration.GetSection("GHN"));
+
+        builder.Services.AddHttpClient<ShippingService>();
+
         builder.Services.AddSignalR();
         builder.Services.AddSingleton<PerformanceMiddleware>();
         builder.Services.AddSingleton<Stopwatch>();

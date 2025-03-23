@@ -44,3 +44,8 @@ public class CloudinarySettings
     public string ApiKey { get; set; } = string.Empty;
     public string ApiSecret { get; set; } = string.Empty;
 }
+public class GhnSettings
+{
+    public string ShopId { get; set; } = string.Empty;
+    public string Token { get; set; } = string.Empty;
+}
