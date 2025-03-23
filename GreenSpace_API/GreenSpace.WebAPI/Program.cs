@@ -1,6 +1,4 @@
-﻿using CloudinaryDotNet;
-using GreenSpace.Application.GlobalExceptionHandling;
-using GreenSpace.Application.Services;
+﻿using GreenSpace.Application.GlobalExceptionHandling;
 using GreenSpace.Application.SignalR;
 using GreenSpace.Infrastructure;
 using GreenSpace.WebAPI;
@@ -9,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 await builder.AddWebAPIServicesAsync();
-
 
 var app = builder.Build();
 app.UseCors();
@@ -28,7 +25,6 @@ app.UseAuthorization();
 ApplyMigration();
 app.MapControllers();
 app.MapHub<SignalrHub>("/hub");
-
 
 app.Run();
 

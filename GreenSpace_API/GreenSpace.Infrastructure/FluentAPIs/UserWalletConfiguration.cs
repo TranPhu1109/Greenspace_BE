@@ -11,5 +11,6 @@ public class UserWalletConfiguration : IEntityTypeConfiguration<UsersWallet>
     {
         builder.HasKey(e => e.Id);
         builder.HasOne(d => d.User).WithOne(p => p.UsersWallet).HasForeignKey<UsersWallet>(d => d.UserId);
+        builder.HasMany(d => d.Bills).WithOne(p => p.UsersWallet).HasForeignKey(d => d.UsersWalletId);
     }
 }

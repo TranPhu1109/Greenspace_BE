@@ -13,4 +13,5 @@ public class UsersWallet : BaseEntity
     public string WalletType { get; set; } = nameof(WalletTypeEnum.Customer);
     public Guid UserId { get; set; }
     public User User { get; set; } = null!;
+    public ICollection<Bill> Bills { get; set; } = new List<Bill>();
 }
