@@ -18,4 +18,6 @@ public class Bill : BaseEntity
     public Payment? Payment { get; set; }
 
     public ServiceOrder? ServiceOrder { get; set; }
+    public Guid UsersWalletId { get; set; }
+    public UsersWallet? UsersWallet { get; set; }
 }
