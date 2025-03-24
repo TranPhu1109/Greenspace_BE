@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\UserWallet\" />
+    <Folder Include="Features\UserWallet\NewFolder\" />
   </ItemGroup>
 
 </Project>
