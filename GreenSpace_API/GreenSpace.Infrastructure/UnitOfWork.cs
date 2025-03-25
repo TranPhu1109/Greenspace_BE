@@ -27,6 +27,8 @@ public class UnitOfWork : IUnitOfWork
     IServiceOrderDetailRepository serviceOrderDetailRepository,
     IRecordDesignRepository recordDesignRepository,
     IRecordSketchRepository recordSketchRepository,
+    IWorkTaskRepository workTaskRepository)
+    IRecordSketchRepository recordSketchRepository,
     IBillRepository billRepository)
     {
         _dbContext = dbcontext;
@@ -48,6 +50,7 @@ public class UnitOfWork : IUnitOfWork
         RecordDesignRepository = recordDesignRepository;
         RecordSketchRepository = recordSketchRepository;
         BillRepository = billRepository;
+        WorkTaskRepository = workTaskRepository;
 
     }
     public IUserRepository UserRepository { get; }
@@ -68,6 +71,7 @@ public class UnitOfWork : IUnitOfWork
 
     public IRecordDesignRepository RecordDesignRepository { get; }
     public IRecordSketchRepository RecordSketchRepository { get; }
+    public IWorkTaskRepository WorkTaskRepository { get; }
     public IMapper Mapper { get; }
 
     public IConnectionConfiguration DirectionConnection { get; }

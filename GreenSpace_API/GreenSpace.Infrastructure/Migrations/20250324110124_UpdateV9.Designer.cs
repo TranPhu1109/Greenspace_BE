@@ -4,6 +4,7 @@ using GreenSpace.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GreenSpace.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250324110124_UpdateV9")]
+    partial class UpdateV9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,17 +209,11 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<Guid>("DesignIdeasCategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("DesignPrice")
-                        .HasColumnType("float");
-
                     b.Property<Guid>("ImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<double>("MaterialPrice")
-                        .HasColumnType("float");
 
                     b.Property<Guid?>("ModificatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -228,7 +225,7 @@ namespace GreenSpace.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("TotalPrice")
+                    b.Property<double>("Price")
                         .HasColumnType("float");
 
                     b.HasKey("Id");

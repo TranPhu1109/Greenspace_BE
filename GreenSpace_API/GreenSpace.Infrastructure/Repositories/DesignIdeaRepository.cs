@@ -32,10 +32,10 @@ namespace GreenSpace.Infrastructure.Repositories
                 query = query.Where(p => p.Name.Contains(name));
 
             if (minPrice.HasValue)
-                query = query.Where(p => p.Price >= minPrice.Value);
+                query = query.Where(p => p.TotalPrice >= minPrice.Value);
 
             if (maxPrice.HasValue)
-                query = query.Where(p => p.Price <= maxPrice.Value);
+                query = query.Where(p => p.TotalPrice <= maxPrice.Value);
 
             return await query.ToListAsync();
         }

@@ -28,7 +28,7 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
 
                 RuleFor(x => x.UpdateModel.DesignIdeasCategoryId).NotNull().WithMessage("CategoryId must not be empty");
 
-                RuleFor(x => x.UpdateModel.Price).GreaterThan(0).WithMessage("Price must be greater than zero");
+                RuleFor(x => x.UpdateModel.DesignPrice).GreaterThan(0).WithMessage("Price must be greater than zero");
 
                 RuleFor(x => x.UpdateModel.Description).NotNull().NotEmpty().WithMessage("Description must not be null or empty");
 
@@ -105,6 +105,7 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
                         }
                     }
 
+
                     // đối chiếu so sánh vơi danh sach cũ nào ko cần nữa xóa 
                     var productIdsInRequest = requestProducts.Select(p => p.ProductId).ToHashSet();
                     var productsToRemove = existProducts.Where(p => !productIdsInRequest.Contains(p.ProductId)).ToList();
@@ -115,6 +116,8 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
                         await _unitOfWork.ProductDetailRepository.RemoveProductDetail(p);
                     }
                 }
+                design.MaterialPrice = design.ProductDetails.Sum(p => p.Price);
+                design.TotalPrice = request.UpdateModel.DesignPrice + design.MaterialPrice;
                 _mapper.Map(request.UpdateModel, design);
                 _unitOfWork.DesignIdeaRepository.Update(design);
 
