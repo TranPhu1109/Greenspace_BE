@@ -27,7 +27,7 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
 
                 RuleFor(x => x.CreateModel.DesignIdeasCategoryId).NotNull().WithMessage("CategoryId must not be empty");
 
-                RuleFor(x => x.CreateModel.Price).GreaterThan(0).WithMessage("Price must be greater than zero");
+                RuleFor(x => x.CreateModel.DesignPrice).GreaterThan(0).WithMessage("Price must be greater than zero");
 
                 RuleFor(x => x.CreateModel.Description).NotNull().NotEmpty().WithMessage("Description must not be null or empty");
 
@@ -65,17 +65,22 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
                 //add table productDetails
                 if (design.ProductDetails != null && design.ProductDetails.Any())
                 {
-                    var productList = design.ProductDetails.ToList(); 
+                    var productList = design.ProductDetails.ToList();
 
-                    foreach(var p in productList)
+                    foreach (var p in productList)
                     {
                         var product = await _unitOfWork.ProductRepository.GetByIdAsync(p.ProductId);
                         if (product == null) throw new NotFoundException($"Product with Id {p.ProductId} does not exist!");
                         p.Price = product.Price * p.Quantity;
                         p.Id = Guid.NewGuid();
                     }
+
+                    var materialPrice = productList.Sum(p => p.Price); 
                     design.ProductDetails = productList;
                 }
+
+                design.MaterialPrice = design.ProductDetails?.Sum(p => p.Price) ?? 0;
+                design.TotalPrice = request.CreateModel.DesignPrice + design.MaterialPrice;
                 await _unitOfWork.DesignIdeaRepository.AddAsync(design);
 
                 await _unitOfWork.SaveChangesAsync();

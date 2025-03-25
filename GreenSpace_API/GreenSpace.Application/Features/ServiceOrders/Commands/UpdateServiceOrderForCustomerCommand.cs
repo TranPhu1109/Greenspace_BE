@@ -50,7 +50,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 var design = serviceOrder.DesignIdeaId.HasValue ?
                            await _unitOfWork.DesignIdeaRepository.GetByIdAsync(serviceOrder.DesignIdeaId.Value) : null;
                 serviceOrder.ServiceType = ((ServiceTypeEnum)request.UpdateModel.ServiceType).ToString();
-                if (design != null && request.UpdateModel.DesignPrice > design.Price * 1.3 && serviceOrder.ServiceType == ServiceTypeEnum.UsingDesignIdea.ToString())
+                if (design != null && request.UpdateModel.DesignPrice > design.DesignPrice * 1.3 && serviceOrder.ServiceType == ServiceTypeEnum.UsingDesignIdea.ToString())
                 {
                     request.UpdateModel.Status = (int)ServiceOrderStatus.Warning;
                 }
@@ -115,7 +115,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                         await _unitOfWork.ServiceOrderDetailRepository.RemoveServiceOrderDetail(d);
                     }
                 }
-
+                serviceOrder.MaterialPrice = serviceOrder.ServiceOrderDetails.Sum(d => d.TotalPrice);
 
                 _mapper.Map(request.UpdateModel, serviceOrder);
                 _unitOfWork.ServiceOrderRepository.Update(serviceOrder);

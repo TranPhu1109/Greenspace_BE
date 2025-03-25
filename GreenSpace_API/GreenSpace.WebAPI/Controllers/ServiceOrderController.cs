@@ -99,7 +99,7 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] ServiceOrderCreateModel model)
+        public async Task<IActionResult> Create([FromBody] ServiceOrderCreateModel model)
         {
             var result = await _mediator.Send(new CreateServiceOrderCommand { CreateModel = model });
             if (result is null)
@@ -113,7 +113,7 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpPost("NoUsing")]
-        public async Task<IActionResult> CreateNoUsingIdea([FromForm] ServiceOrderNoUsingCreateModel model)
+        public async Task<IActionResult> CreateNoUsingIdea([From] ServiceOrderNoUsingCreateModel model)
         {
             var result = await _mediator.Send(new CreateServiceOrderNoIdeaCommand { CreateModel = model });
             if (result is null)

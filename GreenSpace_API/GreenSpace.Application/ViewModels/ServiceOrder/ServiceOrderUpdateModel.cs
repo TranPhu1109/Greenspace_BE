@@ -12,10 +12,7 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
     {
         public Guid Id { get; set; }
         public int ServiceType { get; set; } = default!;
-        public double TotalCost { get; set; } = default!;
         public double? DesignPrice { get; set; } = default!;
-
-        public double? MaterialPrice { get; set; } = default!;
 
         public string Description { get; set; } = string.Empty;
         public int   Status { get; set; } = default!;

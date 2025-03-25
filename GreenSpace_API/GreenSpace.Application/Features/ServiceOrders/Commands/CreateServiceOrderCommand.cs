@@ -61,7 +61,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 var serviceOrder = _mapper.Map<ServiceOrder>(request.CreateModel);
                 serviceOrder.Id = Guid.NewGuid();
                 serviceOrder.ServiceType = ServiceTypeEnum.UsingDesignIdea.ToString();
-                serviceOrder.TotalCost = design?.Price ?? 0;
+
                 serviceOrder.Status = (int)ServiceOrderStatus.Pending;
 
                 if (request.CreateModel.IsCustom == true)
@@ -71,7 +71,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                     image.Id = Guid.NewGuid();
                     await _unitOfWork.ImageRepository.AddAsync(image);
                     serviceOrder.ImageId = image.Id;
-
+                }
                 
                     // add danh sach san pham cua designidea vao serviceOrderDetails
                     if (design != null && design.ProductDetails.Any())
@@ -90,7 +90,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                     }
 
                     serviceOrder.MaterialPrice = design?.ProductDetails.Sum(pd => pd.Price) ?? 0;
-                }
+                
 
                 await _unitOfWork.ServiceOrderRepository.AddAsync(serviceOrder);
                 await _unitOfWork.SaveChangesAsync();
