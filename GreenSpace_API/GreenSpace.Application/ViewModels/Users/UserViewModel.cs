@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GreenSpace.Application.ViewModels.Users
+﻿namespace GreenSpace.Application.ViewModels.Users
 {
     public class UserViewModel
     {
@@ -13,6 +7,7 @@ namespace GreenSpace.Application.ViewModels.Users
         public string? Email { get; set; } = string.Empty;
         public string? Phone { get; set; } = default!;
         public string? Address { get; set; } = string.Empty;
+        public string? AvatarUrl { get; set; } = string.Empty;
         public string RoleName { get; set; } = default!;
 
     }

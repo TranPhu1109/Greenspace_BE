@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\UserWallet\NewFolder\**" />
+    <EmbeddedResource Remove="Features\UserWallet\NewFolder\**" />
+    <None Remove="Features\UserWallet\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GreenSpace.Domain\GreenSpace.Domain.csproj" />
   </ItemGroup>
 
@@ -24,10 +30,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Scrutor" Version="6.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\UserWallet\NewFolder\" />
   </ItemGroup>
 
 </Project>

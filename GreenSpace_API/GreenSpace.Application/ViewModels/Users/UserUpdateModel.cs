@@ -6,6 +6,6 @@ public class UserUpdateModel
     public string? Phone { get; set; } = string.Empty;
     public string? Address { get; set; } = string.Empty;
     public string? AvatarUrl { get; set; }
-    public string? password { get; set; }
+    public string? Password { get; set; }
 
 }

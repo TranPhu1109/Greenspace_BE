@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GreenSpace.Application.Services.Interfaces
+namespace GreenSpace.Application.Services.Interfaces;
+
+public interface IEmailService
 {
-    class IEmailService
-    {
-    }
+    Task<bool> SendEmailAsync(string email, string subject, string message);
 }

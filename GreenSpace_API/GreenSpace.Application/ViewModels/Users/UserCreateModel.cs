@@ -14,6 +14,7 @@ namespace GreenSpace.Application.ViewModels.Users
         public string? Password { get; set; } = string.Empty;
         //public string? FCMToken { get; set; } = string.Empty;
         public string? Phone { get; set; } = default!;
+        public string? AvatarUrl { get; set; } = string.Empty;
         public string? Address { get; set; } = string.Empty;
         public string? RoleName { get; set; } = string.Empty;
     }

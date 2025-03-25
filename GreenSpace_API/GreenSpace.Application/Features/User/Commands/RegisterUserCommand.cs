@@ -54,7 +54,7 @@ public class RegisterUserCommand : IRequest<UserViewModel>
                     Id = Guid.NewGuid(),
                     Email = request.Model.Email,
                     RoleId = roleInDb.Id,
-                    Password = BCrypt.Net.BCrypt.HashPassword(request.Model.Password) // Mã hóa mật khẩu
+                    Password = request.Model.Password,
                 };
 
                 // Tạo JWT token

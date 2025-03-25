@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using GreenSpace.Application.Commons;
 using GreenSpace.Application.Data;
 using GreenSpace.Application.Utilities;
 using GreenSpace.Application.ViewModels.Users;
@@ -28,7 +29,7 @@ public class GetAllUserQuery : GetAllUserQueryModel, IRequest<PaginatedList<User
                 request.Filter.Remove("pageNumber");
             }
             using var connection = _connection.GetDbConnection();
-            var query = @"SELECT Id, name, [email], Phone FROM [Users];";
+            var query = SQLQueriesStorage.GET_ALL_USER;
 
             var result = await connection.QueryAsync<UserViewModel>(query) ?? new List<UserViewModel>();
             // Adding Fillter

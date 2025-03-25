@@ -23,4 +23,5 @@ public interface IUnitOfWork
     IServiceOrderDetailRepository ServiceOrderDetailRepository { get; }
     IRecordDesignRepository RecordDesignRepository { get; }
     IRecordSketchRepository RecordSketchRepository { get; }
+    IBillRepository BillRepository { get; }
 }
