@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CloudinaryDotNet.Core;
 using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
 using GreenSpace.Application.Utilities;
 using GreenSpace.Application.ViewModels.DesignIdea;

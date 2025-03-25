@@ -6,7 +6,9 @@ public class DesignIdea : BaseEntity
 
     public string Description { get; set; } = string.Empty;
 
-    public double Price { get; set; } = default!;
+    public double DesignPrice { get; set; } = default!;
+    public double MaterialPrice { get; set; } = default!;
+    public double TotalPrice { get; set; } = default!;
 
     public Guid ImageId { get; set; }
 
