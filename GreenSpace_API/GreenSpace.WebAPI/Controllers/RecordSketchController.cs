@@ -43,8 +43,8 @@ namespace GreenSpace.WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] RecordSketchUpdateModel model)
         {
-            if (id != model.Id) return BadRequest("Id is not match!");
-            var result = await _mediator.Send(new UpdateRecordSketchCommand { UpdateModel = model });
+           
+            var result = await _mediator.Send(new UpdateRecordSketchCommand { Id = id, UpdateModel = model });
             if (!result)
             {
                 return BadRequest("Update Fail!");

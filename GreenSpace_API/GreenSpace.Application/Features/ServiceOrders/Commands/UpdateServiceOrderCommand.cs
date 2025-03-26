@@ -17,12 +17,13 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
 {
     public class UpdateServiceOrderCommand : IRequest<bool>
     {
+        public Guid Id { get; set; }
         public ServiceOrderUpdateModel UpdateModel { get; set; } = default!;
         public class CommmandValidation : AbstractValidator<UpdateServiceOrderCommand>
         {
             public CommmandValidation()
             {
-                RuleFor(x => x.UpdateModel.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
+                RuleFor(x => x.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
             }
         }
 
@@ -46,8 +47,8 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
             public async Task<bool> Handle(UpdateServiceOrderCommand request, CancellationToken cancellationToken)
             {
                 _logger.LogInformation("Update ServiceOrder:\n");
-                var serviceOrder = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(request.UpdateModel.Id,p => p.Image,p => p.ServiceOrderDetails);
-                if (serviceOrder is null) throw new NotFoundException($"ServiceOrder with Id-{request.UpdateModel.Id} is not exist!");
+                var serviceOrder = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(request.Id,p => p.Image,p => p.ServiceOrderDetails);
+                if (serviceOrder is null) throw new NotFoundException($"ServiceOrder with Id-{request.Id} is not exist!");
                 var design = serviceOrder.DesignIdeaId.HasValue ?
                            await _unitOfWork.DesignIdeaRepository.GetByIdAsync(serviceOrder.DesignIdeaId.Value) : null;
                 serviceOrder.ServiceType = ((ServiceTypeEnum)request.UpdateModel.ServiceType).ToString();

@@ -16,6 +16,7 @@ namespace GreenSpace.Application.Features.Products.Commands
 {
     public class UpdateProductCommand : IRequest<bool>
     {
+        public Guid Id { get; set; }
         public ProductUpdateModel UpdateModel { get; set; } = default!;
 
         public class CommandValidation : AbstractValidator<UpdateProductCommand>
@@ -61,8 +62,8 @@ namespace GreenSpace.Application.Features.Products.Commands
             public async Task<bool> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
             {
 
-                var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.UpdateModel.Id, p => p.Image);
-                if (product is null)throw new NotFoundException($"Product with Id {request.UpdateModel.Id} does not exist!");
+                var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.Id, p => p.Image);
+                if (product is null)throw new NotFoundException($"Product with Id {request.Id} does not exist!");
 
                 //  cập nhật ảnh 
                 if (request.UpdateModel.Image is not null)

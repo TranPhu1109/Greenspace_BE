@@ -18,6 +18,7 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
 {
     public class UpdateDesignIdeaCommand :IRequest<bool>
     {
+        public Guid Id { get; set; }
         public DesignIdeaUpdateModel UpdateModel { get; set; } = default!;
 
         public class CommandValidation : AbstractValidator<UpdateDesignIdeaCommand>
@@ -56,8 +57,8 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
 
             public async Task<bool> Handle(UpdateDesignIdeaCommand request, CancellationToken cancellationToken)
             {
-                var design = await _unitOfWork.DesignIdeaRepository.GetByIdAsync(request.UpdateModel.Id, p => p.Image, p => p.ProductDetails);
-                if (design is null) throw new NotFoundException($"DesignIdea with Id {request.UpdateModel.Id} does not exist!");
+                var design = await _unitOfWork.DesignIdeaRepository.GetByIdAsync(request.Id, p => p.Image, p => p.ProductDetails);
+                if (design is null) throw new NotFoundException($"DesignIdea with Id {request.Id} does not exist!");
 
                 // Cập nhật ảnh
                 if (request.UpdateModel.Image is not null)

@@ -15,12 +15,13 @@ namespace GreenSpace.Application.Features.RecordDesigns.Commands
 {
     public class UpdateRecordDesignCommand : IRequest<bool>
     {
+        public Guid Id { get; set; }
         public RecordDesignUpdateModel UpdateModel { get; set; } = default!;
         public class CommmandValidation : AbstractValidator<UpdateRecordDesignCommand>
         {
             public CommmandValidation()
             {
-                RuleFor(x => x.UpdateModel.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
+                RuleFor(x => x.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
             }
         }
 
@@ -44,8 +45,8 @@ namespace GreenSpace.Application.Features.RecordDesigns.Commands
             public async Task<bool> Handle(UpdateRecordDesignCommand request, CancellationToken cancellationToken)
             {
                 _logger.LogInformation("Update select recordDesign:\n");
-                var record = await _unitOfWork.RecordDesignRepository.GetByIdAsync(request.UpdateModel.Id);
-                if (record is null) throw new NotFoundException($" recordSketch with Id-{request.UpdateModel.Id} is not exist!");
+                var record = await _unitOfWork.RecordDesignRepository.GetByIdAsync(request.Id);
+                if (record is null) throw new NotFoundException($" recordSketch with Id-{request.Id} is not exist!");
                 _mapper.Map(request.UpdateModel, record);
                 _unitOfWork.RecordDesignRepository.Update(record);
                 var result = await _unitOfWork.SaveChangesAsync();
