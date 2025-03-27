@@ -33,4 +33,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 #ENTRYPOINT ["dotnet", "GreenSpace.WebAPI.dll"]
-ENTRYPOINT ["dotnet", "GreenSpace.WebAPI.dll", "--urls", "http://0.0.0.0:8080;https://0.0.0.0:8081"]
+ENTRYPOINT ["dotnet", "GreenSpace.WebAPI.dll", "--urls", "http://0.0.0.0:8080"]
