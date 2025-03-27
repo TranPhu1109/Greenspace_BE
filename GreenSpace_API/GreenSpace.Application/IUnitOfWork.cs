@@ -25,4 +25,6 @@ public interface IUnitOfWork
     IRecordSketchRepository RecordSketchRepository { get; }
 
     IWorkTaskRepository WorkTaskRepository { get; }
+
+    IBlogRepository BlogRepository { get; }
 }

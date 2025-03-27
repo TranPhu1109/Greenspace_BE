@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GreenSpace.Application.ViewModels.Blogs;
 using GreenSpace.Application.ViewModels.Category;
 using GreenSpace.Application.ViewModels.DesignIdea;
 using GreenSpace.Application.ViewModels.DesignIdeasCategory;
@@ -87,7 +88,7 @@ public class MapperConfigurationProfile : Profile
                .ForMember(dest => dest.ServiceOrderDetails, opt => opt.MapFrom(src => src.ServiceOrderDetails))
                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => ((ServiceOrderStatus)src.Status).ToString()))
                .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
-               
+               .ForMember(x => x.Email, opt => opt.MapFrom(x => x.User.Email))
                .ReverseMap(); 
         CreateMap<ServiceOrder, ServiceOrderCreateModel>().ReverseMap();
         CreateMap<ServiceOrder, ServiceOrderNoUsingCreateModel>().ReverseMap();
@@ -116,6 +117,14 @@ public class MapperConfigurationProfile : Profile
             .ReverseMap();
         CreateMap<WorkTask, WorkTaskCreateModel>().ReverseMap();
         CreateMap<WorkTask, WorkTaskUpdateModel>().ReverseMap();
+
+
+
+
+        CreateMap<Blog, BlogCreateModel>().ReverseMap();
+        CreateMap<Blog, BlogViewModel>()
+           .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
+           .ReverseMap();
         //#endregion
 
         //#region Wallet

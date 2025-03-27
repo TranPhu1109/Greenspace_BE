@@ -12,11 +12,15 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
     public class ServiceOrderViewModel
     {
         public Guid Id { get; set; }
+        public Guid UserId { get; set; }
         public string?  UserName { get; set; }
+        public string? Email { get; set; }
 
         public string Address { get; set; } = string.Empty;
 
         public string CusPhone { get; set; } = string.Empty;
+        public Guid? DesignIdeaId { get; set; }
+
         public double? Length { get; set; } = default!;
         public double? Width { get; set; } = default!;
         public string ServiceType { get; set; } = string.Empty;
