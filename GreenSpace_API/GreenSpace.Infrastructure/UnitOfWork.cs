@@ -29,8 +29,7 @@ public class UnitOfWork : IUnitOfWork
     IRecordSketchRepository recordSketchRepository,
     IWorkTaskRepository workTaskRepository,
     IBillRepository billRepository,
-    IWalletLogRepository walletLogRepository)
-    IWorkTaskRepository workTaskRepository,
+    IWalletLogRepository walletLogRepository,
      IBlogRepository blogRepository)
     {
         _dbContext = dbcontext;
