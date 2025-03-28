@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
+using GreenSpace.Application.ViewModels.Blogs;
 using GreenSpace.Application.ViewModels.Products;
-using GreenSpace.Application.ViewModels.ServiceOrder;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,13 +11,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GreenSpace.Application.Features.ServiceOrders.Queries
+namespace GreenSpace.Application.Features.Blogs.Queries
 {
-    public class GetServiceOrderByIdQuery : IRequest<ServiceOrderViewModel>
+    public class GetBlogByIdQuery : IRequest<BlogViewModel>
     {
         public Guid Id { get; set; } = default!;
 
-        public class QueryValidation : AbstractValidator<GetServiceOrderByIdQuery>
+        public class QueryValidation : AbstractValidator<GetBlogByIdQuery>
         {
             public QueryValidation()
             {
@@ -25,7 +25,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Queries
             }
         }
 
-        public class QueryHandler : IRequestHandler<GetServiceOrderByIdQuery, ServiceOrderViewModel>
+        public class QueryHandler : IRequestHandler<GetBlogByIdQuery, BlogViewModel>
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly IMapper _mapper;
@@ -37,11 +37,11 @@ namespace GreenSpace.Application.Features.ServiceOrders.Queries
                 _mapper = mapper;
                 _logger = logger;
             }
-            public async Task<ServiceOrderViewModel> Handle(GetServiceOrderByIdQuery request, CancellationToken cancellationToken)
+            public async Task<BlogViewModel> Handle(GetBlogByIdQuery request, CancellationToken cancellationToken)
             {
-                var orderServices = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(request.Id, x => x.Image, x => x.ServiceOrderDetails,x=>x.User);
-                if (orderServices is null) throw new NotFoundException($"Product with ID-{request.Id} is not exist!");
-                var result = _mapper.Map<ServiceOrderViewModel>(orderServices);
+                var blog = await _unitOfWork.BlogRepository.GetByIdAsync(request.Id, x => x.Image);
+                if (blog is null) throw new NotFoundException($"Blog with ID-{request.Id} is not exist!");
+                var result = _mapper.Map<BlogViewModel>(blog);
                 return result;
             }
         }

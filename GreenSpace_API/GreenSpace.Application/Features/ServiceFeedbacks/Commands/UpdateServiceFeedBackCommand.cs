@@ -15,12 +15,13 @@ namespace GreenSpace.Application.Features.ServiceFeedbacks.Commands
 {
     public class UpdateServiceFeedBackCommand : IRequest<bool>
     {
+        public Guid Id { get; set; }
         public ServiceFeedbackUpdateModel UpdateModel { get; set; } = default!;
         public class CommmandValidation : AbstractValidator<UpdateServiceFeedBackCommand>
         {
             public CommmandValidation()
             {
-                RuleFor(x => x.UpdateModel.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
+                RuleFor(x => x.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
                 RuleFor(x => x.UpdateModel.Reply).NotNull().NotEmpty().WithMessage("Reply must not null or empty");
             }
         }
@@ -45,8 +46,8 @@ namespace GreenSpace.Application.Features.ServiceFeedbacks.Commands
             public async Task<bool> Handle(UpdateServiceFeedBackCommand request, CancellationToken cancellationToken)
             {
                 _logger.LogInformation("Update feedback:\n");
-                var feedback = await _unitOfWork.ServiceFeedbackRepositoy.GetByIdAsync(request.UpdateModel.Id);
-                if (feedback is null) throw new NotFoundException($"feedback: with Id-{request.UpdateModel.Id} is not exist!");
+                var feedback = await _unitOfWork.ServiceFeedbackRepositoy.GetByIdAsync(request.Id);
+                if (feedback is null) throw new NotFoundException($"feedback: with Id-{request.Id} is not exist!");
                 _mapper.Map(request.UpdateModel, feedback);
                 _unitOfWork.ServiceFeedbackRepositoy.Update(feedback);
                 var result = await _unitOfWork.SaveChangesAsync();

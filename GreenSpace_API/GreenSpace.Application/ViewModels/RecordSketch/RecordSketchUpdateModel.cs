@@ -8,7 +8,7 @@ namespace GreenSpace.Application.ViewModels.RecordSketch
 {
     public  class RecordSketchUpdateModel
     {
-        public Guid Id { get; set; }
+   
         public bool isSelected { get; set; }
     }
 }

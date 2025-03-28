@@ -5,22 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GreenSpace.Application.ViewModels.Products
+namespace GreenSpace.Application.ViewModels.Blogs
 {
-    public class ProductUpdateModel
+    public class BlogCreateModel
     {
+        public string Author { get; set; } = string.Empty;
 
-        public string Name { get; set; } = string.Empty;
-
-        public Guid CategoryId { get; set; }
-        public double Price { get; set; }
-
-        public int Stock { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
-
-
-        public int Size { get; set; }
 
         public ImageCreateModel Image { get; set; } = new ImageCreateModel();
     }

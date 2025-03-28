@@ -8,7 +8,7 @@ namespace GreenSpace.Application.ViewModels.WorkTasks
 {
     public class WorkTaskUpdateModel
     {
-        public Guid Id { get; set; }
+ 
         public Guid ServiceOrderId { get; set; }
 
         public Guid UserId { get; set; }

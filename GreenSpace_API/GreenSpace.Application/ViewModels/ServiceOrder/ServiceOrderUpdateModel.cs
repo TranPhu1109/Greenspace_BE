@@ -10,7 +10,7 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
 {
     public class ServiceOrderUpdateModel
     {
-        public Guid Id { get; set; }
+    
         public int ServiceType { get; set; } = default!;
         public double? DesignPrice { get; set; } = default!;
 

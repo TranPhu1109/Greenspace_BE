@@ -8,7 +8,7 @@ namespace GreenSpace.Application.ViewModels.RecordDesign
 {
     public class RecordDesignUpdateModel
     {
-        public Guid Id { get; set; }
+ 
         public bool isSelected { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace GreenSpace.Application.ViewModels.ServiceFeedbacks
 {
     public class ServiceFeedbackUpdateModel
     {
-        public Guid Id { get; set; }
+       
         public string Reply { get; set; } = string.Empty;
     }
 }

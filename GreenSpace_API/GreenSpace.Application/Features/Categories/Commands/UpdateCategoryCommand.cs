@@ -15,12 +15,13 @@ namespace GreenSpace.Application.Features.Categories.Commands
 {
     public class UpdateCategoryCommand : IRequest<bool>
     {
+        public Guid Id { get; set; }
         public CategoryUpdateModel UpdateModel { get; set; } = default!;
         public class CommmandValidation : AbstractValidator<UpdateCategoryCommand>
         {
             public CommmandValidation()
             {
-                RuleFor(x => x.UpdateModel.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
+                RuleFor(x => x.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
                 RuleFor(x => x.UpdateModel.Name).NotNull().NotEmpty().WithMessage("Name must not null or empty");
             }
         }
@@ -44,14 +45,18 @@ namespace GreenSpace.Application.Features.Categories.Commands
 
             public async Task<bool> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
             {
-                _logger.LogInformation("Update Menu:\n");
-                var cate = await _unitOfWork.CategoryRepository.GetByIdAsync(request.UpdateModel.Id);
-                if (cate is null) throw new NotFoundException($"Category with Id-{request.UpdateModel.Id} is not exist!");
+                _logger.LogInformation("Update Category:\n");
+
+                var cate = await _unitOfWork.CategoryRepository.GetByIdAsync(request.Id);
+                if (cate is null) throw new NotFoundException($"Category with Id-{request.Id} does not exist!");
+
                 _mapper.Map(request.UpdateModel, cate);
                 _unitOfWork.CategoryRepository.Update(cate);
+
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result;
             }
+
         }
     }
 }

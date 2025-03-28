@@ -15,12 +15,13 @@ namespace GreenSpace.Application.Features.WorkTasks.Commands
 {
     public class UpdateWorkTasksCommand : IRequest<bool>
     {
+        public Guid Id { get; set; }
         public WorkTaskUpdateModel UpdateModel { get; set; } = default!;
         public class CommmandValidation : AbstractValidator<UpdateWorkTasksCommand>
         {
             public CommmandValidation()
             {
-                RuleFor(x => x.UpdateModel.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
+                RuleFor(x => x.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
                 RuleFor(x => x.UpdateModel.ServiceOrderId).NotNull().NotEmpty().WithMessage("ServiceOrderId must not null or empty");
                 RuleFor(x => x.UpdateModel.UserId).NotNull().NotEmpty().WithMessage("UserID must not null or empty");
             }
@@ -46,8 +47,8 @@ namespace GreenSpace.Application.Features.WorkTasks.Commands
             public async Task<bool> Handle(UpdateWorkTasksCommand request, CancellationToken cancellationToken)
             {
                 _logger.LogInformation("Update task:\n");
-                var task = await _unitOfWork.WorkTaskRepository.GetByIdAsync(request.UpdateModel.Id);
-                if (task is null) throw new NotFoundException($"Task with Id-{request.UpdateModel.Id} is not exist!");
+                var task = await _unitOfWork.WorkTaskRepository.GetByIdAsync(request.Id);
+                if (task is null) throw new NotFoundException($"Task with Id-{request.Id} is not exist!");
                 _mapper.Map(request.UpdateModel, task);
                 _unitOfWork.WorkTaskRepository.Update(task);
                 var result = await _unitOfWork.SaveChangesAsync();

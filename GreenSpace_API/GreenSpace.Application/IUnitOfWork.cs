@@ -24,6 +24,8 @@ public interface IUnitOfWork
     IRecordDesignRepository RecordDesignRepository { get; }
     IRecordSketchRepository RecordSketchRepository { get; }
     IWorkTaskRepository WorkTaskRepository { get; }
+
+    IBlogRepository BlogRepository { get; }
     IBillRepository BillRepository { get; }
     IWalletLogRepository WalletLogRepository { get; }
 }

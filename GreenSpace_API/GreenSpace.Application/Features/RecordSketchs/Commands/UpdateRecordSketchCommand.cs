@@ -15,12 +15,13 @@ namespace GreenSpace.Application.Features.RecordSketchs.Commands
 {
     public class UpdateRecordSketchCommand : IRequest<bool>
     {
+        public Guid Id { get; set; }
         public RecordSketchUpdateModel UpdateModel { get; set; } = default!;
         public class CommmandValidation : AbstractValidator<UpdateRecordSketchCommand>
         {
             public CommmandValidation()
             {
-                RuleFor(x => x.UpdateModel.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
+                RuleFor(x => x.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
             }
         }
 
@@ -44,8 +45,8 @@ namespace GreenSpace.Application.Features.RecordSketchs.Commands
             public async Task<bool> Handle(UpdateRecordSketchCommand request, CancellationToken cancellationToken)
             {
                 _logger.LogInformation("Update select recordSketch:\n");
-                var recordSketch = await _unitOfWork.RecordSketchRepository.GetByIdAsync(request.UpdateModel.Id);
-                if (recordSketch is null) throw new NotFoundException($" recordSketch with Id-{request.UpdateModel.Id} is not exist!");
+                var recordSketch = await _unitOfWork.RecordSketchRepository.GetByIdAsync(request.Id);
+                if (recordSketch is null) throw new NotFoundException($" recordSketch with Id-{request.Id} is not exist!");
                 _mapper.Map(request.UpdateModel, recordSketch);
                 _unitOfWork.RecordSketchRepository.Update(recordSketch);
                 var result = await _unitOfWork.SaveChangesAsync();

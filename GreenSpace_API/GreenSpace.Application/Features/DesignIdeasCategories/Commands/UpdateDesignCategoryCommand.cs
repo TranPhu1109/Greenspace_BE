@@ -15,12 +15,13 @@ namespace GreenSpace.Application.Features.DesignIdeasCategories.Commands
 {
     public class UpdateDesignCategoryCommand : IRequest<bool>
     {
+        public Guid Id { get; set; }
         public DesignIdeasCategoryUpdateModel UpdateModel { get; set; } = default!;
         public class CommmandValidation : AbstractValidator<UpdateDesignCategoryCommand>
         {
             public CommmandValidation()
             {
-                RuleFor(x => x.UpdateModel.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
+                RuleFor(x => x.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
                 RuleFor(x => x.UpdateModel.Name).NotNull().NotEmpty().WithMessage("Name must not null or empty");
             }
         }
@@ -45,8 +46,8 @@ namespace GreenSpace.Application.Features.DesignIdeasCategories.Commands
             public async Task<bool> Handle(UpdateDesignCategoryCommand request, CancellationToken cancellationToken)
             {
                 _logger.LogInformation("Update Menu:\n");
-                var cate = await _unitOfWork.DesignIdeasCategoryRepository.GetByIdAsync(request.UpdateModel.Id);
-                if (cate is null) throw new NotFoundException($"Category with Id-{request.UpdateModel.Id} is not exist!");
+                var cate = await _unitOfWork.DesignIdeasCategoryRepository.GetByIdAsync(request.Id);
+                if (cate is null) throw new NotFoundException($"Category with Id-{request.Id} is not exist!");
                 _mapper.Map(request.UpdateModel, cate);
                 _unitOfWork.DesignIdeasCategoryRepository.Update(cate);
                 var result = await _unitOfWork.SaveChangesAsync();

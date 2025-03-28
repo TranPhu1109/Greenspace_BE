@@ -8,7 +8,7 @@ namespace GreenSpace.Application.ViewModels.ProductFeedback
 {
     public class ProductFeedbackUpdateModel
     {
-        public Guid Id { get; set; }
+
         public string Reply { get; set; } = string.Empty;
     }
 }
