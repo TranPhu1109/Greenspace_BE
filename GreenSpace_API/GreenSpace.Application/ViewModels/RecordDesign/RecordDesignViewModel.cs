@@ -15,6 +15,8 @@ namespace GreenSpace.Application.ViewModels.RecordDesign
         public bool isSelected { get; set; }
         public Guid ServiceOrderId { get; set; }
         public Guid ImageId { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime? ModificationDate { get; set; }
         public ImageCreateModel? Image { get; set; }
     }
 }

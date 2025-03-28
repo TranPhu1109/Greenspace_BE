@@ -15,6 +15,8 @@ namespace GreenSpace.Application.ViewModels.Blogs
         public string Title { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
+        public DateTime CreationDate { get; set; }
+        public DateTime? ModificationDate { get; set; }
 
         public ImageCreateModel? Image { get; set; }
     }

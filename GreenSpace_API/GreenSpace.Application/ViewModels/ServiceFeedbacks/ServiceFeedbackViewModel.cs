@@ -15,4 +15,6 @@ namespace GreenSpace.Application.ViewModels.ServiceFeedbacks
         public string Description { get; set; } = string.Empty;
         public string Reply { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
-    }}
+        public DateTime? ModificationDate { get; set; }
+    }
+}

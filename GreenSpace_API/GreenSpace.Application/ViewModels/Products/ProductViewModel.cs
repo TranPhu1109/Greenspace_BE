@@ -18,6 +18,8 @@ namespace GreenSpace.Application.ViewModels.Products
         public Guid ImageId { get; set; }
         public int Size { get; set; }
         public string CategoryName { get; set; } = default!;
+        public DateTime CreationDate { get; set; }
+        public DateTime? ModificationDate { get; set; }
         public ImageCreateModel? Image { get;  set; }
     }
 }

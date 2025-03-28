@@ -36,6 +36,7 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
         public string Status { get; set; } = string.Empty;
         public Guid? RecordDesignId { get; set; } = default!;
         public Guid? RecordSketchId { get; set; } = default!;
+        public DateTime CreationDate { get; set; }
         public ImageCreateModel? Image { get; set; }
 
         public List<ServiceOrderDetailViewModel> ServiceOrderDetails { get; set; } = new List<ServiceOrderDetailViewModel>();
