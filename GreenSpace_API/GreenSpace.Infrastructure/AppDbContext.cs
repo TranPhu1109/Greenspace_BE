@@ -61,6 +61,8 @@ namespace GreenSpace.Infrastructure
         public  DbSet<WebManager> WebManagers { get; set; }
         public DbSet<RecordDesign> RecordDesigns { get; set; }
         public DbSet<RecordSketch> RecordSketches { get; set; }
+        public DbSet<WalletLog> WalletLogs { get; set; }
+        public DbSet<Complaint> Complaints { get; set; }
 
 
         #endregion

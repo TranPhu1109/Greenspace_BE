@@ -47,7 +47,7 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("OrderId")
+                    b.Property<Guid?>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PaymentId")
@@ -56,7 +56,7 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("ServiceOrderId")
+                    b.Property<Guid?>("ServiceOrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UsersWalletId")
@@ -152,6 +152,60 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("GreenSpace.Domain.Entities.Complaint", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ServiceOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ServiceOrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Complaints");
+                });
+
             modelBuilder.Entity("GreenSpace.Domain.Entities.Contract", b =>
                 {
                     b.Property<Guid>("Id")
@@ -205,6 +259,18 @@ namespace GreenSpace.Infrastructure.Migrations
 
                     b.Property<Guid>("DesignIdeasCategoryId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DesignImage1URL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DesignImage2URL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DesignImage3URL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("DesignPrice")
                         .HasColumnType("float");
@@ -1102,6 +1168,60 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.ToTable("UsersWallets");
                 });
 
+            modelBuilder.Entity("GreenSpace.Domain.Entities.WalletLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ModificatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModificationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TxnRef")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("WalletId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WalletId");
+
+                    b.ToTable("WalletLogs");
+                });
+
             modelBuilder.Entity("GreenSpace.Domain.Entities.WebManager", b =>
                 {
                     b.Property<string>("ImageBanner")
@@ -1161,8 +1281,7 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.HasOne("GreenSpace.Domain.Entities.Order", "Order")
                         .WithMany("Bills")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("GreenSpace.Domain.Entities.Payment", "Payment")
                         .WithMany("Bills")
@@ -1173,8 +1292,7 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.HasOne("GreenSpace.Domain.Entities.ServiceOrder", "ServiceOrder")
                         .WithMany("Bills")
                         .HasForeignKey("ServiceOrderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("GreenSpace.Domain.Entities.UsersWallet", "UsersWallet")
                         .WithMany("Bills")
@@ -1200,6 +1318,41 @@ namespace GreenSpace.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("GreenSpace.Domain.Entities.Complaint", b =>
+                {
+                    b.HasOne("GreenSpace.Domain.Entities.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("GreenSpace.Domain.Entities.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("GreenSpace.Domain.Entities.ServiceOrder", "ServiceOrder")
+                        .WithMany()
+                        .HasForeignKey("ServiceOrderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("GreenSpace.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Image");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("ServiceOrder");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("GreenSpace.Domain.Entities.Contract", b =>
@@ -1468,6 +1621,17 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("GreenSpace.Domain.Entities.WalletLog", b =>
+                {
+                    b.HasOne("GreenSpace.Domain.Entities.UsersWallet", "UsersWallet")
+                        .WithMany("WalletLogs")
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UsersWallet");
+                });
+
             modelBuilder.Entity("GreenSpace.Domain.Entities.WorkTask", b =>
                 {
                     b.HasOne("GreenSpace.Domain.Entities.ServiceOrder", "ServiceOrder")
@@ -1579,6 +1743,8 @@ namespace GreenSpace.Infrastructure.Migrations
             modelBuilder.Entity("GreenSpace.Domain.Entities.UsersWallet", b =>
                 {
                     b.Navigation("Bills");
+
+                    b.Navigation("WalletLogs");
                 });
 #pragma warning restore 612, 618
         }

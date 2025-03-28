@@ -28,6 +28,9 @@ public class UnitOfWork : IUnitOfWork
     IRecordDesignRepository recordDesignRepository,
     IRecordSketchRepository recordSketchRepository,
     IWorkTaskRepository workTaskRepository,
+    IBillRepository billRepository,
+    IWalletLogRepository walletLogRepository)
+    IWorkTaskRepository workTaskRepository,
      IBlogRepository blogRepository)
     {
         _dbContext = dbcontext;
@@ -48,16 +51,17 @@ public class UnitOfWork : IUnitOfWork
         ServiceOrderDetailRepository = serviceOrderDetailRepository;
         RecordDesignRepository = recordDesignRepository;
         RecordSketchRepository = recordSketchRepository;
+        BillRepository = billRepository;
         WorkTaskRepository = workTaskRepository;
         BlogRepository = blogRepository;
+        WalletLogRepository = walletLogRepository;
 
     }
     public IUserRepository UserRepository { get; }
     public IProductRepository ProductRepository { get; }
     public IImageRepository ImageRepository { get; }
-
+    public IBillRepository BillRepository { get; }
     public IDesignIdeaRepository DesignIdeaRepository { get; }
-
     public IProductDetailRepository ProductDetailRepository { get; }
     public ICategoryRepository CategoryRepository { get; }
     public IProductFeedbackRepository ProductFeedbackRepository { get; }
@@ -67,16 +71,14 @@ public class UnitOfWork : IUnitOfWork
     public IServiceFeedbackRepositoy ServiceFeedbackRepositoy { get; }
     public IServiceOrderRepository ServiceOrderRepository { get; }
     public IServiceOrderDetailRepository ServiceOrderDetailRepository { get; }
-
     public IRecordDesignRepository RecordDesignRepository { get; }
     public IRecordSketchRepository RecordSketchRepository { get; }
     public IWorkTaskRepository WorkTaskRepository { get; }
 
     public IBlogRepository BlogRepository { get; }
     public IMapper Mapper { get; }
-
     public IConnectionConfiguration DirectionConnection { get; }
-
+    public IWalletLogRepository WalletLogRepository { get; }
 
     public async Task<bool> SaveChangesAsync() => (await _dbContext.SaveChangesAsync()) > 0;
 

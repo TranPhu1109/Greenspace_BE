@@ -89,6 +89,54 @@ public class AuthService : IAuthService
         }
     }
 
+    public async Task<LoginResponseModel> LoginWithEmailPasswordAsync(string email, string password, string? FCMToken)
+    {
+        // Kiểm tra xem người dùng có tồn tại trong cơ sở dữ liệu không
+        var userInDb = await _unitOfWork.UserRepository.FirstOrDefaultAsync(x => x.Email == email, x => x.Role);
+
+        if (userInDb is null)
+            throw new Exception($"Error at: {nameof(IAuthService)}_ User with email {email} does not exist");
+
+        // Kiểm tra mật khẩu
+        
+        bool isPasswordValid = await VerifyPasswordAsync(email, password);
+
+        if (!isPasswordValid)
+            throw new Exception($"Error at: {nameof(IAuthService)}_ Invalid password for user {email}");
+
+        
+        string newToken = _jwtTokenGenerator.GenerateToken(user: userInDb, role: userInDb.Role.RoleName);
+        userInDb.JWTToken = newToken;
+
+        
+        if (FCMToken is not null)
+        {
+            userInDb.FCMToken = FCMToken;
+        }
+
+        
+        _unitOfWork.UserRepository.Update(userInDb);
+        await _unitOfWork.SaveChangesAsync();
+
+        return new LoginResponseModel
+        {
+            Token = newToken,
+            User = _unitOfWork.Mapper.Map<UserViewModel>(userInDb)
+        };
+    }
+
+    private async Task<bool> VerifyPasswordAsync(string email, string password)
+    {
+        
+        var user = await _unitOfWork.UserRepository.FirstOrDefaultAsync(x => x.Email == email);
+
+        if (user == null)
+            return false;
+
+        return BCrypt.Net.BCrypt.Verify(password, user.Password);
+
+    }
+
     public async Task<LoginResponseModel> RefreshTokenAsync(string token)
     {
         var user = (await _unitOfWork.UserRepository.WhereAsync(x => x.JWTToken == token, x => x.Role)).FirstOrDefault() ?? throw new Exception("Not have any user with provided token");

@@ -37,35 +37,47 @@ namespace GreenSpace.Application.Features.User.Commands
             {
                 var user = _unitOfWork.Mapper.Map<Domain.Entities.User>(request.Model);
 
-                var isDup = await _unitOfWork.UserRepository.WhereAsync(x => x.Email!.ToLower() == request.Model.Email!.ToLower() ||
-                    x.Phone!.ToLower() == request.Model.Phone!.ToLower());
-                if (isDup.Count() > 0)
-                    throw new Exception($"Error: {nameof(CreateUserCommand)}_email or phone is duplicate!");
+                var isDupEmail = await _unitOfWork.UserRepository.WhereAsync(x => x.Email!.ToLower() == request.Model.Email!.ToLower());
+                if (isDupEmail.Count() > 0)
+                    throw new Exception($"Error: {nameof(CreateUserCommand)}_email is duplicate!");
+                var isDupPhone = await _unitOfWork.UserRepository.WhereAsync(x => x.Phone!.ToLower() == request.Model.Phone!.ToLower());
+                if (isDupPhone.Count() > 0)
+                    throw new Exception($"Error: {nameof(CreateUserCommand)}_phone is duplicate!");
+
                 var createToFirebase = await CreateUserToFirebaseAsync(
                     email: request.Model.Email ?? "",
                  password: request.Model.Password ?? "");
                 request.Model.RoleName = request.Model.RoleName ?? nameof(RoleEnum.Customer);
+
                 var role = await _unitOfWork.RoleRepository.FirstOrDefaultAsync(x => x.RoleName.ToLower() == request.Model.RoleName.ToLower())
                     ?? throw new Exception($"Error: {nameof(CreateUserCommand)}_no_role_found: role: {request.Model.RoleName}");
-                //user.WalletId = await CreateWallet(user.Id);
+
                 user.RoleId = role.Id;
+
+
                 await _unitOfWork.UserRepository.AddAsync(user);
                 if (await _unitOfWork.SaveChangesAsync())
                 {
-                    if (role.RoleName == nameof(RoleEnum.Customer))
+                    if (role.RoleName == nameof(RoleEnum.Customer).ToLower())
                     {
-                        //var wallet = new Domain.Entities.Wallet
-                        //{
-                        //    Amount = 0,
-                        //    Name = $"Ví của {user.Email}",
-                        //    WalletType = nameof(WalletTypeEnum.Customer),
-                        //    //
-                        //    = null,
-                        //    UserId = user.Id
-                        //};
-                        //await _unitOfWork.WalletRepository.AddAsync(wallet);
+                        var wallet = new Domain.Entities.UsersWallet
+                        {
+                            Amount = 0,
+                            Name = $"Ví của {user.Email}",
+                            WalletType = nameof(WalletTypeEnum.Customer),
+                            UserId = user.Id
+                        };
+                        await _unitOfWork.WalletRepository.AddAsync(wallet);
+                        if (!await _unitOfWork.SaveChangesAsync())
+                        {
+                            throw new Exception($"Error: Failed to save wallet for customer!");
+                        }
                     }
                     return await _mediator.Send(new GetUserByIdQuery { Id = user.Id }, cancellationToken);
+
+            {
+                throw new Exception($"Error: Failed to save wallet for customer!");
+            }
                 }
                 else
                 {
@@ -91,12 +103,7 @@ namespace GreenSpace.Application.Features.User.Commands
 
             }
 
-            //private async Task<Guid> CreateWallet(Guid userId)
-            //{
-            //    var wallet = new Domain.Entities.Wallet { Name = "User-Wallet", Amount = 0, WalletType = WalletTypeEnum.Customer.ToString(), UserId = userId };
-            //    await _unitOfWork.WalletRepository.AddAsync(wallet);
-            //    return wallet.Id;
-            //}
+            
 
         }
     }

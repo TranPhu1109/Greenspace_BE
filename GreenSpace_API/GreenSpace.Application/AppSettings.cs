@@ -5,6 +5,8 @@ public class AppSettings
     public ConnectionStrings ConnectionStrings { get; set; } = default!;
     public JWTOptions JWTOptions { get; set; } = default!;
     public FirebaseSettings FirebaseSettings { get; set; } = default!;
+    public EmailConfig Email { get; set; } = new();
+    public VnPay VnPay { get; set; } = new();
 }
 
 public class JWTOptions
