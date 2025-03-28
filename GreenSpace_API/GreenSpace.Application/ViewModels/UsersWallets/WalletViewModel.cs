@@ -1,4 +1,5 @@
 ﻿using GreenSpace.Application.ViewModels.Bills;
+using GreenSpace.Application.ViewModels.WalletLogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ public class WalletViewModel
     public decimal Amount { get; set; }
     public string? WalletType { get; set; }
     public Guid? UserId { get; set; }
-    public IEnumerable<BillViewModel> Bills { get; set; } = new List<BillViewModel>();
+    public IEnumerable<BillViewModel>? Bills { get; set; } 
+    public IEnumerable<WalletLogViewModel>? WalletLogs { get; set; } 
 
 }

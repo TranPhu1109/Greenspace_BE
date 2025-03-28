@@ -43,7 +43,7 @@ namespace GreenSpace.Application.Features.UserWallet.Queries
             }
             private async Task<List<BillViewModel>> GetBills(Guid walletId)
             {
-                var transaction = await _unitOfWork.BillRepository.WhereAsync(x => x.UsersWalletId == walletId, x => x.Payment!, x => x.Payment!.Orders);
+                var transaction = await _unitOfWork.BillRepository.WhereAsync(x => x.UsersWalletId == walletId);
                 return _mapper.Map<List<BillViewModel>>(transaction);
             }
         }

@@ -5,9 +5,9 @@ public class Bill : BaseEntity
 
     public Guid PaymentId { get; set; }
 
-    public Guid ServiceOrderId { get; set; }
+    public Guid? ServiceOrderId { get; set; }
 
-    public Guid OrderId { get; set; }
+    public Guid? OrderId { get; set; }
 
     public double Price { get; set; }
 

@@ -30,6 +30,21 @@ namespace GreenSpace.WebAPI.Controllers
         }));
 
         /// <summary>
+        /// Lấy hết tất cả User bi ban
+        /// </summary>
+        /// <returns></returns>
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("Banned")]
+        public async Task<IActionResult> GetBannedAccount([FromQuery] Dictionary<string, string> filter,
+            [FromQuery] int pageNumber = -1)
+        => Ok(await _mediator.Send(new GetAllBanUserQuery
+        {
+            Filter = filter,
+            PageNumber = pageNumber
+        }));
+
+        /// <summary>
         /// Lấy User theo Id
         /// </summary>
         /// <param name="id"></param>
@@ -63,6 +78,29 @@ namespace GreenSpace.WebAPI.Controllers
             else return BadRequest();
         }
         /// <summary>
+        /// Đăng ký tài khoản
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestModel model)
+        {
+            var result = await _mediator.Send(new RegisterUserCommand { Model = model });
+            if (result is not null)
+            {
+                return CreatedAtAction(
+                    actionName: nameof(GetById),
+                    routeValues: new { id = result.Id },
+                    value: result
+                );
+            }
+            else return BadRequest();
+        }
+
+        /// <summary>
         /// Cập nhật thông tin user
         /// </summary>
         /// <param name="id"></param>
@@ -88,6 +126,20 @@ namespace GreenSpace.WebAPI.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             await _mediator.Send(new DeleteUserCommand { Id = id });
+            return NoContent();
+        }
+
+        /// <summary>
+        ///  User theo Id - Admin
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPut("Unban{id}")]
+        public async Task<IActionResult> Unban(Guid id)
+        {
+            await _mediator.Send(new UnbanUserCommand { Id = id });
             return NoContent();
         }
     }

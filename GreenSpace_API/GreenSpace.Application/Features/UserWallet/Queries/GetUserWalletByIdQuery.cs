@@ -37,7 +37,7 @@ public class GetUserWalletByIdQuery : IRequest<WalletViewModel>
         public async Task<WalletViewModel> Handle(GetUserWalletByIdQuery request, CancellationToken cancellationToken)
         {
             
-            var wallet = await _unitOfWork.WalletRepository.FirstOrDefaultAsync(x => x.Id == request.Id, x => x.Bills);
+            var wallet = await _unitOfWork.WalletRepository.FirstOrDefaultAsync(x => x.Id == request.Id, x => x.Bills, x => x.WalletLogs);
             if (wallet is null) throw new BadRequestException($"WalletId-{request.Id} is not exist!");
             // await _cacheService.SetAsync<Wallet>(CacheKey.WALLET + wallet.Id, wallet);
             return _mapper.Map<WalletViewModel>(wallet);

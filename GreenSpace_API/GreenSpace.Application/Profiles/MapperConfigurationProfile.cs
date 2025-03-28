@@ -16,6 +16,8 @@ using GreenSpace.Application.ViewModels.WorkTasks;
 using GreenSpace.Application.ViewModels.UsersWallets;
 using GreenSpace.Domain.Entities;
 using GreenSpace.Domain.Enum;
+using GreenSpace.Application.ViewModels.Roles;
+using GreenSpace.Application.ViewModels.WalletLogs;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -68,7 +70,7 @@ public class MapperConfigurationProfile : Profile
              .ReverseMap();
         CreateMap<ServiceFeedback, ServiceFeedbackCreateModel>().ReverseMap();
         CreateMap<ServiceFeedback, ServiceFeedbackUpdateModel>().ReverseMap();
-        //CreateMap<Role, RoleViewModel>().ReverseMap();
+        CreateMap<Role, RoleViewModel>().ReverseMap();
 
         CreateMap<User, UserViewModel>()
             .ForMember(
@@ -82,7 +84,8 @@ public class MapperConfigurationProfile : Profile
                 opt => opt.MapFrom(x => x.Address)
             ).ReverseMap();
         CreateMap<User, UserUpdateModel>().ReverseMap();
-       
+        CreateMap<User, RegisterRequestModel>().ReverseMap();
+
 
         CreateMap<DesignIdeasCategory, DesignIdeasCategoryViewModel>().ReverseMap();
         CreateMap<DesignIdeasCategory, DesignIdeasCategoryCreateModel>().ReverseMap();
@@ -125,9 +128,10 @@ public class MapperConfigurationProfile : Profile
         //#endregion
 
         CreateMap<UsersWallet, WalletViewModel>()
+            .ForMember(x => x.WalletLogs, opt => opt.MapFrom(x => x.WalletLogs))
             .ForMember(x => x.Bills, opt => opt.Ignore())
             .ReverseMap();
-
+        CreateMap<WalletLog, WalletLogViewModel>().ReverseMap();
 
 
 

@@ -1,5 +1,7 @@
 ﻿using GreenSpace.Application.IntergrationServices.Models;
 using GreenSpace.Application.Utilities;
+using GreenSpace.Domain.Entities;
+using GreenSpace.Domain.Enum;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -38,28 +40,28 @@ public class VnPayResponseCommand : IRequest<bool>
             if (wallet is null)
                 throw new ArgumentException($"Source: {toolService}_Wallet is null");
 
-            //var isExisted = await unitOfWork.WalletLogRepository.FirstOrDefaultAsync(x => x.TransactionNo == request.Model.vnp_TransactionNo
-            //    && x.TxnRef == request.Model.vnp_TxnRef);
-            //if (isExisted is not null)
-            //{
-            //    return false;
-            //}
+            var isExisted = await unitOfWork.WalletLogRepository.FirstOrDefaultAsync(x => x.TransactionNo == request.Model.vnp_TransactionNo
+                && x.TxnRef == request.Model.vnp_TxnRef);
+            if (isExisted is not null)
+            {
+                return false;
+            }
 
-            //var walletLog = new WalletLog()
-            //{
-            //    Amount = request.Model.vnp_Amount / 100,
-            //    //CreationDate = DateTime.Parse(request.Model.vnp_PayDate),
-            //    TxnRef = request.Model.vnp_TxnRef,
-            //    TransactionNo = request.Model.vnp_TransactionNo,
-            //    Source = "VNPay",
-            //    Type = nameof(WalletLogTypeEnum.Deposit),
-            //    WalletId = wallet.Id,
-            //    CreationDate = DateTime.ParseExact(request.Model.vnp_PayDate, "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture)
+            var walletLog = new WalletLog()
+            {
+                Amount = request.Model.vnp_Amount / 100,
+                //CreationDate = DateTime.Parse(request.Model.vnp_PayDate),
+                TxnRef = request.Model.vnp_TxnRef,
+                TransactionNo = request.Model.vnp_TransactionNo,
+                Source = "VNPay",
+                Type = nameof(WalletLogTypeEnum.Deposit),
+                WalletId = wallet.Id,
+                CreationDate = DateTime.ParseExact(request.Model.vnp_PayDate, "yyyyMMddHHmmss", System.Globalization.CultureInfo.InvariantCulture)
 
-            //};
-            //wallet.Amount += walletLog.Amount;
+            };
+            wallet.Amount += walletLog.Amount;
             unitOfWork.WalletRepository.Update(wallet);
-            //await unitOfWork.WalletLogRepository.AddAsync(walletLog);
+            await unitOfWork.WalletLogRepository.AddAsync(walletLog);
 
             return await unitOfWork.SaveChangesAsync();
 

@@ -1,5 +1,7 @@
 ﻿using GreenSpace.Application.Services.Interfaces;
 using GreenSpace.Application.ViewModels.UsersWallets;
+using GreenSpace.Domain.Entities;
+using GreenSpace.Domain.Enum;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -40,17 +42,16 @@ public class AddAccountBalanceCommand : AddAccountBalanceModel, IRequest<bool>
                 // Add Money
                 currentUser.UsersWallet.Amount += request.Amount;
 
-                //var walletLog = new
-                //WalletLog
-                //{
-                //    Amount = request.Amount,
-                //    Source = request.Source,
-                //    TxnRef = request.TxnRef,
-                //    Type = nameof(WalletLogTypeEnum.Deposit),
-                //    WalletId = currentUser.Wallet.Id
-                //};
+                var walletLog = new WalletLog
+                {
+                    Amount = request.Amount,
+                    Source = request.Source,
+                    TxnRef = request.TxnRef,
+                    Type = nameof(WalletLogTypeEnum.Deposit),
+                    WalletId = currentUser.UsersWallet.Id
+                };
                 unitOfWork.WalletRepository.Update(currentUser.UsersWallet);
-                //await unitOfWork.WalletLogRepository.AddAsync(walletLog);
+                await unitOfWork.WalletLogRepository.AddAsync(walletLog);
                 return await unitOfWork.SaveChangesAsync();
             }
 

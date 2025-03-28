@@ -52,10 +52,10 @@ public class RequestVNPayCommand : IRequest<string>
 
             vnpay.AddRequestData("vnp_OrderInfo", "Nạp tiền vào ví");
             vnpay.AddRequestData("vnp_OrderType", payRequest.OrderType); //default value: other
-            if (env.IsDevelopment())
-                vnpay.AddRequestData("vnp_ReturnUrl", $"https://localhost:8080/api/wallets/vn-pay/response?userId={userId}");
-            else
-                vnpay.AddRequestData("vnp_ReturnUrl", $"http://ptp-srv.ddns.net:5000/api/wallets/vn-pay/response?userId={userId}");
+            //if (env.IsDevelopment())
+                vnpay.AddRequestData("vnp_ReturnUrl", $"http://localhost:8080/api/userwallets/vn-pay/response?userId={userId}");
+            //else
+                //vnpay.AddRequestData("vnp_ReturnUrl", $"http://ptp-srv.ddns.net:5000/api/wallets/vn-pay/response?userId={userId}");
 
             vnpay.AddRequestData("vnp_TxnRef", payRequest.TxnRef); // Mã tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY. Không được trùng lặp trong ngày
 

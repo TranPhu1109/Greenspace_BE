@@ -2,6 +2,7 @@
 using FluentValidation;
 using GreenSpace.Application.Features.User.Queries;
 using GreenSpace.Application.Services;
+using GreenSpace.Application.Services.Interfaces;
 using GreenSpace.Application.ViewModels.Users;
 using GreenSpace.Domain.Entities;
 using GreenSpace.Domain.Enum;
@@ -36,41 +37,75 @@ public class RegisterUserCommand : IRequest<UserViewModel>
             }
             public async Task<UserViewModel> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
             {
-                // Kiểm tra email đã tồn tại chưa
-                var existingUser = await _unitOfWork.UserRepository.FirstOrDefaultAsync(x => x.Email == request.Model.Email);
-                if (existingUser != null)
-                    throw new Exception("Email đã được sử dụng");
+                var user = _unitOfWork.Mapper.Map<Domain.Entities.User>(request.Model);
 
-                // Lấy role từ database
-                var roleInDb = await _unitOfWork.RoleRepository.FirstOrDefaultAsync(x => x.RoleName.ToLower() == request.Model.Role.ToLower())
-                            ?? throw new Exception($"Error: {nameof(AuthService)}_ Role Not found: rolename: {request.Model.Role}");
+                var isDupEmail = await _unitOfWork.UserRepository.WhereAsync(x => x.Email!.ToLower() == request.Model.Email!.ToLower());
+                if (isDupEmail.Count() > 0)
+                    throw new Exception($"Error: {nameof(RegisterUserCommand)}_email is duplicate!");
 
-                // Tạo user mới
-                GreenSpace.Domain.Entities.User newUser = new()
+                if (!string.IsNullOrEmpty(request.Model.Phone))
                 {
-                    Name = request.Model.Name,
-                    Phone = request.Model.Phone ?? string.Empty,
-                    FCMToken = string.Empty,
-                    Id = Guid.NewGuid(),
-                    Email = request.Model.Email,
-                    RoleId = roleInDb.Id,
-                    Password = request.Model.Password,
-                };
+                    var isDupPhone = await _unitOfWork.UserRepository.WhereAsync(x => x.Phone!.ToLower() == request.Model.Phone!.ToLower());
+                    if (isDupPhone.Count() > 0)
+                        throw new Exception($"Error: {nameof(RegisterUserCommand)}_phone is duplicate!");
+                }
 
-                // Tạo JWT token
-                //string jwtToken = _jwtTokenGenerator.GenerateToken(newUser, roleInDb.RoleName);
-                //newUser.JWTToken = jwtToken;
+                var createToFirebase = await CreateUserToFirebaseAsync(
+                    email: request.Model.Email ?? "",
+                    password: request.Model.Password ?? "");
+
+                // Mặc định role là Customer
+                var roleName = nameof(RoleEnum.Customer);
+
+                var role = await _unitOfWork.RoleRepository.FirstOrDefaultAsync(x => x.RoleName.ToLower() == roleName.ToLower())
+                    ?? throw new Exception($"Error: {nameof(RegisterUserCommand)}_no_role_found: role: {roleName}");
+
+                user.RoleId = role.Id;
 
                 // Lưu user vào database
-                await _unitOfWork.UserRepository.AddAsync(newUser);
+                await _unitOfWork.UserRepository.AddAsync(user);
                 if (await _unitOfWork.SaveChangesAsync())
                 {
+                    // Tạo ví cho khách hàng
+                    var wallet = new Domain.Entities.UsersWallet
+                    {
+                        Amount = 0,
+                        Name = $"Ví của {user.Email}",
+                        WalletType = nameof(WalletTypeEnum.Customer),
+                        UserId = user.Id
+                    };
+                    await _unitOfWork.WalletRepository.AddAsync(wallet);
+                    if (!await _unitOfWork.SaveChangesAsync())
+                    {
+                        throw new Exception($"Error: Failed to save wallet for customer!");
+                    }
 
-
-                    return await _mediator.Send(new GetUserByIdQuery { Id = newUser.Id }, cancellationToken);
+                    return await _mediator.Send(new GetUserByIdQuery { Id = user.Id }, cancellationToken);
                 }
-                else throw new Exception($"Error: {nameof(AuthService)}_{nameof(RegisterUserCommand)}: SaveChange new User Failed");
+                else
+                {
+                    throw new Exception($"Error: {nameof(RegisterUserCommand)}_Save Change Failed!");
+                }
+            }
+
+            private async Task<bool> CreateUserToFirebaseAsync(string email, string password)
+            {
+                var auth = new FirebaseAuthProvider(new FirebaseConfig(apiKey: _appSettings.FirebaseSettings.ApiKeY));
+                try
+                {
+                    var result = await auth.CreateUserWithEmailAndPasswordAsync(email: email, password: password);
+                    if (result.User is not null)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"{ex}");
+                }
             }
         }
     }
 }
+

@@ -27,9 +27,9 @@ public class UnitOfWork : IUnitOfWork
     IServiceOrderDetailRepository serviceOrderDetailRepository,
     IRecordDesignRepository recordDesignRepository,
     IRecordSketchRepository recordSketchRepository,
-    IWorkTaskRepository workTaskRepository)
-    IRecordSketchRepository recordSketchRepository,
-    IBillRepository billRepository)
+    IWorkTaskRepository workTaskRepository,
+    IBillRepository billRepository,
+    IWalletLogRepository walletLogRepository)
     {
         _dbContext = dbcontext;
         DirectionConnection = connectionConfiguration;
@@ -51,6 +51,7 @@ public class UnitOfWork : IUnitOfWork
         RecordSketchRepository = recordSketchRepository;
         BillRepository = billRepository;
         WorkTaskRepository = workTaskRepository;
+        WalletLogRepository = walletLogRepository;
 
     }
     public IUserRepository UserRepository { get; }
@@ -58,7 +59,6 @@ public class UnitOfWork : IUnitOfWork
     public IImageRepository ImageRepository { get; }
     public IBillRepository BillRepository { get; }
     public IDesignIdeaRepository DesignIdeaRepository { get; }
-
     public IProductDetailRepository ProductDetailRepository { get; }
     public ICategoryRepository CategoryRepository { get; }
     public IProductFeedbackRepository ProductFeedbackRepository { get; }
@@ -68,14 +68,12 @@ public class UnitOfWork : IUnitOfWork
     public IServiceFeedbackRepositoy ServiceFeedbackRepositoy { get; }
     public IServiceOrderRepository ServiceOrderRepository { get; }
     public IServiceOrderDetailRepository ServiceOrderDetailRepository { get; }
-
     public IRecordDesignRepository RecordDesignRepository { get; }
     public IRecordSketchRepository RecordSketchRepository { get; }
     public IWorkTaskRepository WorkTaskRepository { get; }
     public IMapper Mapper { get; }
-
     public IConnectionConfiguration DirectionConnection { get; }
-
+    public IWalletLogRepository WalletLogRepository { get; }
 
     public async Task<bool> SaveChangesAsync() => (await _dbContext.SaveChangesAsync()) > 0;
 
