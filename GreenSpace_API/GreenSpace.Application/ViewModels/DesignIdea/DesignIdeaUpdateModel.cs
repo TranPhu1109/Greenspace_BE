@@ -18,6 +18,9 @@ namespace GreenSpace.Application.ViewModels.DesignIdea
         public double DesignPrice { get; set; } = default!;
 
         public Guid DesignIdeasCategoryId { get; set; }
+        public string DesignImage1URL { get; set; } = string.Empty;
+        public string DesignImage2URL { get; set; } = string.Empty;
+        public string DesignImage3URL { get; set; } = string.Empty;
 
         public ImageCreateModel Image { get; set; } = new ImageCreateModel();
         public List<ProductDetailCreateModel>? ProductDetails { get; set; } = new List<ProductDetailCreateModel>();

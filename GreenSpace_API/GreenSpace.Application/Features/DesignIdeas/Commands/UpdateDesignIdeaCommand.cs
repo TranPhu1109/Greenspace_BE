@@ -60,6 +60,18 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
                 var design = await _unitOfWork.DesignIdeaRepository.GetByIdAsync(request.Id, p => p.Image, p => p.ProductDetails);
                 if (design is null) throw new NotFoundException($"DesignIdea with Id {request.Id} does not exist!");
 
+                design.DesignImage1URL = !string.IsNullOrEmpty(request.UpdateModel.DesignImage1URL)
+                                         ? request.UpdateModel.DesignImage1URL
+                                         : design.DesignImage1URL;
+
+                design.DesignImage2URL = !string.IsNullOrEmpty(request.UpdateModel.DesignImage2URL)
+                                         ? request.UpdateModel.DesignImage2URL
+                                         : design.DesignImage2URL;
+
+                design.DesignImage3URL = !string.IsNullOrEmpty(request.UpdateModel.DesignImage3URL)
+                                         ? request.UpdateModel.DesignImage3URL
+                                         : design.DesignImage3URL;
+
                 // Cập nhật ảnh
                 if (request.UpdateModel.Image is not null)
                 {
