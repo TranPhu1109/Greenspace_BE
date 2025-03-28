@@ -28,6 +28,7 @@ public class WalletsController : BaseController
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
+    [Authorize]
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.Created)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
