@@ -16,7 +16,6 @@ namespace GreenSpace.Domain.Entities.MongoDbs
         public Guid UserId { get; set; }
 
         public List<CartItemEntity> Items { get; set; } = new List<CartItemEntity>();
-
         public bool IsCurrent { get; set; } = true;
     }
 

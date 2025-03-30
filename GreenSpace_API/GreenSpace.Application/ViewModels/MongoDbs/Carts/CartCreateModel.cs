@@ -4,9 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GreenSpace.Application.ViewModels.MongoDbs.Carts
+namespace GreenSpace.Application.ViewModels.MongoDbs.Carts;
+
+public class CartCreateModel
 {
-    class CartCreateModel
-    {
-    }
+    public Guid UserId { get; set; }
+    public List<CartItemCreateModel> Items { get; set; }
+}
+
+public class CartItemCreateModel
+{
+    public Guid ProductId { get; set; }
+    public int Quantity { get; set; }
 }
