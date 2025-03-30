@@ -43,7 +43,7 @@ namespace GreenSpace.Application.Features.ServiceFeedbacks.Queries
 
             public async Task<PaginatedList<ServiceFeedbackViewModel>> Handle(GetServiceFeedbackByUserIdQuery request, CancellationToken cancellationToken)
             {
-                var serviceFeedbacks = await _unitOfWork.ServiceFeedbackRepositoy.WhereAsync(x => x.UserId == request.UserId, x => x.DesignIdeaId);
+                var serviceFeedbacks = await _unitOfWork.ServiceFeedbackRepositoy.WhereAsync(x => x.UserId == request.UserId, x => x.DesignIdeaId ,x => x.User);
                 if (serviceFeedbacks == null || !serviceFeedbacks.Any())
                 {
                     throw new NotFoundException($"No serviceFeedback found for User ID {request.UserId}.");

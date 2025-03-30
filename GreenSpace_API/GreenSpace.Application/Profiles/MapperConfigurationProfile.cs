@@ -63,6 +63,7 @@ public class MapperConfigurationProfile : Profile
 
         CreateMap<ProductFeedback, ProductFeedbackViewModel>()
              .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
+               .ForMember(x => x.AvatarUrl, opt => opt.MapFrom(x => x.User.AvatarUrl))
              .ForMember(x => x.ProductName, opt => opt.MapFrom(x => x.Product.Name))
             .ReverseMap();
         CreateMap<ProductFeedback, ProductFeedbackCreateModel>().ReverseMap();
@@ -70,6 +71,7 @@ public class MapperConfigurationProfile : Profile
 
         CreateMap<ServiceFeedback, ServiceFeedbackViewModel>()
              .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
+             .ForMember(x => x.AvatarUrl, opt => opt.MapFrom(x => x.User.AvatarUrl))
              .ForMember(x => x.DesignName, opt => opt.MapFrom(x => x.DesignIdea.Name))
              .ReverseMap();
         CreateMap<ServiceFeedback, ServiceFeedbackCreateModel>().ReverseMap();

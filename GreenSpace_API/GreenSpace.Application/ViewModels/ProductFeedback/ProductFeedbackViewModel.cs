@@ -10,7 +10,8 @@ namespace GreenSpace.Application.ViewModels.ProductFeedback
     {
         public Guid Id { get; set; }
         public string UserName { get; set; } = string.Empty; 
-        public string ProductName { get; set; } = string.Empty; 
+        public string ProductName { get; set; } = string.Empty;
+        public string? AvatarUrl { get; set; }
         public int? Rating { get; set; }
         public string Description { get; set; } = string.Empty;
         public string Reply { get; set; } = string.Empty;
