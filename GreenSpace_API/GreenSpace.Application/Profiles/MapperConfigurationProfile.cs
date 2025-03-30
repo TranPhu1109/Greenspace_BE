@@ -19,6 +19,7 @@ using GreenSpace.Domain.Entities;
 using GreenSpace.Domain.Enum;
 using GreenSpace.Application.ViewModels.Roles;
 using GreenSpace.Application.ViewModels.WalletLogs;
+using GreenSpace.Application.ViewModels.Contracts;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -143,6 +144,9 @@ public class MapperConfigurationProfile : Profile
         CreateMap<WalletLog, WalletLogViewModel>().ReverseMap();
 
 
-
+        CreateMap<ContractCreateModel, Contract>();
+        CreateMap<Contract, ContractViewModel>()
+            .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
+            .ReverseMap();
     }
 }

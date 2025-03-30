@@ -30,7 +30,8 @@ public class UnitOfWork : IUnitOfWork
     IWorkTaskRepository workTaskRepository,
     IBillRepository billRepository,
     IWalletLogRepository walletLogRepository,
-     IBlogRepository blogRepository)
+     IBlogRepository blogRepository,
+     IContractRepository contractRepository)
     {
         _dbContext = dbcontext;
         DirectionConnection = connectionConfiguration;
@@ -54,6 +55,7 @@ public class UnitOfWork : IUnitOfWork
         WorkTaskRepository = workTaskRepository;
         BlogRepository = blogRepository;
         WalletLogRepository = walletLogRepository;
+        ContractRepository = contractRepository;
 
     }
     public IUserRepository UserRepository { get; }
@@ -75,6 +77,7 @@ public class UnitOfWork : IUnitOfWork
     public IWorkTaskRepository WorkTaskRepository { get; }
 
     public IBlogRepository BlogRepository { get; }
+    public IContractRepository ContractRepository { get; }
     public IMapper Mapper { get; }
     public IConnectionConfiguration DirectionConnection { get; }
     public IWalletLogRepository WalletLogRepository { get; }
