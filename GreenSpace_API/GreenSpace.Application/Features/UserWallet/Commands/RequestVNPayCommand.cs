@@ -45,15 +45,16 @@ public class RequestVNPayCommand : IRequest<string>
             vnpay.AddRequestData("vnp_Command", payRequest.Command);
             vnpay.AddRequestData("vnp_TmnCode", appSettings.VnPay.Vnp_TmnCode);
             vnpay.AddRequestData("vnp_Amount", ((int)request.Amount * 100).ToString());
-            vnpay.AddRequestData("vnp_CreateDate", payRequest.CreateDate);
+            string createDate = DateTime.Now.ToString("yyyyMMddHHmmss");
+            vnpay.AddRequestData("vnp_CreateDate", createDate);
+            //vnpay.AddRequestData("vnp_CreateDate", payRequest.CreateDate);
             vnpay.AddRequestData("vnp_CurrCode", payRequest.CurrCode);
             vnpay.AddRequestData("vnp_IpAddr", payRequest.IpAddress);
             vnpay.AddRequestData("vnp_Locale", payRequest.Locale);
-
             vnpay.AddRequestData("vnp_OrderInfo", "Nạp tiền vào ví");
             vnpay.AddRequestData("vnp_OrderType", payRequest.OrderType); //default value: other
             //if (env.IsDevelopment())
-                vnpay.AddRequestData("vnp_ReturnUrl", $"http://localhost:8080/api/userwallets/vn-pay/response?userId={userId}");
+            vnpay.AddRequestData("vnp_ReturnUrl", $"http://localhost:8080/api/userwallets/vn-pay/response?userId={userId}");
             //else
                 //vnpay.AddRequestData("vnp_ReturnUrl", $"http://ptp-srv.ddns.net:5000/api/wallets/vn-pay/response?userId={userId}");
 
