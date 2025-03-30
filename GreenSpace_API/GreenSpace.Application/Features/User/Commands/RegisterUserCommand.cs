@@ -62,24 +62,21 @@ public class RegisterUserCommand : IRequest<UserViewModel>
 
                 user.RoleId = role.Id;
 
-                // Lưu user vào database
+                // Tạo ví cho khách hàng
+                var wallet = new Domain.Entities.UsersWallet
+                {
+                    Amount = 0,
+                    Name = $"Ví của {user.Email}",
+                    WalletType = nameof(WalletTypeEnum.Customer),
+                    UserId = user.Id
+                };
+                await _unitOfWork.WalletRepository.AddAsync(wallet);
+            
+                user.WalletId = wallet.Id;
                 await _unitOfWork.UserRepository.AddAsync(user);
+
                 if (await _unitOfWork.SaveChangesAsync())
                 {
-                    // Tạo ví cho khách hàng
-                    var wallet = new Domain.Entities.UsersWallet
-                    {
-                        Amount = 0,
-                        Name = $"Ví của {user.Email}",
-                        WalletType = nameof(WalletTypeEnum.Customer),
-                        UserId = user.Id
-                    };
-                    await _unitOfWork.WalletRepository.AddAsync(wallet);
-                    if (!await _unitOfWork.SaveChangesAsync())
-                    {
-                        throw new Exception($"Error: Failed to save wallet for customer!");
-                    }
-
                     return await _mediator.Send(new GetUserByIdQuery { Id = user.Id }, cancellationToken);
                 }
                 else
