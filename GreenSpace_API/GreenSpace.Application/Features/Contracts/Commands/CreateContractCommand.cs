@@ -73,7 +73,9 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                 var contract = _mapper.Map<Contract>(request.CreateModel);
                 contract.Id = Guid.NewGuid();
                 contract.UserId = request.CreateModel.UserId;
+                contract.ServiceOrderId = request.CreateModel.ServiceOrderId;
                 contract.Description = pdfUrl;
+
 
                 await _unitOfWork.ContractRepository.AddAsync(contract);
                 await _unitOfWork.SaveChangesAsync();

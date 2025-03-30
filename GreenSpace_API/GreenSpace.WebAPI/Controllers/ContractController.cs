@@ -2,6 +2,7 @@
 using GreenSpace.Application.Features.Blogs.Queries;
 using GreenSpace.Application.Features.Contracts.Commands;
 using GreenSpace.Application.Features.Contracts.Queries;
+using GreenSpace.Application.Features.Products.Queries;
 using GreenSpace.Application.Services;
 using GreenSpace.Application.ViewModels.Blogs;
 using GreenSpace.Application.ViewModels.Contracts;
@@ -37,6 +38,32 @@ namespace GreenSpace.WebAPI.Controllers
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         => Ok(await _mediator.Send(new GetContractByIdQuery { Id = id }));
 
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] int pageNumber = 0,
+                                     [FromQuery] int pageSize = 10)
+        => Ok(await _mediator.Send(new GetAllContractQuery { PageNumber = pageNumber, PageSize = pageSize }));
+
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("{id}/Users")]
+        public async Task<IActionResult> GetContractByUserId([FromRoute] Guid id,
+                                                                [FromQuery] int pageNumber = 0,
+                                                                [FromQuery] int pageSize = 10)
+        => Ok(await _mediator.Send(new GetContractByUserIdQuery { UserId = id, PageNumber = pageNumber, PageSize = pageSize }));
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("{id}/ServiceOrder")]
+        public async Task<IActionResult> GetContractByServiceOrderId([FromRoute] Guid id,
+                                                             [FromQuery] int pageNumber = 0,
+                                                             [FromQuery] int pageSize = 10)
+     => Ok(await _mediator.Send(new GetContractByServiceOrderIdQuery { ServiceOrderId = id, PageNumber = pageNumber, PageSize = pageSize }));
 
 
         #endregion
