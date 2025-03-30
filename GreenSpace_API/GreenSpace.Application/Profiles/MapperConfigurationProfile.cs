@@ -29,7 +29,9 @@ public class MapperConfigurationProfile : Profile
     {
 
         CreateMap<Product, ProductCreateModel>().ReverseMap();
-        CreateMap<Product, ProductUpdateModel>().ReverseMap();
+        CreateMap<Product, ProductUpdateModel>()    
+            .ReverseMap()
+            .ForMember(dest => dest.ServiceOrderDetails, opt => opt.Ignore());
         CreateMap<Product, ProductViewModel>()
            .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Category.Name))
            .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))

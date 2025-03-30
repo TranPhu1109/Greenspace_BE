@@ -62,7 +62,7 @@ namespace GreenSpace.Application.Features.Products.Commands
             public async Task<bool> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
             {
 
-                var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.Id, p => p.Image);
+                var product = await _unitOfWork.ProductRepository.GetByIdAsync(request.Id, p => p.Image,p => p.ProductDetails);
                 if (product is null)throw new NotFoundException($"Product with Id {request.Id} does not exist!");
 
                 //  cập nhật ảnh 
@@ -73,10 +73,47 @@ namespace GreenSpace.Application.Features.Products.Commands
                         product.Image.Image3 = !string.IsNullOrEmpty(request.UpdateModel.Image.Image3) ? request.UpdateModel.Image.Image3 : product.Image.Image3;                   
                     
                 }
+                if (request.UpdateModel.Price != product.Price)
+                {
+                    
+                    product.Price = request.UpdateModel.Price;
+
+                    // Cập nhật giá trong ProductDetail 
+                    foreach (var productDetail in product.ProductDetails)
+                    {
+                        productDetail.Price = product.Price * productDetail.Quantity;
+                        //_unitOfWork.ProductDetailRepository.Update(productDetail);
+                    }
+
+                }
+                     
                 _mapper.Map(request.UpdateModel, product);
                 _unitOfWork.ProductRepository.Update(product);
-               return await _unitOfWork.SaveChangesAsync();
+
+                await _unitOfWork.SaveChangesAsync();
+                var designIdeaIds = product.ProductDetails.Select(pd => pd.DesignIdeaId).Distinct().ToList();
+                foreach (var designIdeaId in designIdeaIds)
+                {
+                    var productDetails = await _unitOfWork.ProductDetailRepository.WhereAsync(pd => pd.DesignIdeaId == designIdeaId);
+
+                    var materialPrice = productDetails.Sum(pd => pd.Price);
+
+                    var designIdea = await _unitOfWork.DesignIdeaRepository.GetByIdAsync(designIdeaId);
+                    if (designIdea != null)
+                    {
+                        designIdea.MaterialPrice = materialPrice;
+                        designIdea.TotalPrice = designIdea.DesignPrice + designIdea.MaterialPrice;
+                        _unitOfWork.DesignIdeaRepository.Update(designIdea);
+
+                    }
+                }
+
+
+
+                return await _unitOfWork.SaveChangesAsync();
             }
+
+
         }
 
     }
