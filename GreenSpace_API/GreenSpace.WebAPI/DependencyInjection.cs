@@ -19,6 +19,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using CloudinaryDotNet;
 using GreenSpace.Application.Services;
+using MongoDB.Driver;
+using MongoDB.Driver.Core.Extensions.DiagnosticSources;
 
 namespace GreenSpace.WebAPI;
 
@@ -59,7 +61,14 @@ public static class DependencyInjection
         builder.Services.AddValidatorsFromAssemblies(assemblies: assemblies);
         builder.Services.AddInfrastructureServices(configuration.ConnectionStrings.DefaultConnection);
         builder.Services.AddSingleton<GlobalErrorHandlingMiddleware>();
-   
+
+        // Register MongoDb
+        var mongoUrl = MongoUrl.Create(configuration.ConnectionStrings.MongoDbConnection);
+        var clientSettings = MongoClientSettings.FromUrl(mongoUrl);
+        clientSettings.ClusterConfigurator = cb => cb.Subscribe(new DiagnosticsActivityEventSubscriber());
+        var mongoClient = new MongoClient(clientSettings);
+        builder.Services.AddSingleton(mongoClient.GetDatabase("GreenSpace"));
+
         // Register To Handle Query/Command of MediatR
         builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
