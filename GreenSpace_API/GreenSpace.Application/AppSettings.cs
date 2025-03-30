@@ -18,6 +18,7 @@ public class JWTOptions
 public class ConnectionStrings
 {
     public string DefaultConnection { get; set; } = default!;
+    public string MongoDbConnection { get; set; } = string.Empty;
 }
 public class FirebaseSettings
 {
