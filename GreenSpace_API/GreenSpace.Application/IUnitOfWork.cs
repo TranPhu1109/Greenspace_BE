@@ -28,4 +28,6 @@ public interface IUnitOfWork
     IBlogRepository BlogRepository { get; }
     IBillRepository BillRepository { get; }
     IWalletLogRepository WalletLogRepository { get; }
+
+    IContractRepository ContractRepository { get; }
 }

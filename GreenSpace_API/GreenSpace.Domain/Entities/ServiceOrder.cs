@@ -29,6 +29,7 @@ public class ServiceOrder :BaseEntity
     public Guid? ImageId { get; set; } = default!;
     public Guid? RecordDesignId { get; set; } = default!;
     public Guid? RecordSketchId { get; set; } = default!;
+    public string DeliveryCode { get; set; } = string.Empty;
 
     public int Status { get; set; } = default;
     public User User { get; set; } = default!;

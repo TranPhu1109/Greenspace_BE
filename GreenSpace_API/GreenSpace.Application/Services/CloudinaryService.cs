@@ -33,6 +33,35 @@ namespace GreenSpace.Application.Services
             var uploadResult = await _cloudinary.UploadAsync(uploadParams);
             return uploadResult?.SecureUrl?.AbsoluteUri;
         }
+        public async Task<string?> UploadPdfAsync(byte[] pdfBytes, string fileName)
+        {
+            if (pdfBytes == null || pdfBytes.Length == 0)
+                return null;
+
+            using var stream = new MemoryStream(pdfBytes);
+            var uploadParams = new RawUploadParams
+            {
+                File = new FileDescription(fileName, stream),
+                Folder = "Contracts",
+            };
+
+            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+            return uploadResult?.SecureUrl?.AbsoluteUri;
+        }
+        public async Task<byte[]> DownloadPdfAsync(string fileUrl)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                HttpResponseMessage response = await httpClient.GetAsync(fileUrl);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Failed to download PDF. Status Code: {response.StatusCode}");
+                }
+
+                return await response.Content.ReadAsByteArrayAsync();
+            }
+        }
 
 
     }

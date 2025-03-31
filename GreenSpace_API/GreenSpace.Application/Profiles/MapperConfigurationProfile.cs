@@ -19,6 +19,7 @@ using GreenSpace.Domain.Entities;
 using GreenSpace.Domain.Enum;
 using GreenSpace.Application.ViewModels.Roles;
 using GreenSpace.Application.ViewModels.WalletLogs;
+using GreenSpace.Application.ViewModels.Contracts;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -28,7 +29,9 @@ public class MapperConfigurationProfile : Profile
     {
 
         CreateMap<Product, ProductCreateModel>().ReverseMap();
-        CreateMap<Product, ProductUpdateModel>().ReverseMap();
+        CreateMap<Product, ProductUpdateModel>()    
+            .ReverseMap()
+            .ForMember(dest => dest.ServiceOrderDetails, opt => opt.Ignore());
         CreateMap<Product, ProductViewModel>()
            .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Category.Name))
            .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
@@ -60,6 +63,7 @@ public class MapperConfigurationProfile : Profile
 
         CreateMap<ProductFeedback, ProductFeedbackViewModel>()
              .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
+               .ForMember(x => x.AvatarUrl, opt => opt.MapFrom(x => x.User.AvatarUrl))
              .ForMember(x => x.ProductName, opt => opt.MapFrom(x => x.Product.Name))
             .ReverseMap();
         CreateMap<ProductFeedback, ProductFeedbackCreateModel>().ReverseMap();
@@ -67,6 +71,7 @@ public class MapperConfigurationProfile : Profile
 
         CreateMap<ServiceFeedback, ServiceFeedbackViewModel>()
              .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
+             .ForMember(x => x.AvatarUrl, opt => opt.MapFrom(x => x.User.AvatarUrl))
              .ForMember(x => x.DesignName, opt => opt.MapFrom(x => x.DesignIdea.Name))
              .ReverseMap();
         CreateMap<ServiceFeedback, ServiceFeedbackCreateModel>().ReverseMap();
@@ -101,6 +106,7 @@ public class MapperConfigurationProfile : Profile
                .ReverseMap(); 
         CreateMap<ServiceOrder, ServiceOrderCreateModel>().ReverseMap();
         CreateMap<ServiceOrder, ServiceOrderNoUsingCreateModel>().ReverseMap();
+        CreateMap<ServiceOrder, ServiceOrderUpdateStatusModel>().ReverseMap();
         CreateMap<ServiceOrder, ServiceOrderUpdateModel>()
             .ForMember(dest => dest.ServiceOrderDetails, opt => opt.Ignore())
             .ReverseMap()
@@ -143,6 +149,9 @@ public class MapperConfigurationProfile : Profile
         CreateMap<WalletLog, WalletLogViewModel>().ReverseMap();
 
 
-
+        CreateMap<ContractCreateModel, Contract>();
+        CreateMap<Contract, ContractViewModel>()
+            .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
+            .ReverseMap();
     }
 }

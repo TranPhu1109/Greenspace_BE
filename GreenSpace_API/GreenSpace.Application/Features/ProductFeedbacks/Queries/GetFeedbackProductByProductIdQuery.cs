@@ -42,7 +42,7 @@ namespace GreenSpace.Application.Features.ProductFeedbacks.Queries
 
             public async Task<PaginatedList<ProductFeedbackViewModel>> Handle(GetFeedbackProductByProductIdQuery request, CancellationToken cancellationToken)
             {
-                var productFeedbacks = await _unitOfWork.ProductFeedbackRepository.WhereAsync(x => x.ProductId == request.ProductId);
+                var productFeedbacks = await _unitOfWork.ProductFeedbackRepository.WhereAsync(x => x.ProductId == request.ProductId,x => x.User);
                 if (productFeedbacks == null || !productFeedbacks.Any())
                 {
                     throw new NotFoundException($"No productFeedback found for product ID {request.ProductId}.");

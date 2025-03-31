@@ -51,6 +51,10 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 var design = serviceOrder.DesignIdeaId.HasValue ?
                            await _unitOfWork.DesignIdeaRepository.GetByIdAsync(serviceOrder.DesignIdeaId.Value) : null;
                 serviceOrder.ServiceType = ((ServiceTypeEnum)request.UpdateModel.ServiceType).ToString();
+                if (!Enum.IsDefined(typeof(ServiceOrderStatus), request.UpdateModel.Status))
+                {
+                    throw new InvalidOperationException($"Invalid status value: {request.UpdateModel.Status}");
+                }
                 if (design != null && request.UpdateModel.DesignPrice > design.DesignPrice * 1.3 && serviceOrder.ServiceType == ServiceTypeEnum.UsingDesignIdea.ToString())
                 {
                     request.UpdateModel.Status = (int)ServiceOrderStatus.Warning;
