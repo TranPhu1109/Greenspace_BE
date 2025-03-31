@@ -15,7 +15,7 @@ namespace GreenSpace.Application.ViewModels.DesignIdea
 
         public string Description { get; set; } = string.Empty;
 
-        public double DesignPrice { get; set; } = default!;
+        public decimal DesignPrice { get; set; } = default!;
 
         public Guid DesignIdeasCategoryId { get; set; }
         public string DesignImage1URL { get; set; } = string.Empty;

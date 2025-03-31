@@ -14,15 +14,15 @@ public class ServiceOrder :BaseEntity
     public double? Length { get; set; } = default!;
     public double? Width { get; set; } = default!;
     public string ServiceType { get; set; } = string.Empty;
-    public double TotalCost { get; set; } = default!;
+    public decimal TotalCost { get; set; } = default!;
 
     public Guid? PaymentId { get; set; }
 
     public bool IsCustom { get; set; } = false;
 
-    public double? DesignPrice { get; set; } = default!;
+    public decimal? DesignPrice { get; set; } = default!;
 
-    public double? MaterialPrice { get; set; } = default!;
+    public decimal? MaterialPrice { get; set; } = default!;
 
     public string Description { get; set; } = string.Empty;
 

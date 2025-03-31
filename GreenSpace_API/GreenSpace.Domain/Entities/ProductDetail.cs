@@ -8,7 +8,7 @@ public class ProductDetail : BaseEntity
 
     public int Quantity { get; set; }
 
-    public double Price { get; set; }
+    public decimal Price { get; set; }
 
     public DesignIdea DesignIdea { get; set; } = null!;
 

@@ -17,7 +17,7 @@ namespace GreenSpace.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<List<Product>> Search(string? cate, string? name, float? minPrice, float? maxPrice)
+        public async Task<List<Product>> Search(string? cate, string? name, decimal? minPrice, decimal? maxPrice)
         {
             var query = _context.Materials
                 .Include(p => p.Category)

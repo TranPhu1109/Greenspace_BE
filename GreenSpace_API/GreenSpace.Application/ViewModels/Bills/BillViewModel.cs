@@ -10,7 +10,7 @@ namespace GreenSpace.Application.ViewModels.Bills
     public class BillViewModel
     {
         [Precision(18, 10)]
-        public double Amount { get; set; } = default!;
+        public decimal Amount { get; set; } = default!;
         public Guid WalletId { get; set; }
         public Guid? OrderId { get; set; }
         public Guid? ServiceOrderId { get; set; }

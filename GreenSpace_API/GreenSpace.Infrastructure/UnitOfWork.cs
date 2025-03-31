@@ -2,6 +2,7 @@
 using GreenSpace.Application;
 using GreenSpace.Application.Data;
 using GreenSpace.Application.Repositories;
+using GreenSpace.Application.Repositories.MongoDbs;
 using GreenSpace.Infrastructure.Repositories;
 
 namespace GreenSpace.Infrastructure;
@@ -30,8 +31,11 @@ public class UnitOfWork : IUnitOfWork
     IWorkTaskRepository workTaskRepository,
     IBillRepository billRepository,
     IWalletLogRepository walletLogRepository,
-     IBlogRepository blogRepository,
-     IContractRepository contractRepository)
+    IBlogRepository blogRepository,
+    IContractRepository contractRepository,
+    IOrderRepository orderRepository,
+    IOrderDetailRepository orderDetailRepository
+    )
     {
         _dbContext = dbcontext;
         DirectionConnection = connectionConfiguration;
@@ -56,7 +60,8 @@ public class UnitOfWork : IUnitOfWork
         BlogRepository = blogRepository;
         WalletLogRepository = walletLogRepository;
         ContractRepository = contractRepository;
-
+        OrderRepository = orderRepository;
+        OrderDetailRepository = orderDetailRepository;
     }
     public IUserRepository UserRepository { get; }
     public IProductRepository ProductRepository { get; }
@@ -81,7 +86,8 @@ public class UnitOfWork : IUnitOfWork
     public IMapper Mapper { get; }
     public IConnectionConfiguration DirectionConnection { get; }
     public IWalletLogRepository WalletLogRepository { get; }
-
+    public IOrderRepository OrderRepository { get; }
+    public IOrderDetailRepository OrderDetailRepository { get; }
     public async Task<bool> SaveChangesAsync() => (await _dbContext.SaveChangesAsync()) > 0;
 
 }

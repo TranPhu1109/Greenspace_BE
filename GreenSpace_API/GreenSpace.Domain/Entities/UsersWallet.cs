@@ -9,7 +9,7 @@ public class UsersWallet : BaseEntity
 {
     public string Name { get; set; } = default!;
     [Precision(18, 2)]
-    public double Amount { get; set; }
+    public decimal Amount { get; set; }
     public string WalletType { get; set; } = nameof(WalletTypeEnum.Customer);
     public Guid UserId { get; set; }
     public User User { get; set; } = null!;

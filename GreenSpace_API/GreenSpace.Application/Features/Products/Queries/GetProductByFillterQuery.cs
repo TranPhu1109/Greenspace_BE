@@ -18,8 +18,8 @@ namespace GreenSpace.Application.Features.Products.Queries
         public int PageSize { get; set; }
         public string? Category { get; set; }
         public string? Name { get; set; }
-        public float? MinPrice { get; set; }
-        public float? MaxPrice { get; set; }
+        public decimal? MinPrice { get; set; }
+        public decimal? MaxPrice { get; set; }
         public class QueryHandler : IRequestHandler<GetProductByFillterQuery, PaginatedList<ProductViewModel>>
         {
 

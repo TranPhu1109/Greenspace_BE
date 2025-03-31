@@ -8,7 +8,7 @@ public class OrderDetail : BaseEntity
 
     public int Quantity { get; set; }
 
-    public double? Price { get; set; } = default!;
+    public decimal? Price { get; set; } = default!;
 
     public Order Order { get; set; } = null!;
 

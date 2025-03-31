@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GreenSpace.Application.Data;
 using GreenSpace.Application.Repositories;
+using GreenSpace.Application.Repositories.MongoDbs;
 
 namespace GreenSpace.Application;
 public interface IUnitOfWork
@@ -24,10 +25,11 @@ public interface IUnitOfWork
     IRecordDesignRepository RecordDesignRepository { get; }
     IRecordSketchRepository RecordSketchRepository { get; }
     IWorkTaskRepository WorkTaskRepository { get; }
-
     IBlogRepository BlogRepository { get; }
     IBillRepository BillRepository { get; }
     IWalletLogRepository WalletLogRepository { get; }
-
     IContractRepository ContractRepository { get; }
+    IOrderRepository OrderRepository { get; }
+    IOrderDetailRepository OrderDetailRepository { get; }
+
 }

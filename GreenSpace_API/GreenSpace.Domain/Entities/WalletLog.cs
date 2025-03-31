@@ -13,7 +13,7 @@ namespace GreenSpace.Domain.Entities
         public string Source { get; set; } = string.Empty;
 
         [Precision(18, 2)]
-        public double Amount { get; set; } = default!;
+        public decimal Amount { get; set; } = default!;
         public string Status { get; set; } = nameof(WalletLogStatusEnum.Sucess);
         public string Type { get; set; } = nameof(WalletLogTypeEnum.Deposit);
         public string? TxnRef { get; set; } = string.Empty;
