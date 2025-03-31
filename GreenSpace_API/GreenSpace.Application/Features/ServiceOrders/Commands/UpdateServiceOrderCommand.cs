@@ -51,7 +51,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 if (serviceOrder is null) throw new NotFoundException($"ServiceOrder with Id-{request.Id} is not exist!");
                 var design = serviceOrder.DesignIdeaId.HasValue ?
                            await _unitOfWork.DesignIdeaRepository.GetByIdAsync(serviceOrder.DesignIdeaId.Value) : null;
-                serviceOrder.ServiceType = ((ServiceTypeEnum)request.UpdateModel.ServiceType).ToString();
+               
                 if (!Enum.IsDefined(typeof(ServiceOrderStatus), request.UpdateModel.Status))
                 {
                     throw new InvalidOperationException($"Invalid status value: {request.UpdateModel.Status}");
@@ -216,6 +216,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 serviceOrder.MaterialPrice = serviceOrder.ServiceOrderDetails.Sum(d => d.TotalPrice);
 
                 _mapper.Map(request.UpdateModel, serviceOrder);
+                serviceOrder.ServiceType = ((ServiceTypeEnum)request.UpdateModel.ServiceType).ToString();
                 _unitOfWork.ServiceOrderRepository.Update(serviceOrder);
                 var result = await _unitOfWork.SaveChangesAsync();
                 return result;

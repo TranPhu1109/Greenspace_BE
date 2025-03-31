@@ -8,7 +8,7 @@ namespace GreenSpace.Domain.Enum
 {
     public enum  ServiceTypeEnum
     {
-        UsingDesignIdea ,
-        NoDesignIdea 
+        UsingDesignIdea = 0,
+        NoDesignIdea = 1
     }
 }
