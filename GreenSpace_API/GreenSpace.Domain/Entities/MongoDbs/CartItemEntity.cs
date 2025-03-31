@@ -13,5 +13,6 @@ namespace GreenSpace.Domain.Entities.MongoDbs
         public string ProductName { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public double Price { get; set; }   
+        public string ProductImage { get; set; } = string.Empty;
     }
 }

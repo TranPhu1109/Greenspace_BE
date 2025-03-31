@@ -40,6 +40,9 @@
 
   <ItemGroup>
     <Folder Include="Features\Bills\Queries\" />
+    <Folder Include="Features\NewFolder\" />
+    <Folder Include="Features\OrderProduct\Commands\" />
+    <Folder Include="Features\OrderProduct\Queries\" />
     <Folder Include="ViewModels\MongoDbs\Notifications\" />
   </ItemGroup>
 
