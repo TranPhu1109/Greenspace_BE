@@ -59,7 +59,7 @@ public class WalletsController : BaseController
 
     [Authorize]
     [HttpPost("vn-pay")]
-    public async Task<IActionResult> VNPayCallBack([FromBody] decimal amount)
+    public async Task<IActionResult> VNPayCallBack([FromBody] double amount)
     {
         var result = await mediator.Send(new RequestVNPayCommand { Amount = amount });
         return Ok(result);

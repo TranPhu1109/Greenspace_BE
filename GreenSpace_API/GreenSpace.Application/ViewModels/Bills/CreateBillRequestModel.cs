@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace GreenSpace.Application.ViewModels.Bills
 {
-    public class BillViewModel
+    public class CreateBillRequestModel
     {
-        [Precision(18, 10)]
-        public double Amount { get; set; } = default!;
         public Guid WalletId { get; set; }
         public Guid? OrderId { get; set; }
         public Guid? ServiceOrderId { get; set; }
-        public string Description { get; set; } = default!;
+        public double Amount { get; set; } 
+        public string Description { get; set; } = string.Empty;
     }
 }
