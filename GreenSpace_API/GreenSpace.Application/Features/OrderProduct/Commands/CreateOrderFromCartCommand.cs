@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace GreenSpace.Application.Features.OrderProduct.Commands
 {
-    class CreateOrderFromCartCommand : IRequest<OrderProductViewModel>
+    public class CreateOrderFromCartCommand : IRequest<OrderProductViewModel>
     {
         public CreateOrderProductModel CreateModel { get; set; } = default!;
 
