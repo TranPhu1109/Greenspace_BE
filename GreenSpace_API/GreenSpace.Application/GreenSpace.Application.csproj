@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Bills\Queries\" />
     <Folder Include="ViewModels\MongoDbs\Notifications\" />
   </ItemGroup>
 
