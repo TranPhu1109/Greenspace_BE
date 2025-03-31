@@ -13,6 +13,8 @@ using PdfSharpCore.Pdf;
 using PdfSharpCore;
 using HtmlRendererCore.PdfSharp;
 using GreenSpace.Application.Services;
+using PdfSharpCore.Drawing;
+
 
 namespace GreenSpace.Application.Features.Contracts.Commands
 {
@@ -132,20 +134,34 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                         htmlContent += "<p>Hợp đồng có hiệu lực kể từ ngày ký kết.</p>";
 
                         // Thêm khu vực ký tên với hình ảnh chữ ký mặc định cho Bên A
-                        string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "signal_n.jpeg");
-                        string base64Image = ConvertImageToBase64(imagePath);
-                        htmlContent += $"<h3><strong>ĐẠI DIỆN CÁC BÊN</strong></h3>";
-                        htmlContent += "<table style='width:100%; border-top: 1px solid black; border-bottom: 1px solid black;'>";
+                        htmlContent += "<h3><strong>ĐẠI DIỆN CÁC BÊN</strong></h3>";
+                        htmlContent += "<table style='width:100%; border-top: 1px solid black; border-collapse: collapse;'>";
                         htmlContent += "<tr>";
                         htmlContent += "<td style='width: 50%; text-align: center; padding-top: 50px;'><b>BÊN B</b><br><u>Chữ ký và họ tên</u></td>";
-                        htmlContent += $"<td style='width: 50%; text-align: center; padding-top: 50px;'><b>BÊN A</b><br><img src='data:image/jpeg;base64,{base64Image}' alt='Chữ ký Bên A' style='width: 150px;' /></td>";
+                        htmlContent += "<td style='width: 50%; text-align: center; padding-top: 50px;'><b>BÊN A</b></td>";
                         htmlContent += "</tr>";
                         htmlContent += "</table>";
 
 
 
-
                         PdfGenerator.AddPdfPages(document, htmlContent, PageSize.A4);
+
+                        // vẽ ảnh kí 
+                        string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "sig_n.jpg");
+
+                        if (!string.IsNullOrWhiteSpace(imagePath) && File.Exists(imagePath))
+                        {
+                            PdfPage page = document.Pages[document.Pages.Count - 1]; 
+                            XGraphics gfx = XGraphics.FromPdfPage(page);
+                            XImage signature = XImage.FromFile(imagePath);
+
+                           
+                            gfx.DrawImage(signature, 390, 330, 150, 50);
+                        }
+                        else
+                        {
+                            throw new Exception($"Không tìm thấy ảnh chữ ký tại: {imagePath}");
+                        }
 
                         using (var ms = new MemoryStream())
                         {

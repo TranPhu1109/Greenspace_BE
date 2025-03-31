@@ -15,7 +15,7 @@ namespace GreenSpace.Application.ViewModels.ServiceFeedbacks
         public int? Rating { get; set; }
         public string Description { get; set; } = string.Empty;
         public string Reply { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreationDate { get; set; }
         public DateTime? ModificationDate { get; set; }
     }
 }

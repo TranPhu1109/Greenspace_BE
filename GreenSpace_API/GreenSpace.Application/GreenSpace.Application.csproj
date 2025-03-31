@@ -24,6 +24,7 @@
     <PackageReference Include="Firebase.Auth" Version="1.0.0" />
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="HtmlRendererCore.PdfSharp" Version="1.0.5" />
+    <PackageReference Include="itext.html2pdf.core" Version="1.0.4" />
 
     <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.13" />
@@ -31,10 +32,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="PdfPig" Version="0.1.10" />
     <PackageReference Include="PdfSharpCore" Version="1.3.65" />
     <PackageReference Include="Scrutor" Version="6.0.1" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
   </ItemGroup>
 
 </Project>

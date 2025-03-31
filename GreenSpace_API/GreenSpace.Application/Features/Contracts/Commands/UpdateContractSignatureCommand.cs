@@ -7,17 +7,18 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Drawing;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
+
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using GreenSpace.Domain.Entities;
 using PdfSharpCore.Pdf.IO;
-using Image = SixLabors.ImageSharp.Image;
-using SixLabors.ImageSharp.Formats;
 using System.Text;
+using System.Drawing.Imaging;
+using System.Drawing;
+using Image = System.Drawing.Image;
+using System.Diagnostics;
 
 namespace GreenSpace.Application.Features.Contracts.Commands
 {
@@ -69,18 +70,21 @@ namespace GreenSpace.Application.Features.Contracts.Commands
 
                 byte[] updatedPdfBytes;
 
-                if (request.UpdateModel.SignatureBase64.StartsWith("data:image"))
+                if (!string.IsNullOrEmpty(request.UpdateModel.SignatureUrl))
                 {
-                    // Xử lý chữ ký dạng ảnh
-                    byte[] signatureBytes = Convert.FromBase64String(request.UpdateModel.SignatureBase64.Split(',')[1]);
-                    updatedPdfBytes = AddSignatureImageToPdf(pdfBytes, signatureBytes);
+                    // Image URL (Chữ ký dưới dạng URL ảnh)
+                    updatedPdfBytes = AddSignatureImageToPdf(pdfBytes, request.UpdateModel.SignatureUrl);
+                }
+                else if (!string.IsNullOrEmpty(request.UpdateModel.SignatureBase64))
+                {
+                    // Base64 text (Chữ ký dưới dạng văn bản Base64)
+                    updatedPdfBytes = AddSignatureTextToPdf(pdfBytes, request.UpdateModel.SignatureBase64);
                 }
                 else
                 {
-                    // Xử lý chữ ký dạng văn bản
-                    updatedPdfBytes = AddSignatureTextToPdf(pdfBytes, request.UpdateModel.SignatureBase64);
+                  
+                    throw new ArgumentException("Chữ ký (Base64 hoặc URL) phải được cung cấp.");
                 }
-
                 string? newPdfUrl = await _cloudinaryService.UploadPdfAsync(updatedPdfBytes, $"contract_signed_{request.ContractId}.pdf");
                 if (string.IsNullOrEmpty(newPdfUrl))
                 {
@@ -111,38 +115,109 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                     }
                     catch (FormatException)
                     {
-                        decodedText = signatureText; // Nếu không phải Base64, giữ nguyên chuỗi gốc
+                        decodedText = signatureText;
                     }
 
                     // Vẽ chữ ký lên PDF
-                    gfx.DrawString(decodedText, font, XBrushes.Black, new XPoint(100, 450));
+                    gfx.DrawString(decodedText, font, XBrushes.Black, new XPoint(100, 400));
 
                     document.Save(output);
                     return output.ToArray();
                 }
             }
 
+            //private byte[] AddSignatureImageToPdf(byte[] pdfBytes, string base64Signature)
+            //{
+            //    if (string.IsNullOrWhiteSpace(base64Signature))
+            //    {
+            //        throw new ArgumentException("Base64 image data is null or empty.");
+            //    }
 
-            private byte[] AddSignatureImageToPdf(byte[] pdfBytes, byte[] signatureBytes)
+            //    try
+            //    {
+            //        // Giải mã Base64 thành byte[]
+            //        byte[] signatureBytes = Convert.FromBase64String(base64Signature);
+
+
+            //        string fileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "signature.jpg");
+
+
+            //        // Lưu ảnh vào file, sẽ ghi đè nếu file đã tồn tại
+            //        File.WriteAllBytes(fileName, signatureBytes);
+
+            //        // Bắt đầu tạo và vẽ lên PDF
+            //        using (var pdfStream = new MemoryStream(pdfBytes))
+            //        using (var output = new MemoryStream())
+            //        {
+            //            var document = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Modify);
+            //            var page = document.Pages[document.Pages.Count - 1];
+            //            var gfx = XGraphics.FromPdfPage(page);
+
+            //            // Đọc ảnh từ file cố định và vẽ lên PDF
+            //            XImage xImage = XImage.FromFile(fileName);
+            //            gfx.DrawImage(xImage, 100, 450, 150, 50); // Vị trí và kích thước chữ ký
+
+            //            // Lưu PDF mới vào output stream
+            //            document.Save(output);
+            //            return output.ToArray();
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        throw new InvalidOperationException("Lỗi khi xử lý ảnh chữ ký: " + ex.Message);
+            //    }
+            //}
+            private byte[] AddSignatureImageToPdf(byte[] pdfBytes, string imageUrl)
             {
-                using (var ms = new MemoryStream(pdfBytes))
-                using (var output = new MemoryStream())
+                if (string.IsNullOrWhiteSpace(imageUrl))
                 {
-                    var document = PdfReader.Open(ms, PdfDocumentOpenMode.Modify);
-                    var gfx = XGraphics.FromPdfPage(document.Pages[document.Pages.Count - 1]);
-                    using (var image = Image.Load(signatureBytes))
+                    throw new ArgumentException("Image URL is null or empty.");
+                }
+
+                try
+                {
+                    // Tải ảnh từ URL
+                    using (var webClient = new System.Net.WebClient())
                     {
-                        using (var imgStream = new MemoryStream())
+                        byte[] signatureBytes = webClient.DownloadData(imageUrl); // Tải dữ liệu ảnh từ URL
+
+                       
+                        string tempFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "signature.jpg");
+                        File.WriteAllBytes(tempFilePath, signatureBytes); // Lưu vào thư mục
+
+                        // Bắt đầu tạo và vẽ lên PDF
+                        using (var pdfStream = new MemoryStream(pdfBytes))
+                        using (var output = new MemoryStream())
                         {
-                            image.Save(imgStream, new JpegEncoder());
-                            XImage xImage = XImage.FromStream(() => new MemoryStream(imgStream.ToArray()));
-                            gfx.DrawImage(xImage, 420, 750, 150, 50);
+                            var document = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Modify);
+                            var page = document.Pages[document.Pages.Count - 1];
+                            var gfx = XGraphics.FromPdfPage(page);
+
+                            // Đọc ảnh từ file đã tải
+                            XImage xImage = XImage.FromFile(tempFilePath);
+                            gfx.DrawImage(xImage, 100, 350, 150, 50); 
+
+                            // Lưu PDF mới vào output stream
+                            document.Save(output);
+                            return output.ToArray();
                         }
                     }
-                    document.Save(output);
-                    return output.ToArray();
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException("Lỗi khi xử lý ảnh chữ ký từ URL: " + ex.Message);
                 }
             }
+
+
+
+
+
+
+
+
+
+
         }
     }
 }
