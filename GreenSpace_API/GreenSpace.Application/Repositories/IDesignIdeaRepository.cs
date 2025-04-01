@@ -9,7 +9,7 @@ namespace GreenSpace.Application.Repositories
 {
     public interface IDesignIdeaRepository : IGenericRepository<DesignIdea>
     {
-        Task<List<DesignIdea>> Search(string? cate, string? name, float? minPrice, float? maxPrice);
+        Task<List<DesignIdea>> Search(string? cate, string? name, decimal? minPrice, decimal? maxPrice);
 
     }
 }

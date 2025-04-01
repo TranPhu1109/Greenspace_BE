@@ -6,9 +6,9 @@ public class DesignIdea : BaseEntity
 
     public string Description { get; set; } = string.Empty;
 
-    public double DesignPrice { get; set; } = default!;
-    public double MaterialPrice { get; set; } = default!;
-    public double TotalPrice { get; set; } = default!;
+    public decimal DesignPrice { get; set; } = default!;
+    public decimal MaterialPrice { get; set; } = default!;
+    public decimal TotalPrice { get; set; } = default!;
     public string DesignImage1URL { get; set; } = string.Empty;
     public string DesignImage2URL { get; set; } = string.Empty;
     public string DesignImage3URL { get; set; } = string.Empty;

@@ -9,7 +9,8 @@ namespace GreenSpace.Domain.Enum
     public enum WalletLogTypeEnum
     {
         Withdraw,
-        Deposit
+        Deposit, 
+        Pay
     }
 
     public enum WalletLogStatusEnum

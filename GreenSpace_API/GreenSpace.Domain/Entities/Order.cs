@@ -6,13 +6,13 @@ public class Order : BaseEntity
 
     public DateTime OrderDate { get; set; }
 
-    public double? TotalAmount { get; set; } = default!;
+    public decimal? TotalAmount { get; set; } = default!;
 
     public Guid PaymentId { get; set; } = default!;
 
     public int Status { get; set; }
 
-    public int? Ship { get; set; }
+    public decimal? ShipPrice { get; set; }
 
     public string Address { get; set; } = string.Empty;
 

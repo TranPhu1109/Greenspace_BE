@@ -4,6 +4,7 @@ using GreenSpace.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GreenSpace.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250331082259_UpdateV14")]
+    partial class UpdateV14
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,8 +56,8 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<Guid>("PaymentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<Guid?>("ServiceOrderId")
                         .HasColumnType("uniqueidentifier");
@@ -275,8 +278,8 @@ namespace GreenSpace.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("DesignPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("DesignPrice")
+                        .HasColumnType("float");
 
                     b.Property<Guid>("ImageId")
                         .HasColumnType("uniqueidentifier");
@@ -284,8 +287,8 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("MaterialPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("MaterialPrice")
+                        .HasColumnType("float");
 
                     b.Property<Guid?>("ModificatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -297,8 +300,8 @@ namespace GreenSpace.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -484,14 +487,14 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("ShipPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int?>("Ship")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("TotalAmount")
+                        .HasColumnType("float");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -529,8 +532,8 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal?>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
@@ -612,8 +615,8 @@ namespace GreenSpace.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<int>("Size")
                         .HasColumnType("int");
@@ -654,8 +657,8 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
@@ -967,8 +970,8 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<Guid?>("DesignIdeaId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal?>("DesignPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("DesignPrice")
+                        .HasColumnType("float");
 
                     b.Property<Guid?>("ImageId")
                         .HasColumnType("uniqueidentifier");
@@ -982,8 +985,8 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<double?>("Length")
                         .HasColumnType("float");
 
-                    b.Property<decimal?>("MaterialPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double?>("MaterialPrice")
+                        .HasColumnType("float");
 
                     b.Property<Guid?>("ModificatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -1007,8 +1010,8 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("TotalCost")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("TotalCost")
+                        .HasColumnType("float");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -1046,8 +1049,8 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
@@ -1058,8 +1061,8 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<Guid>("ServiceOrderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -1137,9 +1140,9 @@ namespace GreenSpace.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Amount")
+                    b.Property<double>("Amount")
                         .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("float(18)");
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -1181,9 +1184,9 @@ namespace GreenSpace.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Amount")
+                    b.Property<double>("Amount")
                         .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("float(18)");
 
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uniqueidentifier");

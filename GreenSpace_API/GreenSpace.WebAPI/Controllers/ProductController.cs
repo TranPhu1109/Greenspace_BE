@@ -49,8 +49,8 @@ namespace GreenSpace.WebAPI.Controllers
                                                              [FromQuery] int pageSize = 10,
                                                              [FromQuery] string? category = null,
                                                              [FromQuery] string? name = null,
-                                                             [FromQuery] float? minPrice = null,
-                                                             [FromQuery] float? maxPrice = null)
+                                                             [FromQuery] decimal? minPrice = null,
+                                                             [FromQuery] decimal? maxPrice = null)
         => Ok(await _mediator.Send(new GetProductByFillterQuery{PageNumber = pageNumber,PageSize = pageSize,Category = category,Name = name,MinPrice = minPrice,MaxPrice = maxPrice}));
         #endregion
 

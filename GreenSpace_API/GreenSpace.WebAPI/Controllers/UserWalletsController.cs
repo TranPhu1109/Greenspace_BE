@@ -43,31 +43,23 @@ public class WalletsController : BaseController
         else return BadRequest();
     }
     [HttpGet("vn-pay/response")]
-    public async Task<IActionResult> VNPayResponse([FromQuery] VnPayResponseModel model)
+    public async Task<IActionResult> VNPayResponse([FromQuery] string returnUrl)
     {
-        string html = string.Empty;
-        var result = await mediator.Send(new VnPayResponseCommand { Model = model });
-        var user = await mediator.Send(new GetUserByIdQuery { Id = model.userId });
+        var result = await mediator.Send(new VnPayResponseCommand { ReturnUrl = returnUrl });
+
         if (result)
         {
-            html = System.IO.File.ReadAllText(@"./wwwroot/payment-sucess.html")
-                .Replace("{{User}}", user.Email)
-                .Replace("{{Amount}}", (model.vnp_Amount / 100).ToString("#,##0"))
-                .Replace("{{CreateDate}}", DateTime.Now.ToString("dd/MM/yyyy"));
-            return base.Content(html, "text/html");
-
+            return Ok("Nạp tiền vào ví thành công");
         }
         else
         {
-            html = System.IO.File.ReadAllText(@"./wwwroot/payment-fail.html")
-                            .Replace("{{User}}", user.Email);
-            return base.Content(html, "text/html");
+            return BadRequest("Nạp tiền vào ví thất bại");
         }
-
     }
+
     [Authorize]
     [HttpPost("vn-pay")]
-    public async Task<IActionResult> VNPayCallBack([FromBody] decimal amount)
+    public async Task<IActionResult> VNPayCallBack([FromBody] double amount)
     {
         var result = await mediator.Send(new RequestVNPayCommand { Amount = amount });
         return Ok(result);
@@ -88,6 +80,13 @@ public class WalletsController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetWalletById([FromRoute] Guid id)
     => Ok(await mediator.Send(new GetUserWalletByIdQuery { Id = id }));
+
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [HttpGet("User{id}")]
+    public async Task<IActionResult> GetWalletByUserId([FromRoute] Guid id)
+    => Ok(await mediator.Send(new GetUserWalletByUserIdQuery { UserId = id }));
     #endregion
 }
 

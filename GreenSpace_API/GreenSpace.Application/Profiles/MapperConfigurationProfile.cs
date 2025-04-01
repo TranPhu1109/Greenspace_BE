@@ -20,6 +20,9 @@ using GreenSpace.Domain.Enum;
 using GreenSpace.Application.ViewModels.Roles;
 using GreenSpace.Application.ViewModels.WalletLogs;
 using GreenSpace.Application.ViewModels.Contracts;
+using GreenSpace.Application.ViewModels.MongoDbs.Carts;
+using GreenSpace.Domain.Entities.MongoDbs;
+using GreenSpace.Application.ViewModels.OrderProducts;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -152,6 +155,10 @@ public class MapperConfigurationProfile : Profile
         CreateMap<ContractCreateModel, Contract>();
         CreateMap<Contract, ContractViewModel>()
             .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
+            .ReverseMap();
+        CreateMap<CartEntity, CartViewModel>();
+        CreateMap<Order, OrderProductViewModel>()
+            .ForMember(x => x.Products, opt => opt.MapFrom(x => x.OrderDetails.Select(x => x.Product)))
             .ReverseMap();
     }
 }
