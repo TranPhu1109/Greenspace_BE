@@ -9,7 +9,7 @@ namespace GreenSpace.Application.Features.UserWallet.Commands;
 
 public class RequestVNPayCommand : IRequest<string>
 {
-    public double Amount { get; set; }
+    public decimal Amount { get; set; }
     public class CommandHandler : IRequestHandler<RequestVNPayCommand, string>
     {
         private readonly IClaimsService claimsService;

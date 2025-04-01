@@ -11,7 +11,7 @@ namespace GreenSpace.Application.ViewModels.UsersWallets
         public Guid WalletId { get; set; }
         public Guid? OrderId { get; set; }
         public Guid? ServiceOrderId { get; set; }
-        public double Amount { get; set; } // số tiền cần thanh toán
+        public decimal Amount { get; set; } // số tiền cần thanh toán
         public string Description { get; set; } = string.Empty;
     }
 }
