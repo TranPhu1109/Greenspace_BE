@@ -157,7 +157,14 @@ public class MapperConfigurationProfile : Profile
         CreateMap<Contract, ContractViewModel>()
             .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
             .ReverseMap();
-        CreateMap<CartEntity, CartViewModel>();
+        // Cart
+        CreateMap<CartEntity, CartViewModel>().ReverseMap();
+        CreateMap<CartItemEntity, CartItemViewModel>().ReverseMap();
+        CreateMap<CartCreateModel, CartEntity>().ReverseMap();
+        CreateMap<CartUpdateModel, CartEntity>().ReverseMap();
+        CreateMap<CartItemCreateModel, CartItemEntity>().ReverseMap();
+        CreateMap<CartItemUpdateModel, CartItemEntity>().ReverseMap();
+
         CreateMap<Order, OrderProductViewModel>()
             .ForMember(x => x.Products, opt => opt.MapFrom(x => x.OrderDetails.Select(x => x.Product)))
             .ReverseMap();

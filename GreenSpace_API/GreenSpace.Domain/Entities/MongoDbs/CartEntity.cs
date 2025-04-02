@@ -12,7 +12,7 @@ namespace GreenSpace.Domain.Entities.MongoDbs
     {
         [BsonId]
         public ObjectId Id { get; set; }
-
+        [BsonRepresentation(BsonType.String)]
         public Guid UserId { get; set; }
 
         public List<CartItemEntity> Items { get; set; } = new List<CartItemEntity>();
