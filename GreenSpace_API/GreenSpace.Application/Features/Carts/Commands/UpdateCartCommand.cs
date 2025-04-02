@@ -29,19 +29,21 @@ namespace GreenSpace.Application.Features.Carts.Commands
             }
             public async Task<CartViewModel?> Handle(UpdateCartCommand request, CancellationToken cancellationToken)
             {
+                var currentUser = claimsService.GetCurrentUser;
                 var cart = unitOfWork.Mapper.Map<CartEntity>(request.model);
+                cart.UserId = currentUser;
                 if (cart.Items.Any())
                 {
                     foreach (var item in cart.Items)
                     {
                         if (await unitOfWork.ProductRepository.FirstOrDefaultAsync(x => x.Id == item.ProductId) is null)
                         {
-                            throw new Exception($"Product In Menu not exist in this Id {item.ProductId}");
+                            throw new Exception($"Sản phẩm không tồn tại");
                         }
                     }
                 }
                 var res = await cartRepository.UpdateCartAsync(cart);
-                return res;
+                return await cartRepository.GetCartByUserIdAsync(currentUser);
             }
         }
     }

@@ -8,8 +8,6 @@ public class Order : BaseEntity
 
     public decimal? TotalAmount { get; set; } = default!;
 
-    public Guid PaymentId { get; set; } = default!;
-
     public int Status { get; set; }
 
     public decimal? ShipPrice { get; set; }
@@ -21,8 +19,6 @@ public class Order : BaseEntity
     public ICollection<Bill> Bills { get; set; } = new List<Bill>();
 
     public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-
-    public Payment? Payment { get; set; }
 
     public User User { get; set; } = default!;
 }

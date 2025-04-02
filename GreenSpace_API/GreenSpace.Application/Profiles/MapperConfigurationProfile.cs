@@ -162,13 +162,11 @@ public class MapperConfigurationProfile : Profile
         // Cart
         CreateMap<CartEntity, CartViewModel>().ReverseMap()
             .ForMember(x => x.Id, cfg => cfg.MapFrom(x => ObjectId.Parse(x.Id)))
-            .ForMember(dest => dest.UserId, opt => opt.Ignore())
             .ForMember(x => x.Items, cfg => cfg.MapFrom(x => x.Items)); 
         CreateMap<CartItemEntity, CartItemViewModel>().ReverseMap();
         CreateMap<CartCreateModel, CartEntity>().ReverseMap();
         CreateMap<CartUpdateModel, CartEntity>()
             .ForMember(x => x.Id, cfg => cfg.MapFrom(x => ObjectId.Parse(x.Id)))
-            .ForMember(dest => dest.UserId, opt => opt.Ignore())
             .ForMember(x => x.Items, cfg => cfg.MapFrom(x => x.Items));
        
         CreateMap<CartItemCreateModel, CartItemEntity>().ReverseMap();
