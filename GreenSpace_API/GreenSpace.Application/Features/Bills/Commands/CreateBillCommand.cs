@@ -89,7 +89,6 @@ public class CreateBillCommand : IRequest<BillViewModel>
                 Description = request.CreateModel.Description,
                 Price = request.CreateModel.Amount,
                 CreationDate = DateTime.UtcNow,
-                
             };
 
             //var bill = _mapper.Map<Bill>(request.CreateModel);
