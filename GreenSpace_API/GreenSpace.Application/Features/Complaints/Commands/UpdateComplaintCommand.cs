@@ -1,0 +1,70 @@
+﻿using AutoMapper;
+using FluentValidation;
+using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
+using GreenSpace.Application.ViewModels.Blogs;
+using GreenSpace.Application.ViewModels.Complaints;
+using GreenSpace.Domain.Enum;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace GreenSpace.Application.Features.Complaints.Commands
+{
+    public class UpdateComplaintCommand : IRequest<bool>
+    {
+        public Guid Id { get; set; }
+        public ComplaintUpdateModel UpdateModel { get; set; } = default!;
+
+        public class CommandValidation : AbstractValidator<UpdateComplaintCommand>
+        {
+            public CommandValidation()
+            {
+                RuleFor(x => x.UpdateModel.Status).NotNull().NotEmpty().WithMessage("Status must not be null or empty");
+
+                RuleFor(x => x.UpdateModel.ComplaintType).NotNull().WithMessage("Type must not be empty");
+
+
+            }
+        }
+        public class CommandHandler : IRequestHandler<UpdateComplaintCommand, bool>
+        {
+            private readonly IUnitOfWork _unitOfWork;
+            private readonly IMapper _mapper;
+            private ILogger<CommandHandler> _logger;
+            private AppSettings _appSettings;
+
+
+
+            public CommandHandler(IUnitOfWork unitOfWork,
+                IMapper mapper, ILogger<CommandHandler> logger,
+                AppSettings appSettings)
+            {
+                _unitOfWork = unitOfWork;
+                _mapper = mapper;
+                _logger = logger;
+                _appSettings = appSettings;
+
+            }
+
+            public async Task<bool> Handle(UpdateComplaintCommand request, CancellationToken cancellationToken)
+            {
+
+                var complaint = await _unitOfWork.ComplaintRepository.GetByIdAsync(request.Id, p => p.Image ,p => p.User);
+                if (complaint is null) throw new NotFoundException($"Complain with Id {request.Id} does not exist!");
+                if (!Enum.IsDefined(typeof(ComplaintStatusEnum), request.UpdateModel.Status))
+                {
+                    throw new InvalidOperationException($"Invalid status value: {request.UpdateModel.Status}");
+                }
+                _mapper.Map(request.UpdateModel, complaint);
+                complaint.ComplaintType = ((ComplaintTypeEnum)request.UpdateModel.ComplaintType).ToString();
+                _unitOfWork.ComplaintRepository.Update(complaint);
+                return await _unitOfWork.SaveChangesAsync();
+            }
+        }
+
+    }
+}

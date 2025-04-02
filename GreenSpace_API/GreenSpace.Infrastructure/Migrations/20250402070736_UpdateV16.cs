@@ -24,6 +24,22 @@ namespace GreenSpace.Infrastructure.Migrations
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
+
+            migrationBuilder.AlterColumn<Guid>(
+             name: "ServiceOrderId",
+             table: "Complaints",
+             type: "uniqueidentifier",
+             nullable: true,
+             oldClrType: typeof(Guid),
+             oldType: "uniqueidentifier");
+
+            migrationBuilder.AlterColumn<Guid>(
+                name: "OrderId",
+                table: "Complaints",
+                type: "uniqueidentifier",
+                nullable: true,
+                oldClrType: typeof(Guid),
+                oldType: "uniqueidentifier");
         }
 
         /// <inheritdoc />
@@ -40,6 +56,24 @@ namespace GreenSpace.Infrastructure.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int");
+
+            migrationBuilder.AlterColumn<Guid>(
+               name: "ServiceOrderId",
+               table: "Complaints",
+               type: "uniqueidentifier",
+               nullable: false,
+               oldClrType: typeof(Guid),
+               oldType: "uniqueidentifier",
+               oldNullable: true);
+
+            migrationBuilder.AlterColumn<Guid>(
+                name: "OrderId",
+                table: "Complaints",
+                type: "uniqueidentifier",
+                nullable: false,
+                oldClrType: typeof(Guid),
+                oldType: "uniqueidentifier",
+                oldNullable: true);
         }
     }
 }

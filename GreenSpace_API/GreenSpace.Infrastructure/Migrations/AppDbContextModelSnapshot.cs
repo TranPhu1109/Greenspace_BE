@@ -180,14 +180,14 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("OrderId")
+                    b.Property<Guid?>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Reason")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ServiceOrderId")
+                    b.Property<Guid?>("ServiceOrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Status")
@@ -1341,14 +1341,12 @@ namespace GreenSpace.Infrastructure.Migrations
                     b.HasOne("GreenSpace.Domain.Entities.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("GreenSpace.Domain.Entities.ServiceOrder", "ServiceOrder")
                         .WithMany()
                         .HasForeignKey("ServiceOrderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("GreenSpace.Domain.Entities.User", "User")
                         .WithMany()
