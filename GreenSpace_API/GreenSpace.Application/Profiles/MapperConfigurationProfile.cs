@@ -25,6 +25,7 @@ using GreenSpace.Domain.Entities.MongoDbs;
 using GreenSpace.Application.ViewModels.OrderProducts;
 using GreenSpace.Application.ViewModels.Bills;
 using MongoDB.Bson;
+using GreenSpace.Application.ViewModels.Complaints;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -176,10 +177,5 @@ public class MapperConfigurationProfile : Profile
         CreateMap<Order, OrderProductViewModel>()
             .ForMember(x => x.Products, opt => opt.MapFrom(x => x.OrderDetails.Select(x => x.Product)))
             .ReverseMap();
-
-        //Bill
-        CreateMap<Bill, BillViewModel>();
-        CreateMap<CreateBillRequestModel, Bill>()
-            .ForMember(dest => dest.UsersWalletId, opt => opt.MapFrom(src => src.WalletId));
     }
 }
