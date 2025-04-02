@@ -5,11 +5,6 @@ using GreenSpace.Application.ViewModels.OrderProducts;
 using GreenSpace.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GreenSpace.Application.Features.OrderProduct.Commands
 {
@@ -91,11 +86,11 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
                         OrderId = order.Id,
                         ProductId = cartItem.ProductId,
                         Quantity = cartItem.Quantity,
-                        Price = cartItem.Price
+                        Price = product.Price
                     };
                     await _unitOfWork.OrderDetailRepository.AddAsync(orderDetail);
                     order.OrderDetails.Add(orderDetail);
-                    totalAmount += cartItem.Price * cartItem.Quantity;
+                    totalAmount += product.Price * cartItem.Quantity;
                     product.Stock -= cartItem.Quantity;
                     _unitOfWork.ProductRepository.Update(product);
                     orderedProducts.Add(product);

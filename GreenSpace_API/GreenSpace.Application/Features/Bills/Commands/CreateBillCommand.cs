@@ -80,11 +80,24 @@ public class CreateBillCommand : IRequest<BillViewModel>
             await _unitOfWork.WalletLogRepository.AddAsync(walletLog);
 
             // Tạo mới Bill
-            var bill = _mapper.Map<Bill>(request.CreateModel);
-            bill.Id = Guid.NewGuid();
-            bill.CreationDate = DateTime.UtcNow;
+            var bill = new Bill
+            {
+                Id = Guid.NewGuid(),
+                OrderId = request.CreateModel.OrderId,
+                ServiceOrderId = request.CreateModel.ServiceOrderId,
+                UsersWalletId = request.CreateModel.WalletId,
+                Description = request.CreateModel.Description,
+                Price = request.CreateModel.Amount,
+                CreationDate = DateTime.UtcNow,
+                
+            };
+
+            //var bill = _mapper.Map<Bill>(request.CreateModel);
+            //bill.Id = Guid.NewGuid();
+            //bill.CreationDate = DateTime.UtcNow;
 
             await _unitOfWork.BillRepository.AddAsync(bill);
+
             await _unitOfWork.SaveChangesAsync();
 
             var billViewModel = _mapper.Map<BillViewModel>(bill);
