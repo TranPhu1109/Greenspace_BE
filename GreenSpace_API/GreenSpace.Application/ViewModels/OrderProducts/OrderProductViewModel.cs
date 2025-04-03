@@ -22,6 +22,7 @@ namespace GreenSpace.Application.ViewModels.OrderProducts
         public DateTime CreationDate { get; set; }
         public DateTime? ModificationDate { get; set; }
 
+
         public List<OrderDetailViewModel> OrderDetails { get; set; } = new List<OrderDetailViewModel>();
     }
 }

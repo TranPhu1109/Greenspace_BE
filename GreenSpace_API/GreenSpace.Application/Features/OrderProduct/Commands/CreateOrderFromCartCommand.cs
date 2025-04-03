@@ -113,7 +113,7 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
                 }
 
                 var orderViewModel = _mapper.Map<OrderProductViewModel>(order);
-                orderViewModel.Products = orderedProducts;
+                //orderViewModel.Products = orderedProducts;
 
                 return orderViewModel;
             }

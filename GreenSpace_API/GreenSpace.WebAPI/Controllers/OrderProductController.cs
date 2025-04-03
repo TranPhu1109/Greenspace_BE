@@ -63,7 +63,7 @@ namespace GreenSpace.WebAPI.Controllers
             {
                 return BadRequest("Create Fail!");
             }
-            return Ok();
+            return Ok("create successful");
         }
 
         [ProducesResponseType((int)HttpStatusCode.Created)]
