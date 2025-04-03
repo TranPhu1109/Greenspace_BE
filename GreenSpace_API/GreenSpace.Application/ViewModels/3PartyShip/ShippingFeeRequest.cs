@@ -8,8 +8,8 @@ namespace GreenSpace.Application.ViewModels._3PartyShip
 {
     public class ShippingFeeRequest
     {
-        public required int ToProvinceName { get; set; }
-        public required int ToDistrictName { get; set; }
+        public required string ToProvinceName { get; set; }
+        public required string ToDistrictName { get; set; }
         public  required string ToWardName { get; set; }
     }
 }

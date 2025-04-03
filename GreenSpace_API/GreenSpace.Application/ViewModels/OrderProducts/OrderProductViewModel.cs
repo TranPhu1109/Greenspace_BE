@@ -18,7 +18,9 @@ namespace GreenSpace.Application.ViewModels.OrderProducts
         public decimal ShipPrice { get; set; }
         public decimal TotalAmount { get; set; }
         public string Status { get; set; } = string.Empty;
-        public List<Product> Products { get; set; } = new();
+
+        public DateTime CreationDate { get; set; }
+        public DateTime? ModificationDate { get; set; }
 
         public List<OrderDetailViewModel> OrderDetails { get; set; } = new List<OrderDetailViewModel>();
     }
