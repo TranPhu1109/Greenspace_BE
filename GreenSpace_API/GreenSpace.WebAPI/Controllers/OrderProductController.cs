@@ -3,6 +3,7 @@ using GreenSpace.Application.Features.OrderProduct.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using GreenSpace.Application.Features.OrderProduct.Queries;
 
 namespace GreenSpace.WebAPI.Controllers
 {
@@ -17,7 +18,37 @@ namespace GreenSpace.WebAPI.Controllers
             _mediator = mediator;
         }
         /// <summary>
-        /// 
+        ///     #region Queries
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] int pageNumber = 0,
+                                             [FromQuery] int pageSize = 10)
+        => Ok(await _mediator.Send(new GetAllOrderProductQuery { PageNumber = pageNumber, PageSize = pageSize }));
+
+
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        => Ok(await _mediator.Send(new GetOrderProductByIdQuery { Id = id }));
+
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("User")]
+        public async Task<IActionResult> GetUserOrders([FromQuery] int pageNumber = 0,
+                                                       [FromQuery] int pageSize = 10)
+        => Ok(await _mediator.Send(new GetOrderProductByUserIdQuery { PageNumber = pageNumber, PageSize = pageSize }));
+
+
+
+
+
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
