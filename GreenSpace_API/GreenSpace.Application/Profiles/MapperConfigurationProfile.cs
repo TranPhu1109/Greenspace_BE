@@ -28,6 +28,7 @@ using MongoDB.Bson;
 using GreenSpace.Application.ViewModels.Complaints;
 using CloudinaryDotNet.Core;
 using GreenSpace.Application.ViewModels.OrderDetail;
+using GreenSpace.Application.ViewModels._3PartyShip;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -187,5 +188,6 @@ public class MapperConfigurationProfile : Profile
         CreateMap<OrderDetail, OrderDetailViewModel>()
            .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Product.Category.Name))
            .ReverseMap();
+       
     }
 }

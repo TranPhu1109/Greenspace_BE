@@ -36,6 +36,20 @@ public class ShippingService
 
         var apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create";
 
+        var parts = request.Address.Split(',');
+
+        if (parts.Length != 4)
+        {
+            throw new Exception("Địa chỉ không hợp lệ. Cần định dạng: address,ward,district,province");
+        }
+
+        var addressModel = new AddressModel
+        {
+            Address = parts[0].Trim(),
+            Ward = parts[1].Trim(),
+            District = parts[2].Trim(),
+            Province = parts[3].Trim()
+        };
         var data = new
         {
             payment_type_id = 1,
@@ -57,13 +71,14 @@ public class ShippingService
             from_district_id = "1451",
             from_province_id = "202",
 
+
             //  Thông tin NGƯỜI NHẬN
             to_name = request.ToName,
             to_phone = request.ToPhone,
-            to_address = request.ToAddress,
-            to_ward_code = request.ToWard,
-            to_district_id = request.ToDistrict,
-            to_province_id = request.ToProvince,
+            to_address = addressModel.Address,
+            to_ward_code = addressModel.Ward,
+            to_district_id = addressModel.District,
+            to_province_id = addressModel.Province,
 
             //  Dịch vụ GHN
             service_id = 53320,
@@ -93,7 +108,13 @@ public class ShippingService
     }
 
 
-
+    public class AddressModel
+    {
+        public string Address { get; set; }
+        public string Ward { get; set; }
+        public string District { get; set; }
+        public string Province { get; set; }
+    }
 
     /// <summary>
     /// Gửi request GET
