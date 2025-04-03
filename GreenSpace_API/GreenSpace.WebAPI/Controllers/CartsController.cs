@@ -31,7 +31,7 @@ public class CartsController : ControllerBase
         => Ok(await mediator.Send(request));
 
     [HttpPut, Authorize]
-    public async Task<IActionResult> UpdateCart(UpdateCartCommand request)
+    public async Task<IActionResult> UpdateCart([FromBody] UpdateCartCommand request)
     {
         return Ok(await mediator.Send(request));
     }

@@ -16,7 +16,6 @@ namespace GreenSpace.Infrastructure.FluentAPIs
         {
             builder.HasKey(e => e.Id);
             builder.Property(e => e.Id).ValueGeneratedOnAdd();
-            builder.HasOne(d => d.Payment).WithMany(p => p.Orders).HasForeignKey(d => d.PaymentId);
             builder.HasOne(d => d.User).WithMany(p => p.Orders).HasForeignKey(d => d.UserId);
         }
     }

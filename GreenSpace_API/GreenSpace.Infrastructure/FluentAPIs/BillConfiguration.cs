@@ -10,7 +10,6 @@ public class BillConfiguration : IEntityTypeConfiguration<Bill>
     {
         builder.HasKey(e => e.Id);
         builder.HasOne(d => d.Order).WithMany(p => p.Bills).HasForeignKey(d => d.OrderId).OnDelete(DeleteBehavior.NoAction);
-        builder.HasOne(d => d.Payment).WithMany(p => p.Bills).HasForeignKey(d => d.PaymentId).OnDelete(DeleteBehavior.NoAction);
         builder.HasOne(d => d.ServiceOrder).WithMany(p => p.Bills).HasForeignKey(d => d.ServiceOrderId).OnDelete(DeleteBehavior.NoAction);
         builder.HasOne(d => d.UsersWallet).WithMany(p => p.Bills).HasForeignKey(d => d.UsersWalletId).OnDelete(DeleteBehavior.NoAction);
     }

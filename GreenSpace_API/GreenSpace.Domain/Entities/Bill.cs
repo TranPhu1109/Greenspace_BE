@@ -2,9 +2,6 @@
 
 public class Bill : BaseEntity
 {
-
-    public Guid PaymentId { get; set; }
-
     public Guid? ServiceOrderId { get; set; }
 
     public Guid? OrderId { get; set; }
@@ -14,8 +11,6 @@ public class Bill : BaseEntity
     public string Description { get; set; } = string.Empty;
 
     public Order? Order { get; set; }
-
-    public Payment? Payment { get; set; }
 
     public ServiceOrder? ServiceOrder { get; set; }
     public Guid UsersWalletId { get; set; }

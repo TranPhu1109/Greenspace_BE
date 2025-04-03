@@ -23,7 +23,10 @@ using GreenSpace.Application.ViewModels.Contracts;
 using GreenSpace.Application.ViewModels.MongoDbs.Carts;
 using GreenSpace.Domain.Entities.MongoDbs;
 using GreenSpace.Application.ViewModels.OrderProducts;
+using GreenSpace.Application.ViewModels.Bills;
+using MongoDB.Bson;
 using GreenSpace.Application.ViewModels.Complaints;
+using CloudinaryDotNet.Core;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -158,28 +161,25 @@ public class MapperConfigurationProfile : Profile
             .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
             .ReverseMap();
         // Cart
-        CreateMap<CartEntity, CartViewModel>().ReverseMap();
+        CreateMap<CartEntity, CartViewModel>().ReverseMap()
+            .ForMember(x => x.Id, cfg => cfg.MapFrom(x => ObjectId.Parse(x.Id)))
+            .ForMember(x => x.Items, cfg => cfg.MapFrom(x => x.Items)); 
         CreateMap<CartItemEntity, CartItemViewModel>().ReverseMap();
         CreateMap<CartCreateModel, CartEntity>().ReverseMap();
-        CreateMap<CartUpdateModel, CartEntity>().ReverseMap();
+        CreateMap<CartUpdateModel, CartEntity>()
+            .ForMember(x => x.Id, cfg => cfg.MapFrom(x => ObjectId.Parse(x.Id)))
+            .ForMember(x => x.Items, cfg => cfg.MapFrom(x => x.Items));
+       
         CreateMap<CartItemCreateModel, CartItemEntity>().ReverseMap();
         CreateMap<CartItemUpdateModel, CartItemEntity>().ReverseMap();
 
         CreateMap<Order, OrderProductViewModel>()
             .ForMember(x => x.Products, opt => opt.MapFrom(x => x.OrderDetails.Select(x => x.Product)))
             .ReverseMap();
-
-
-
-        CreateMap<Complaint, ComplaintViewModel>()
-         .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
-         .ForMember(dest => dest.Status, opt => opt.MapFrom(src => ((ComplaintStatusEnum)src.Status).ToString()))
-         .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
-         .ForMember(x => x.Email, opt => opt.MapFrom(x => x.User.Email))
-         .ForMember(x => x.CusPhone, opt => opt.MapFrom(x => x.User.Phone))
-         .ReverseMap();
-        CreateMap<Complaint, ComplaintCreateModel>().ReverseMap();
-        CreateMap<Complaint, ComplaintUpdateModel>().ReverseMap();
-
+        //bill
+        CreateMap<Bill, BillViewModel>()
+            .ForMember(x => x.UserWalletId, opt => opt.MapFrom(x => x.UsersWalletId))
+            .ForMember(x => x.Amount, opt => opt.MapFrom(x => x.Price))
+            .ReverseMap();
     }
 }
