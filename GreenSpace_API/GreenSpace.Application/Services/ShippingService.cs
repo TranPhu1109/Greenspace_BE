@@ -24,15 +24,15 @@ public class ShippingService
     /// </summary>
     public async Task<string> CreateOrderAsync(ShippingOrderRequest request)
     {
-        //  Lấy mã tỉnh/quận/phường của NGƯỜI NHẬN
-        var toProvinceId = await GetProvinceIdAsync(request.ToProvince);
-        if (toProvinceId == null) return "Không tìm thấy mã tỉnh người nhận.";
+        ////  Lấy mã tỉnh/quận/phường của NGƯỜI NHẬN
+        //var toProvinceId = await GetProvinceIdAsync(request.ToProvince);
+        //if (toProvinceId == null) return "Không tìm thấy mã tỉnh người nhận.";
 
-        var toDistrictId = await GetDistrictIdAsync(toProvinceId.Value, request.ToDistrict);
-        if (toDistrictId == null) return "Không tìm thấy mã quận/huyện người nhận.";
+        //var toDistrictId = await GetDistrictIdAsync(toProvinceId.Value, request.ToDistrict);
+        //if (toDistrictId == null) return "Không tìm thấy mã quận/huyện người nhận.";
 
-        var toWardCode = await GetWardCodeAsync(toDistrictId.Value, request.ToWard);
-        if (toWardCode == null) return "Không tìm thấy mã phường/xã người nhận.";
+        //var toWardCode = await GetWardCodeAsync(toDistrictId.Value, request.ToWard);
+        //if (toWardCode == null) return "Không tìm thấy mã phường/xã người nhận.";
 
         var apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create";
 
@@ -61,9 +61,9 @@ public class ShippingService
             to_name = request.ToName,
             to_phone = request.ToPhone,
             to_address = request.ToAddress,
-            to_ward_code = toWardCode,
-            to_district_id = toDistrictId,
-            to_province_id = toProvinceId,
+            to_ward_code = request.ToWard,
+            to_district_id = request.ToDistrict,
+            to_province_id = request.ToProvince,
 
             //  Dịch vụ GHN
             service_id = 53320,
@@ -114,81 +114,81 @@ public class ShippingService
             return $"Lỗi: {ex.Message}";
         }
     }
-    /// <summary>
-    /// Lấy danh sách tỉnh/thành phố
-    /// </summary>
-    public async Task<int?> GetProvinceIdAsync(string provinceName)
-    {
-        var apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province";
-        var response = await SendGetRequest(apiUrl);
-        if (response == null) return null;
+    ///// <summary>
+    ///// Lấy danh sách tỉnh/thành phố
+    ///// </summary>
+    //public async Task<int?> GetProvinceIdAsync(string provinceName)
+    //{
+    //    var apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province";
+    //    var response = await SendGetRequest(apiUrl);
+    //    if (response == null) return null;
 
-        var jsonResponse = JsonConvert.DeserializeObject<dynamic>(response);
-        foreach (var province in jsonResponse.data)
-        {
-            if (province.ProvinceName.ToString().ToLower() == provinceName.ToLower())
-            {
-                return (int)province.ProvinceID;
-            }
-        }
-        return null;
-    }
+    //    var jsonResponse = JsonConvert.DeserializeObject<dynamic>(response);
+    //    foreach (var province in jsonResponse.data)
+    //    {
+    //        if (province.ProvinceName.ToString().ToLower() == provinceName.ToLower())
+    //        {
+    //            return (int)province.ProvinceID;
+    //        }
+    //    }
+    //    return null;
+    //}
 
-    /// <summary>
-    /// Lấy danh sách quận/huyện theo mã tỉnh
-    /// </summary>
-    public async Task<int?> GetDistrictIdAsync(int provinceId, string districtName)
-    {
-        var apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district";
-        var data = new { province_id = provinceId };
-        var response = await SendPostRequest(apiUrl, data);
-        if (response == null) return null;
+    ///// <summary>
+    ///// Lấy danh sách quận/huyện theo mã tỉnh
+    ///// </summary>
+    //public async Task<int?> GetDistrictIdAsync(int provinceId, string districtName)
+    //{
+    //    var apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district";
+    //    var data = new { province_id = provinceId };
+    //    var response = await SendPostRequest(apiUrl, data);
+    //    if (response == null) return null;
 
-        var jsonResponse = JsonConvert.DeserializeObject<dynamic>(response);
-        foreach (var district in jsonResponse.data)
-        {
-            if (district.DistrictName.ToString().ToLower() == districtName.ToLower())
-            {
-                return (int)district.DistrictID;
-            }
-        }
-        return null;
-    }
+    //    var jsonResponse = JsonConvert.DeserializeObject<dynamic>(response);
+    //    foreach (var district in jsonResponse.data)
+    //    {
+    //        if (district.DistrictName.ToString().ToLower() == districtName.ToLower())
+    //        {
+    //            return (int)district.DistrictID;
+    //        }
+    //    }
+    //    return null;
+    //}
 
-    /// <summary>
-    /// Lấy danh sách phường/xã theo mã quận/huyện
-    /// </summary>
-    public async Task<string> GetWardCodeAsync(int districtId, string wardName)
-    {
-        var apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward";
-        var data = new { district_id = districtId };
-        var response = await SendPostRequest(apiUrl, data);
-        if (response == null) return null;
+    ///// <summary>
+    ///// Lấy danh sách phường/xã theo mã quận/huyện
+    ///// </summary>
+    //public async Task<string> GetWardCodeAsync(int districtId, string wardName)
+    //{
+    //    var apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward";
+    //    var data = new { district_id = districtId };
+    //    var response = await SendPostRequest(apiUrl, data);
+    //    if (response == null) return null;
 
-        var jsonResponse = JsonConvert.DeserializeObject<dynamic>(response);
-        foreach (var ward in jsonResponse.data)
-        {
-            if (ward.WardName.ToString().ToLower() == wardName.ToLower())
-            {
-                return ward.WardCode.ToString();
-            }
-        }
-        return null;
-    }
+    //    var jsonResponse = JsonConvert.DeserializeObject<dynamic>(response);
+    //    foreach (var ward in jsonResponse.data)
+    //    {
+    //        if (ward.WardName.ToString().ToLower() == wardName.ToLower())
+    //        {
+    //            return ward.WardCode.ToString();
+    //        }
+    //    }
+    //    return null;
+    //}
 
     /// <summary>
     /// Tính phí vận chuyển
     /// </summary>
-    public async Task<string> CalculateFeeAsync(string toProvinceName, string toDistrictName, string toWardName)
+    public async Task<string> CalculateFeeAsync(int toProvinceName, int toDistrictName, string toWardName)
     {  //  Lấy mã tỉnh/quận/phường của NGƯỜI NHẬN
-        var toProvinceId = await GetProvinceIdAsync(toProvinceName);
-        if (toProvinceId == null) return "Không tìm thấy mã tỉnh người nhận.";
+        //var toProvinceId = await GetProvinceIdAsync(toProvinceName);
+        //if (toProvinceId == null) return "Không tìm thấy mã tỉnh người nhận.";
 
-        var toDistrictId = await GetDistrictIdAsync(toProvinceId.Value, toDistrictName);
-        if (toDistrictId == null) return "Không tìm thấy mã quận/huyện người nhận.";
+        //var toDistrictId = await GetDistrictIdAsync(toProvinceId.Value, toDistrictName);
+        //if (toDistrictId == null) return "Không tìm thấy mã quận/huyện người nhận.";
 
-        var toWardCode = await GetWardCodeAsync(toDistrictId.Value, toWardName);
-        if (toWardCode == null) return "Không tìm thấy mã phường/xã người nhận.";
+        //var toWardCode = await GetWardCodeAsync(toDistrictId.Value, toWardName);
+        //if (toWardCode == null) return "Không tìm thấy mã phường/xã người nhận.";
 
         var apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee";
 
@@ -199,9 +199,9 @@ public class ShippingService
             from_province_id = 202,
             service_id = 53321,
             service_type_id = 2,
-            to_ward_code = toWardCode,
-            to_district_id = toDistrictId,
-            to_province_id = toProvinceId,
+            to_ward_code = toWardName,
+            to_district_id = toDistrictName,
+            to_province_id = toProvinceName,
             weight = 500,
             height = 10,
             length = 20,
@@ -282,4 +282,66 @@ public class ShippingService
             return await response.Content.ReadAsStringAsync();
         }
     }
+
+    public async Task<List<(int ProvinceID, string ProvinceName)>> GetProvincesAsync()
+    {
+        var apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province";
+        var response = await SendGetRequest(apiUrl);
+        if (response == null) return new List<(int, string)>();
+
+        var jsonResponse = JsonConvert.DeserializeObject<dynamic>(response);
+        var provinces = new List<(int, string)>();
+
+        foreach (var province in jsonResponse.data)
+        {
+            provinces.Add(((int)province.ProvinceID, province.ProvinceName.ToString()));
+        }
+
+        return provinces;
+    }
+
+
+    /// <summary>
+    /// Lấy toàn bộ danh sách quận/huyện trên cả nước
+    /// </summary>
+    public async Task<List<(int DistrictID, string DistrictName)>> GetAllDistrictsAsync()
+    {
+        var apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district";
+        var response = await SendPostRequest(apiUrl, null); // Không truyền province_id
+
+        if (response == null) return new List<(int, string)>();
+
+        var jsonResponse = JsonConvert.DeserializeObject<dynamic>(response);
+        var districts = new List<(int, string)>();
+
+        foreach (var district in jsonResponse.data)
+        {
+            districts.Add(((int)district.DistrictID, district.DistrictName.ToString()));
+        }
+
+        return districts;
+    }
+
+    /// <summary>
+    /// Lấy danh sách phường/xã theo mã quận/huyện
+    /// </summary>
+    public async Task<List<(string WardCode, string WardName)>> GetWardsAsync(int districtId)
+    {
+        var apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward?district_id";
+        var data = new { district_id = districtId };
+        var response = await SendPostRequest(apiUrl, data);
+        if (response == null) return new List<(string, string)>();
+
+        var jsonResponse = JsonConvert.DeserializeObject<dynamic>(response);
+        var wards = new List<(string, string)>();
+
+        foreach (var ward in jsonResponse.data)
+        {
+            wards.Add((ward.WardCode.ToString(), ward.WardName.ToString()));
+        }
+
+        return wards;
+    }
+  
+
 }

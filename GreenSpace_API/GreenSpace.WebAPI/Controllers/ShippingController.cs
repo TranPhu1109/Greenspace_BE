@@ -33,44 +33,44 @@ public class ShippingController : ControllerBase
 
 
 
-    /// <summary>
-    /// API lấy mã tỉnh/thành phố
-    /// </summary>
-    [HttpGet("province-id")]
-    public async Task<IActionResult> GetProvinceId([FromQuery] string provinceName)
-    {
-        var provinceId = await _shippingService.GetProvinceIdAsync(provinceName);
-        if (provinceId == null)
-            return NotFound("Không tìm thấy mã tỉnh.");
+    ///// <summary>
+    ///// API lấy mã tỉnh/thành phố
+    ///// </summary>
+    //[HttpGet("province-id")]
+    //public async Task<IActionResult> GetProvinceId([FromQuery] string provinceName)
+    //{
+    //    var provinceId = await _shippingService.GetProvinceIdAsync(provinceName);
+    //    if (provinceId == null)
+    //        return NotFound("Không tìm thấy mã tỉnh.");
 
-        return Ok(new { provinceId });
-    }
+    //    return Ok(new { provinceId });
+    //}
 
-    /// <summary>
-    /// API lấy mã quận/huyện theo tỉnh
-    /// </summary>
-    [HttpGet("district-id")]
-    public async Task<IActionResult> GetDistrictId([FromQuery] int provinceId, [FromQuery] string districtName)
-    {
-        var districtId = await _shippingService.GetDistrictIdAsync(provinceId, districtName);
-        if (districtId == null)
-            return NotFound("Không tìm thấy mã quận/huyện.");
+    ///// <summary>
+    ///// API lấy mã quận/huyện theo tỉnh
+    ///// </summary>
+    //[HttpGet("district-id")]
+    //public async Task<IActionResult> GetDistrictId([FromQuery] int provinceId, [FromQuery] string districtName)
+    //{
+    //    var districtId = await _shippingService.GetDistrictIdAsync(provinceId, districtName);
+    //    if (districtId == null)
+    //        return NotFound("Không tìm thấy mã quận/huyện.");
 
-        return Ok(new { districtId });
-    }
+    //    return Ok(new { districtId });
+    //}
 
-    /// <summary>
-    /// API lấy mã phường/xã theo quận/huyện
-    /// </summary>
-    [HttpGet("ward-code")]
-    public async Task<IActionResult> GetWardCode([FromQuery] int districtId, [FromQuery] string wardName)
-    {
-        var wardCode = await _shippingService.GetWardCodeAsync(districtId, wardName);
-        if (wardCode == null)
-            return NotFound("Không tìm thấy mã phường/xã.");
+    ///// <summary>
+    ///// API lấy mã phường/xã theo quận/huyện
+    ///// </summary>
+    //[HttpGet("ward-code")]
+    //public async Task<IActionResult> GetWardCode([FromQuery] int districtId, [FromQuery] string wardName)
+    //{
+    //    var wardCode = await _shippingService.GetWardCodeAsync(districtId, wardName);
+    //    if (wardCode == null)
+    //        return NotFound("Không tìm thấy mã phường/xã.");
 
-        return Ok(new { wardCode });
-    }
+    //    return Ok(new { wardCode });
+    //}
 
     /// <summary>
     /// Tính phí vận chuyển
@@ -81,7 +81,7 @@ public class ShippingController : ControllerBase
         var result = await _shippingService.CalculateFeeAsync(request.ToProvinceName, request.ToDistrictName, request.ToWardName);
         var formattedResponse = new
         {
-            message = "Đơn hàng đã được hủy",
+            message = "Chi phí đơn hàng",
 
             data = JsonSerializer.Deserialize<object>(result.ToString())
         };
@@ -142,6 +142,66 @@ public class ShippingController : ControllerBase
         };
 
         return Content(JsonSerializer.Serialize(formattedResponse, new JsonSerializerOptions { WriteIndented = true }), "application/json");
+    }
+
+    [HttpGet("provinces")]
+    public async Task<IActionResult> GetProvinces()
+    {
+        var provinces = await _shippingService.GetProvincesAsync();
+
+        if (provinces == null || !provinces.Any())
+        {
+            var errorResponse = new
+            {
+                message = "Không tìm thấy danh sách tỉnh.",
+                data = new object[] { } // Trả về mảng rỗng thay vì null
+            };
+            return Content(JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions { WriteIndented = true }), "application/json");
+        }
+
+        var formattedProvinces = provinces.Select(p => new
+        {
+            provinceId = p.ProvinceID,
+            provinceName = p.ProvinceName
+        }).ToList();
+
+        var response = new
+        {
+            message = "Danh sách tỉnh thành",
+            data = formattedProvinces
+        };
+
+        return Content(JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true }), "application/json");
+    }
+
+    [HttpGet("all-districts")]
+    public async Task<IActionResult> GetAllDistricts()
+    {
+        var districts = await _shippingService.GetAllDistrictsAsync();
+        var formattedDistricts = districts?.Select(d => new { districtId = d.DistrictID, districtName = d.DistrictName }) ?? [];
+
+        var response = new
+        {
+            message = districts.Any() ? "Danh sách toàn bộ quận/huyện" : "Không tìm thấy dữ liệu.",
+            data = formattedDistricts
+        };
+
+        return Content(JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true }), "application/json");
+    }
+
+    [HttpGet("wards")]
+    public async Task<IActionResult> GetWards([FromQuery] int districtId)
+    {
+        var wards = await _shippingService.GetWardsAsync(districtId);
+        var formattedWards = wards?.Select(w => new { wardCode = w.WardCode, wardName = w.WardName }) ?? [];
+
+        var response = new
+        {
+            message = wards.Any() ? "Danh sách phường/xã" : "Không tìm thấy phường/xã.",
+            data = formattedWards
+        };
+
+        return Content(JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true }), "application/json");
     }
 
 }
