@@ -35,7 +35,7 @@ public class CartsController : ControllerBase
     {
         return Ok(await mediator.Send(request));
     }
-    [HttpPost("remove-item"), Authorize]
+    [HttpPut("remove-item"), Authorize]
     public async Task<IActionResult> RemoveItem([FromBody] DeleteItemFromCartCommand request)
     {
         return Ok(await mediator.Send(request));
