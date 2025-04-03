@@ -4,6 +4,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using GreenSpace.Application.Features.OrderProduct.Queries;
+using GreenSpace.Application.Features.ServiceOrders.Commands;
+using GreenSpace.Application.ViewModels.ServiceOrder;
 
 namespace GreenSpace.WebAPI.Controllers
 {
@@ -78,6 +80,22 @@ namespace GreenSpace.WebAPI.Controllers
                 return BadRequest("Create Fail!");
             }
             return Ok();
+        }
+
+
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPut("status/{id}")]
+        public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] OrderUpdateStatusModel model)
+        {
+
+            var result = await _mediator.Send(new UpdateOrderStatusCommand { Id = id, UpdateModel = model });
+            if (!result)
+            {
+                return BadRequest("Update Fail!");
+            }
+            return Ok("Update Successfully!");
         }
     }
 }

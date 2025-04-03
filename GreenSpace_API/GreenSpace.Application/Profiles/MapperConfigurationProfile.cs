@@ -187,5 +187,8 @@ public class MapperConfigurationProfile : Profile
         CreateMap<OrderDetail, OrderDetailViewModel>()
            .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Product.Category.Name))
            .ReverseMap();
+
+
+        CreateMap<Order, OrderUpdateStatusModel>().ReverseMap();
     }
 }

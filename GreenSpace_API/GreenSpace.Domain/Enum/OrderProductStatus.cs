@@ -13,6 +13,10 @@ namespace GreenSpace.Domain.Enum
         Done = 2,                      // Đã xử lý
         Cancelled = 3,                 // Đã hủy
         Refund = 4,                    // Đã hoàn tiền
-        DoneRefund = 5                 // Đã hoàn tiền xong
+        DoneRefund = 5,              // Đã hoàn tiền xong
+        PickedPackageAndDelivery = 6,  // Đã lấy hàng & đang giao
+        DeliveryFail = 7,              // Giao hàng thất bại
+        ReDelivery = 8,                // Giao lại
+        DeliveredSuccessfully = 9,     // Đã giao hàng thành công
     }
 }

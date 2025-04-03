@@ -18,7 +18,7 @@ namespace GreenSpace.Application.ViewModels.OrderProducts
         public decimal ShipPrice { get; set; }
         public decimal TotalAmount { get; set; }
         public string Status { get; set; } = string.Empty;
-
+        public string DeliveryCode { get; set; } = string.Empty;
         public DateTime CreationDate { get; set; }
         public DateTime? ModificationDate { get; set; }
 

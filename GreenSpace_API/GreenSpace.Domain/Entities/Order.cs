@@ -15,6 +15,7 @@ public class Order : BaseEntity
     public string Address { get; set; } = string.Empty;
 
     public string? Phone { get; set; } = default!;
+    public string DeliveryCode { get; set; } = string.Empty;
 
     public ICollection<Bill> Bills { get; set; } = new List<Bill>();
 

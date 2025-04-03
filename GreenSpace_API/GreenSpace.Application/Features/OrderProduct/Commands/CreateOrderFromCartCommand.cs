@@ -52,7 +52,7 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
                     Address = request.CreateModel.Address,
                     Phone = request.CreateModel.Phone,
                     ShipPrice = request.CreateModel.ShipPrice,
-                    Status = 1, // Pending
+                    Status = 0, // Pending
                     OrderDate = DateTime.UtcNow,
                    
                 };
