@@ -177,7 +177,7 @@ public class MapperConfigurationProfile : Profile
 
         CreateMap<Order, OrderProductViewModel>()
              .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
-            .ForMember(x => x.Products, opt => opt.MapFrom(x => x.OrderDetails.Select(x => x.Product)))
+           
             .ReverseMap();
         //bill
         CreateMap<Bill, BillViewModel>()
@@ -188,6 +188,8 @@ public class MapperConfigurationProfile : Profile
         CreateMap<OrderDetail, OrderDetailViewModel>()
            .ForMember(x => x.CategoryName, opt => opt.MapFrom(x => x.Product.Category.Name))
            .ReverseMap();
-       
+
+
+        CreateMap<Order, OrderUpdateStatusModel>().ReverseMap();
     }
 }

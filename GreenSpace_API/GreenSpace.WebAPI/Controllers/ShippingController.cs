@@ -174,20 +174,21 @@ public class ShippingController : ControllerBase
         return Content(JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true }), "application/json");
     }
 
-    [HttpGet("all-districts")]
-    public async Task<IActionResult> GetAllDistricts()
+    [HttpGet("districts")]
+    public async Task<IActionResult> GetDistricts([FromQuery] int provinceId)
     {
-        var districts = await _shippingService.GetAllDistrictsAsync();
+        var districts = await _shippingService.GetDistrictsAsync(provinceId);
         var formattedDistricts = districts?.Select(d => new { districtId = d.DistrictID, districtName = d.DistrictName }) ?? [];
 
         var response = new
         {
-            message = districts.Any() ? "Danh sách toàn bộ quận/huyện" : "Không tìm thấy dữ liệu.",
+            message = districts.Any() ? "Danh sách quận/huyện" : "Không tìm thấy quận/huyện.",
             data = formattedDistricts
         };
 
         return Content(JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true }), "application/json");
     }
+
 
     [HttpGet("wards")]
     public async Task<IActionResult> GetWards([FromQuery] int districtId)

@@ -52,7 +52,7 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
                     Address = request.CreateModel.Address,
                     Phone = request.CreateModel.Phone,
                     ShipPrice = request.CreateModel.ShipPrice,
-                    Status = 1, // Pending
+                    Status = 0, // Pending
                     OrderDate = DateTime.UtcNow,
                    
                 };
@@ -113,7 +113,7 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
                 }
 
                 var orderViewModel = _mapper.Map<OrderProductViewModel>(order);
-                orderViewModel.Products = orderedProducts;
+                //orderViewModel.Products = orderedProducts;
 
                 return orderViewModel;
             }

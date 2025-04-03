@@ -36,7 +36,7 @@ namespace GreenSpace.Application.Features.OrderProduct.Queries
 
 
 
-                var orders = await _unitOfWork.OrderRepository.GetAllAsync(x => x.User);
+                var orders = await _unitOfWork.OrderRepository.GetAllAsync(x => x.User , x => x.OrderDetails);
                 if (orders.Count == 0) throw new NotFoundException("There are no Order in DB!");
                 var viewModels = _mapper.Map<List<OrderProductViewModel>>(orders);
 
