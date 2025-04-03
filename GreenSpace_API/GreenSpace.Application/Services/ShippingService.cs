@@ -304,11 +304,14 @@ public class ShippingService
     /// <summary>
     /// Lấy toàn bộ danh sách quận/huyện trên cả nước
     /// </summary>
-    public async Task<List<(int DistrictID, string DistrictName)>> GetAllDistrictsAsync()
+    /// <summary>
+    /// Lấy danh sách quận/huyện theo mã tỉnh
+    /// </summary>
+    public async Task<List<(int DistrictID, string DistrictName)>> GetDistrictsAsync(int provinceId)
     {
         var apiUrl = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district";
-        var response = await SendPostRequest(apiUrl, null); // Không truyền province_id
-
+        var data = new { province_id = provinceId };
+        var response = await SendPostRequest(apiUrl, data);
         if (response == null) return new List<(int, string)>();
 
         var jsonResponse = JsonConvert.DeserializeObject<dynamic>(response);
@@ -321,6 +324,7 @@ public class ShippingService
 
         return districts;
     }
+
 
     /// <summary>
     /// Lấy danh sách phường/xã theo mã quận/huyện
