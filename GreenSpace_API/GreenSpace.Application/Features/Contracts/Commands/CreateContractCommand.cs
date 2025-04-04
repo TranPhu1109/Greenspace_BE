@@ -147,21 +147,20 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                         PdfGenerator.AddPdfPages(document, htmlContent, PageSize.A4);
 
                         // vẽ ảnh kí 
-                        string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "sig_n.jpg");
+                        //string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "sig_n.jpg");
+                        string imageUrl = "https://res.cloudinary.com/dyn6t5fdh/image/upload/v1743350140/u7obnw76tjwmoexzwmkk.jpg";
+                        string tempFile = Path.GetTempFileName() + ".jpg";
 
-                        if (!string.IsNullOrWhiteSpace(imagePath) && File.Exists(imagePath))
-                        {
-                            PdfPage page = document.Pages[document.Pages.Count - 1]; 
-                            XGraphics gfx = XGraphics.FromPdfPage(page);
-                            XImage signature = XImage.FromFile(imagePath);
+                        // Tải ảnh về
+                        await File.WriteAllBytesAsync(tempFile, await new HttpClient().GetByteArrayAsync(imageUrl));
 
-                           
-                            gfx.DrawImage(signature, 390, 330, 150, 50);
-                        }
-                        else
-                        {
-                            throw new Exception($"Không tìm thấy ảnh chữ ký tại: {imagePath}");
-                        }
+                        // Vẽ lên PDF
+                        PdfPage page = document.Pages[^1];
+                        XGraphics gfx = XGraphics.FromPdfPage(page);
+                        gfx.DrawImage(XImage.FromFile(tempFile), 390, 330, 150, 50);
+
+                        
+                        File.Delete(tempFile);
 
                         using (var ms = new MemoryStream())
                         {

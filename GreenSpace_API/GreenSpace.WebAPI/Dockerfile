@@ -2,6 +2,15 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+RUN apt-get update && apt-get install -y \
+    libgdiplus \
+    libc6-dev \
+    libx11-dev \
+    xvfb \
+    libfontconfig1 \
+    libfreetype6 \
+    && rm -rf /var/lib/apt/lists/*
+ENV DISPLAY=:99
 USER $APP_UID
 WORKDIR /app
 COPY appsettings*.json /app/
