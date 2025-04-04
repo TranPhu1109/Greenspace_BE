@@ -59,7 +59,7 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
                     ShipPrice = model.ShipPrice,
                     TotalAmount = totalPrice,
                     CreationDate = DateTime.UtcNow,
-                    Status = 1, // Pending
+                    Status = 0, // Pending
                 };
                 await orderRepository.AddAsync(order);
                 var orderDetail = new OrderDetail
