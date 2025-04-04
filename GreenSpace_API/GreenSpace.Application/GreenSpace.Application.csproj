@@ -23,8 +23,9 @@
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="Firebase.Auth" Version="1.0.0" />
     <PackageReference Include="FluentValidation" Version="11.11.0" />
-    <PackageReference Include="HtmlRendererCore.PdfSharp" Version="1.0.5" />
-    <PackageReference Include="itext.html2pdf.core" Version="1.0.4" />
+    <PackageReference Include="Hangfire" Version="1.8.18" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.18" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.8.18" />
 
     <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.13" />
@@ -32,8 +33,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="PdfSharpCore" Version="1.3.65" />
     <PackageReference Include="MongoDB.Driver" Version="3.3.0" />
+    <PackageReference Include="QuestPDF" Version="2025.1.6" />
     <PackageReference Include="Scrutor" Version="6.0.1" />
   </ItemGroup>
 

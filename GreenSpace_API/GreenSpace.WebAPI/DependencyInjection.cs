@@ -21,6 +21,7 @@ using CloudinaryDotNet;
 using GreenSpace.Application.Services;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Extensions.DiagnosticSources;
+using Hangfire;
 
 namespace GreenSpace.WebAPI;
 
@@ -30,8 +31,8 @@ public static class DependencyInjection
     public static async Task<WebApplicationBuilder> AddWebAPIServicesAsync(this WebApplicationBuilder builder)
     {
 
-        const string serviceName = "GreenSpace_WebAPI";
-        const string serviceVersion = "v1.0";
+        //const string serviceName = "GreenSpace_WebAPI";
+        //const string serviceVersion = "v1.0";
 
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddCors(options
@@ -73,6 +74,12 @@ public static class DependencyInjection
         builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
         builder.Services.AddScoped<IClaimsService, ClaimsService>();
+        // Register hangfire
+        builder.Services.AddHangfire(config =>
+        config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddHangfireServer();
+        builder.Services.AddHttpClient();
+        builder.Services.AddTransient<GhnJobService>();
         // Scan and register all interfaces --> implementations 
         builder.Services.Scan(scan => scan
          .FromAssemblies(GreenSpace.Infrastructure.AssemblyReference.Assembly,

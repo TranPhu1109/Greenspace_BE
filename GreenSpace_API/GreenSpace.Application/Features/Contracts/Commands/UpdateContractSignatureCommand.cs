@@ -1,24 +1,16 @@
 ﻿using AutoMapper;
+using Azure.Core;
+using CloudinaryDotNet.Core;
 using FluentValidation;
-using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
 using GreenSpace.Application.Services;
 using GreenSpace.Application.ViewModels.Contracts;
+using GreenSpace.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using PdfSharpCore.Pdf;
-using PdfSharpCore.Drawing;
-
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using GreenSpace.Domain.Entities;
-using PdfSharpCore.Pdf.IO;
-using System.Text;
-using System.Drawing.Imaging;
-using System.Drawing;
-using Image = System.Drawing.Image;
-using System.Diagnostics;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+using static GreenSpace.Application.Features.Contracts.Commands.CreateContractCommand;
 
 namespace GreenSpace.Application.Features.Contracts.Commands
 {
@@ -43,6 +35,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
             private readonly CloudinaryService _cloudinaryService;
             private readonly ILogger<CommandHandler> _logger;
 
+
             public CommandHandler(IUnitOfWork unitOfWork, IMapper mapper,
                 CloudinaryService cloudinaryService, ILogger<CommandHandler> logger)
             {
@@ -55,169 +48,136 @@ namespace GreenSpace.Application.Features.Contracts.Commands
             public async Task<bool> Handle(UpdateContractSignatureCommand request, CancellationToken cancellationToken)
             {
                 var contract = await _unitOfWork.ContractRepository.GetByIdAsync(request.ContractId);
+                
+
                 if (contract is null || string.IsNullOrEmpty(contract.Description))
                 {
                     _logger.LogError("Contract {ContractId} does not exist or has no PDF file.", request.ContractId);
-                    throw new NotFoundException($"Contract with ID {request.ContractId} does not exist or has no PDF file!");
+                    throw new Exception($"Contract with ID {request.ContractId} does not exist or has no PDF file!");
                 }
-                // tải pdf từ cloudinary
-                byte[] pdfBytes = await _cloudinaryService.DownloadPdfAsync(contract.Description);
-                if (pdfBytes == null || pdfBytes.Length == 0)
+                var user = await _unitOfWork.UserRepository.GetByIdAsync(contract.UserId);
+                var order = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(contract.ServiceOrderId);
+                
+                var model = new ContractModel
                 {
-                    _logger.LogError("Failed to download PDF for ContractId: {ContractId}", request.ContractId);
-                    throw new Exception("Failed to download contract PDF.");
-                }
+                    UserName = user.Name,
+                    Address = user.Address,
+                    Email = user.Email,
+                    Phone = user.Phone,
+                    DesignPrice = order.DesignPrice ?? 0,
+                    ServiceOrderId = contract.ServiceOrderId,
 
-                byte[] updatedPdfBytes;
+                };
 
-                if (!string.IsNullOrEmpty(request.UpdateModel.SignatureUrl))
-                {
-                    // Image URL (Chữ ký dưới dạng URL ảnh)
-                    updatedPdfBytes = AddSignatureImageToPdf(pdfBytes, request.UpdateModel.SignatureUrl);
-                }
-                else if (!string.IsNullOrEmpty(request.UpdateModel.SignatureBase64))
-                {
-                    // Base64 text (Chữ ký dưới dạng văn bản Base64)
-                    updatedPdfBytes = AddSignatureTextToPdf(pdfBytes, request.UpdateModel.SignatureBase64);
-                }
-                else
-                {
-                  
-                    throw new ArgumentException("Chữ ký (Base64 hoặc URL) phải được cung cấp.");
-                }
-                string? newPdfUrl = await _cloudinaryService.UploadPdfAsync(updatedPdfBytes, $"contract_signed_{request.ContractId}.pdf");
+                
+
+                byte[] signatureBytes = Convert.FromBase64String(request.UpdateModel.SignatureBase64);
+
+                // Tái dựng lại hợp đồng bằng QuestPDF với chữ ký bên B
+                var signedBytes = GeneratePdfWithSignature(model, signatureBytes);
+
+                string? newPdfUrl = await _cloudinaryService.UploadPdfAsync(signedBytes, $"contract_signed_{request.ContractId}.pdf");
                 if (string.IsNullOrEmpty(newPdfUrl))
                 {
                     _logger.LogError("Failed to upload signed contract PDF for ContractId: {ContractId}", request.ContractId);
                     throw new Exception("Failed to upload signed contract PDF.");
                 }
 
+                
+
                 contract.Description = newPdfUrl;
                 _unitOfWork.ContractRepository.Update(contract);
                 return await _unitOfWork.SaveChangesAsync();
             }
-
-            private byte[] AddSignatureTextToPdf(byte[] pdfBytes, string signatureText)
+            public class ContractModel
             {
-                using (var ms = new MemoryStream(pdfBytes))
-                using (var output = new MemoryStream())
-                {
-                    var document = PdfReader.Open(ms, PdfDocumentOpenMode.Modify);
-                    var gfx = XGraphics.FromPdfPage(document.Pages[document.Pages.Count - 1]);
-                    XFont font = new XFont("Arial", 10, XFontStyle.Bold);
-
-                    // Kiểm tra nếu là chuỗi Base64 thì giải mã
-                    string decodedText;
-                    try
-                    {
-                        byte[] bytes = Convert.FromBase64String(signatureText);
-                        decodedText = Encoding.UTF8.GetString(bytes);
-                    }
-                    catch (FormatException)
-                    {
-                        decodedText = signatureText;
-                    }
-
-                    // Vẽ chữ ký lên PDF
-                    gfx.DrawString(decodedText, font, XBrushes.Black, new XPoint(100, 400));
-
-                    document.Save(output);
-                    return output.ToArray();
-                }
+                public string UserName { get; set; } = default!;
+                public string Address { get; set; } = default!;
+                public string Email { get; set; } = default!;
+                public string Phone { get; set; } = default!;
+                public decimal DesignPrice { get; set; }
+                public Guid ServiceOrderId { get; set; } = default!;
             }
-
-            //private byte[] AddSignatureImageToPdf(byte[] pdfBytes, string base64Signature)
-            //{
-            //    if (string.IsNullOrWhiteSpace(base64Signature))
-            //    {
-            //        throw new ArgumentException("Base64 image data is null or empty.");
-            //    }
-
-            //    try
-            //    {
-            //        // Giải mã Base64 thành byte[]
-            //        byte[] signatureBytes = Convert.FromBase64String(base64Signature);
-
-
-            //        string fileName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "signature.jpg");
-
-
-            //        // Lưu ảnh vào file, sẽ ghi đè nếu file đã tồn tại
-            //        File.WriteAllBytes(fileName, signatureBytes);
-
-            //        // Bắt đầu tạo và vẽ lên PDF
-            //        using (var pdfStream = new MemoryStream(pdfBytes))
-            //        using (var output = new MemoryStream())
-            //        {
-            //            var document = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Modify);
-            //            var page = document.Pages[document.Pages.Count - 1];
-            //            var gfx = XGraphics.FromPdfPage(page);
-
-            //            // Đọc ảnh từ file cố định và vẽ lên PDF
-            //            XImage xImage = XImage.FromFile(fileName);
-            //            gfx.DrawImage(xImage, 100, 450, 150, 50); // Vị trí và kích thước chữ ký
-
-            //            // Lưu PDF mới vào output stream
-            //            document.Save(output);
-            //            return output.ToArray();
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        throw new InvalidOperationException("Lỗi khi xử lý ảnh chữ ký: " + ex.Message);
-            //    }
-            //}
-            private byte[] AddSignatureImageToPdf(byte[] pdfBytes, string imageUrl)
+            private byte[] GeneratePdfWithSignature(ContractModel contract, byte[] signatureBytes)
             {
-                if (string.IsNullOrWhiteSpace(imageUrl))
-                {
-                    throw new ArgumentException("Image URL is null or empty.");
-                }
+               
+                using var stream = new MemoryStream();
+                QuestPDF.Settings.License = LicenseType.Community;
 
-                try
+                QuestPDF.Fluent.Document.Create(container =>
                 {
-                    // Tải ảnh từ URL
-                    using (var webClient = new System.Net.WebClient())
+                    container.Page(page =>
                     {
-                        byte[] signatureBytes = webClient.DownloadData(imageUrl); // Tải dữ liệu ảnh từ URL
+                        page.Size(PageSizes.A4);
+                        page.Margin(2, QuestPDF.Infrastructure.Unit.Centimetre);
+                        page.DefaultTextStyle(x => x.FontSize(12));
 
-                       
-                        string tempFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "signature.jpg");
-                        File.WriteAllBytes(tempFilePath, signatureBytes); // Lưu vào thư mục
-
-                        // Bắt đầu tạo và vẽ lên PDF
-                        using (var pdfStream = new MemoryStream(pdfBytes))
-                        using (var output = new MemoryStream())
+                        page.Header().Column(col =>
                         {
-                            var document = PdfReader.Open(pdfStream, PdfDocumentOpenMode.Modify);
-                            var page = document.Pages[document.Pages.Count - 1];
-                            var gfx = XGraphics.FromPdfPage(page);
+                            col.Item().AlignCenter().Text("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM").Bold();
+                            col.Item().AlignCenter().Text("Độc lập - Tự do - Hạnh phúc").Italic().Underline();
+                            col.Item().AlignRight().Text($"TPHCM, ngày {DateTime.Now:dd 'tháng' MM 'năm' yyyy}");
+                            col.Item().AlignCenter().Text("HỢP ĐỒNG DỊCH VỤ THIẾT KẾ").FontSize(18).Bold();
+                            col.Item().AlignCenter().Text($"DỊCH VỤ THIẾT KẾ: {contract.ServiceOrderId}").FontSize(14);
+                        });
 
-                            // Đọc ảnh từ file đã tải
-                            XImage xImage = XImage.FromFile(tempFilePath);
-                            gfx.DrawImage(xImage, 100, 350, 150, 50); 
+                        page.Content().Column(col =>
+                        {
+                            col.Item().Text("BÊN A: BÊN CUNG CẤP DỊCH VỤ").Bold();
+                            col.Item().Text("Tên: Công ty GreenSpaces");
+                            col.Item().Text("Địa chỉ: Lô E2a-7, Đường D1, Khu CNC, TP. Thủ Đức, TP.HCM");
+                            col.Item().Text("Người đại diện: Đoàn Minh Quang");
+                            col.Item().Text("Chức vụ: Giám đốc");
 
-                            // Lưu PDF mới vào output stream
-                            document.Save(output);
-                            return output.ToArray();
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new InvalidOperationException("Lỗi khi xử lý ảnh chữ ký từ URL: " + ex.Message);
-                }
+                            col.Item().PaddingTop(10).Text("BÊN B: KHÁCH HÀNG").Bold();
+                            col.Item().Text($"Họ và tên: {contract.UserName}");
+                            col.Item().Text($"Địa chỉ: {contract.Address}");
+                            col.Item().Text($"Email: {contract.Email}");
+                            col.Item().Text($"Số điện thoại: {contract.Phone}");
+
+                            col.Item().PaddingTop(10).Text("Nội dung hợp đồng").Bold();
+                            col.Item().Text("Bên B được sửa tối đa 2 lần ở giai đoạn phát thảo.");
+                            col.Item().Text("Bên B được sửa tối đa 3 lần ở giai đoạn thiết kế không gian.");
+                            col.Item().Text($"Tổng tiền thiết kế: {contract.DesignPrice:N0} VNĐ.");
+                            col.Item().Text($"Đặt cọc 50%: {contract.DesignPrice / 2:N0} VNĐ.");
+                            col.Item().Text($"Hoàn trả nếu ngưng giữa chừng: {((contract.DesignPrice / 2) * 0.3m):N0} VNĐ.");
+                            col.Item().Text($"Nếu ngưng khi đã hoàn tất thiết kế: phải trả đủ {contract.DesignPrice / 2:N0} VNĐ.");
+
+                            col.Item().PaddingTop(10).Text("ĐIỀU KHOẢN CHUNG").Bold();
+                            col.Item().Text("Hai bên cam kết thực hiện đúng các điều khoản của hợp đồng.");
+                            col.Item().Text("Hợp đồng có hiệu lực kể từ ngày ký kết.");
+
+                            col.Item().PaddingTop(20).Text("ĐẠI DIỆN CÁC BÊN").Bold();
+                            col.Item().Row(row =>
+                            {
+                                row.RelativeItem().AlignCenter().Text("BÊN B\n(Khách hàng)").Bold();
+                                row.RelativeItem().AlignCenter().Text("BÊN A\n(Công ty)").Bold();
+                            });
+
+                            col.Item().PaddingTop(20).Row(row =>
+                            {
+                                row.RelativeItem().AlignCenter().Element(e =>
+                                {
+                                    e.Image(signatureBytes).FitWidth();
+                                    e.Text("\n(Ký và ghi rõ họ tên)").FontSize(10).Italic();
+                                });
+
+                                row.RelativeItem().AlignCenter().Element(e =>
+                                {
+                                    var imageUrl = "https://res.cloudinary.com/dyn6t5fdh/image/upload/v1743350140/u7obnw76tjwmoexzwmkk.jpg";
+                                    var imageData = new HttpClient().GetByteArrayAsync(imageUrl).Result;
+                                    e.Image(imageData).FitWidth();
+                                    e.Text("\n(Đoàn Minh Quang)").FontSize(10).Italic();
+                                });
+                            });
+                        });
+
+                        page.Footer().AlignCenter().Text("GreenSpaces - Hợp đồng đã được ký");
+                    });
+                }).GeneratePdf(stream);
+
+                return stream.ToArray();
             }
-
-
-
-
-
-
-
-
-
-
         }
     }
 }

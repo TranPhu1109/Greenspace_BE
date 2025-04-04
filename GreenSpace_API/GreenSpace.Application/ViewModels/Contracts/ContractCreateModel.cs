@@ -15,7 +15,7 @@ namespace GreenSpace.Application.ViewModels.Contracts
         public string? Phone { get; set; } = default!;
 
         public string? Address { get; set; } = string.Empty;
-        public double? DesignPrice { get; set; } = default!;
+        public decimal? DesignPrice { get; set; } = default!;
 
     }
 }
