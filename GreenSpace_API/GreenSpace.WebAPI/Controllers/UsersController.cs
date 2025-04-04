@@ -4,6 +4,7 @@ using System.Net;
 using MediatR;
 using GreenSpace.Application.Features.User.Commands;
 using GreenSpace.Application.ViewModels.Users;
+using GreenSpace.Application.Features.Blogs.Queries;
 
 namespace GreenSpace.WebAPI.Controllers
 {
@@ -54,6 +55,17 @@ namespace GreenSpace.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         => Ok(await _mediator.Send(new GetUserByIdQuery{ Id = id }));
+
+
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("Designer")]
+        public async Task<IActionResult> GetDesigner([FromQuery] int pageNumber = 0,
+                                     [FromQuery] int pageSize = 10)
+=> Ok(await _mediator.Send(new GetAllDesignerQuery { PageNumber = pageNumber, PageSize = pageSize }));
+
 
         /// <summary>
         /// Tạo mới một user

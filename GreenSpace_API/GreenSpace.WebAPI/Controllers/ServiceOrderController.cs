@@ -41,6 +41,15 @@ namespace GreenSpace.WebAPI.Controllers
   => Ok(await _mediator.Send(new GetAllServiceOrderUsingIdeaQuery { PageNumber = pageNumber, PageSize = pageSize }));
 
 
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("status")]
+        public async Task<IActionResult> GetStatusConsulting([FromQuery] int pageNumber = 0,
+                                                             [FromQuery] int pageSize = 10)
+=> Ok(await _mediator.Send(new GetAllServiceOrderStatusConsultingQuery { PageNumber = pageNumber, PageSize = pageSize }));
+
+
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]

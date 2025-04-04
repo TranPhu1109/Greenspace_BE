@@ -10,20 +10,21 @@ namespace GreenSpace.Domain.Enum
     {
         Pending = 0,                   // Chờ xử lý
         ConsultingAndSketching = 1,    // Đang tư vấn & phác thảo
-        DepositSuccessful = 2,         // Đặt cọc thành công
-        DeterminingMaterialPrice = 3,  // Đang xác định giá vật liệu
+        DeterminingDesignPrice = 2,    // Đang xác định giá 
+        DepositSuccessful = 3,         // Đặt cọc thành công
         AssignToDesigner = 4,          // Đã giao cho nhà thiết kế
-        DoneDesign = 5,                // Hoàn thành thiết kế
-        PaymentSuccess = 6,            // Thanh toán thành công
-        Processing =7,                // Đang xử lý
-        PickedPackageAndDelivery = 8,  // Đã lấy hàng & đang giao
-        DeliveryFail = 9,              // Giao hàng thất bại
-        ReDelivery = 10,                // Giao lại
-        DeliveredSuccessfully = 11,     // Đã giao hàng thành công
-        CompleteOrder  = 12,             // Hoàn thành đơn hàng
-        OrderCancelled  = 13,           // Đơn hàng đã bị hủy
-        Warning = 14,                 // cảnh báo vượt 30%
-        Refund =15,
-        DoneRefund = 16
+        DeterminingMaterialPrice = 5,   // xác dịnh giá vật liệu
+        DoneDesign = 6,                // Hoàn thành thiết kế
+        PaymentSuccess = 7,            // Thanh toán thành công
+        Processing =8,                // Đang xử lý
+        PickedPackageAndDelivery = 9,  // Đã lấy hàng & đang giao
+        DeliveryFail = 10,              // Giao hàng thất bại
+        ReDelivery = 11,                // Giao lại
+        DeliveredSuccessfully = 12,     // Đã giao hàng thành công
+        CompleteOrder  = 13,             // Hoàn thành đơn hàng
+        OrderCancelled  = 14,           // Đơn hàng đã bị hủy
+        Warning = 15,                 // cảnh báo vượt 30%
+        Refund =16,
+        DoneRefund = 17
     }
 }

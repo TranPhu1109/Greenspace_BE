@@ -8,9 +8,12 @@ namespace GreenSpace.Domain.Enum
 {
     public enum WorkTasksEnum
     {
-        Pending = 0,
-        Proccessing = 1,
-        Done = 2 ,
-        ReAssign = 3
+        ConsultingAndSket = 0,
+        DoneConsulting = 1,
+        Design = 2,
+        DoneDesign = 3,
+        DesignDetail = 4,
+        DoneDesignDetail = 5,
+           
     }
 }

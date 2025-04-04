@@ -18,10 +18,6 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
 
         public double? Length { get; set; } = default!;
         public double? Width { get; set; } = default!;
-        public double? DesignPrice { get; set; } = default!;
-
-        public double? MaterialPrice { get; set; } = default!;
-        public double TotalCost { get; set; } = default!;
 
         public string Description { get; set; } = string.Empty;
         public ImageCreateModel Image { get; set; } = new ImageCreateModel();
