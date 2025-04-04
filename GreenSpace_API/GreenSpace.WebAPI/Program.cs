@@ -25,7 +25,6 @@ app.UseAuthorization();
 ApplyMigration();
 app.MapControllers();
 app.MapHub<SignalrHub>("/hub");
-AppContext.SetSwitch("Switch.System.Drawing.EnableUnixSupport", true);
 
 
 app.Run();

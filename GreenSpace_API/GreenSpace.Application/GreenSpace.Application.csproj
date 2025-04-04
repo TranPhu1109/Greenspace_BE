@@ -23,7 +23,8 @@
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="Firebase.Auth" Version="1.0.0" />
     <PackageReference Include="FluentValidation" Version="11.11.0" />
-    <PackageReference Include="HtmlRendererCore.PdfSharp" Version="1.0.5" />
+    <PackageReference Include="IronPdf" Version="2025.3.6" />
+    <PackageReference Include="IronSoftware.System.Drawing" Version="2025.3.6" />
     <PackageReference Include="itext.html2pdf.core" Version="1.0.4" />
 
     <PackageReference Include="MediatR" Version="12.4.1" />

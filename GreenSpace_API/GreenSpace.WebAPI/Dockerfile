@@ -3,14 +3,23 @@
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 RUN apt-get update && apt-get install -y \
-    libgdiplus \
     libc6-dev \
+    libgdiplus \
     libx11-dev \
-    xvfb \
+    fontconfig \
     libfontconfig1 \
-    libfreetype6 \
-    && rm -rf /var/lib/apt/lists/*
-ENV DISPLAY=:99
+    libnss3 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libgbm1 \
+    libasound2
 USER $APP_UID
 WORKDIR /app
 COPY appsettings*.json /app/

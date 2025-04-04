@@ -1,19 +1,10 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
+using GreenSpace.Application.Services;
 using GreenSpace.Application.ViewModels.Contracts;
 using GreenSpace.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using PdfSharpCore.Pdf;
-using PdfSharpCore;
-using HtmlRendererCore.PdfSharp;
-using GreenSpace.Application.Services;
-using PdfSharpCore.Drawing;
 
 
 namespace GreenSpace.Application.Features.Contracts.Commands
@@ -96,8 +87,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                         throw new Exception("Contract does not exist");
                     }
 
-                    using (var document = new PdfDocument())
-                    {
+                   
                         string htmlContent = "<style> h1, h2, h3 { text-align: center; } </style>";
                         htmlContent += "<h2>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h2>";
                         htmlContent += "<h3><u>Độc lập - Tự do - Hạnh phúc</u></h3>";
@@ -142,32 +132,34 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                         htmlContent += "</tr>";
                         htmlContent += "</table>";
 
+                        // Tạo renderer với IronPDF
+                        var renderer = new IronPdf.ChromePdfRenderer();
+
+                        // Cấu hình renderer
+                        renderer.RenderingOptions.PaperSize = IronPdf.Rendering.PdfPaperSize.A4;
+                        renderer.RenderingOptions.MarginTop = 10;
+                        renderer.RenderingOptions.MarginBottom = 10;
+                        renderer.RenderingOptions.MarginLeft = 10;
+                        renderer.RenderingOptions.MarginRight = 10;
 
 
-                        PdfGenerator.AddPdfPages(document, htmlContent, PageSize.A4);
+                    // Tải ảnh chữ ký
+                    string imageUrl = "https://res.cloudinary.com/dyn6t5fdh/image/upload/v1743350140/u7obnw76tjwmoexzwmkk.jpg";
+                    byte[] imageBytes = await new HttpClient().GetByteArrayAsync(imageUrl);
 
-                        // vẽ ảnh kí 
-                        //string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "sig_n.jpg");
-                        string imageUrl = "https://res.cloudinary.com/dyn6t5fdh/image/upload/v1743350140/u7obnw76tjwmoexzwmkk.jpg";
-                        string tempFile = Path.GetTempFileName() + ".jpg";
+                    // Chuyển đổi ảnh thành base64 để nhúng vào HTML
+                    string base64Image = Convert.ToBase64String(imageBytes);
+                    string imageTag = $"<img src='data:image/jpeg;base64,{base64Image}' style='width:150px;height:50px;position:absolute;top:330px;left:390px;' />";
 
-                        // Tải ảnh về
-                        await File.WriteAllBytesAsync(tempFile, await new HttpClient().GetByteArrayAsync(imageUrl));
+                    // Thêm thẻ img vào HTML trước khi render
+                    htmlContent = htmlContent.Replace("<td style='width: 50%; text-align: center; padding-top: 50px;'><b>BÊN A</b></td>",
+                                                     $"<td style='width: 50%; text-align: center; padding-top: 50px;'><b>BÊN A</b>{imageTag}</td>");
 
-                        // Vẽ lên PDF
-                        PdfPage page = document.Pages[^1];
-                        XGraphics gfx = XGraphics.FromPdfPage(page);
-                        gfx.DrawImage(XImage.FromFile(tempFile), 390, 330, 150, 50);
+                    // Render HTML thành PDF
+                    var pdf = renderer.RenderHtmlAsPdf(htmlContent);
 
-                        
-                        File.Delete(tempFile);
-
-                        using (var ms = new MemoryStream())
-                        {
-                            document.Save(ms);
-                            return ms.ToArray(); // Trả về PDF dưới dạng byte[]
-                        }
-                    }
+                    // Trả về PDF dưới dạng byte array
+                    return pdf.BinaryData;
                 }
                 catch (Exception ex)
                 {
