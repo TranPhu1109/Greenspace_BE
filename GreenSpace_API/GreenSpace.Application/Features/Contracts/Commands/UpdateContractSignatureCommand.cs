@@ -5,20 +5,9 @@ using GreenSpace.Application.Services;
 using GreenSpace.Application.ViewModels.Contracts;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using PdfSharpCore.Pdf;
-using PdfSharpCore.Drawing;
-
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using GreenSpace.Domain.Entities;
-using PdfSharpCore.Pdf.IO;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf.IO;
 using System.Text;
-using System.Drawing.Imaging;
-using System.Drawing;
-using Image = System.Drawing.Image;
-using System.Diagnostics;
 
 namespace GreenSpace.Application.Features.Contracts.Commands
 {
@@ -104,7 +93,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                 {
                     var document = PdfReader.Open(ms, PdfDocumentOpenMode.Modify);
                     var gfx = XGraphics.FromPdfPage(document.Pages[document.Pages.Count - 1]);
-                    XFont font = new XFont("Arial", 10, XFontStyle.Bold);
+                    //XFont font = new XFont("Arial", 10, XFontStyle.Bold);
 
                     // Kiểm tra nếu là chuỗi Base64 thì giải mã
                     string decodedText;
@@ -119,7 +108,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                     }
 
                     // Vẽ chữ ký lên PDF
-                    gfx.DrawString(decodedText, font, XBrushes.Black, new XPoint(100, 400));
+                    //gfx.DrawString(decodedText, XBrushes.Black, new XPoint(100, 400));
 
                     document.Save(output);
                     return output.ToArray();
