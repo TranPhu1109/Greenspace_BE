@@ -6,6 +6,7 @@ using GreenSpace.WebAPI;
 using GreenSpace.WebAPI.Middlewares;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 await builder.AddWebAPIServicesAsync();
@@ -13,6 +14,7 @@ await builder.AddWebAPIServicesAsync();
 var app = builder.Build();
 app.UseCors();
 
+QuestPDF.Settings.License = LicenseType.Community;
 
 app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 app.UseMiddleware<PerformanceMiddleware>();
@@ -32,6 +34,7 @@ RecurringJob.AddOrUpdate<GhnJobService>(
 ApplyMigration();
 app.MapControllers();
 app.MapHub<SignalrHub>("/hub");
+
 
 app.Run();
 
