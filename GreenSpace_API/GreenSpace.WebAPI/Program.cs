@@ -4,6 +4,7 @@ using GreenSpace.Infrastructure;
 using GreenSpace.WebAPI;
 using GreenSpace.WebAPI.Middlewares;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 await builder.AddWebAPIServicesAsync();
@@ -11,6 +12,7 @@ await builder.AddWebAPIServicesAsync();
 var app = builder.Build();
 app.UseCors();
 
+QuestPDF.Settings.License = LicenseType.Community;
 
 app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 app.UseMiddleware<PerformanceMiddleware>();

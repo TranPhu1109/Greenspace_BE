@@ -1,25 +1,11 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+﻿# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-RUN apt-get update && apt-get install -y \
-    libc6-dev \
-    libgdiplus \
-    libx11-dev \
-    fontconfig \
-    libfontconfig1 \
-    libnss3 \
-    libatk1.0-0 \
-    libatk-bridge2.0-0 \
-    libcups2 \
-    libdrm2 \
-    libxkbcommon0 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxfixes3 \
-    libxrandr2 \
-    libgbm1 \
-    libasound2
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    fonts-dejavu-core fonts-liberation fonts-freefont-ttf && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 USER $APP_UID
 WORKDIR /app
 COPY appsettings*.json /app/
