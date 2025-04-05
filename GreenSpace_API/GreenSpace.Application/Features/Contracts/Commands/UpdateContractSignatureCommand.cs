@@ -23,8 +23,8 @@ namespace GreenSpace.Application.Features.Contracts.Commands
         {
             public CommandValidation()
             {
-                RuleFor(x => x.UpdateModel.SignatureBase64)
-                    .NotNull().NotEmpty().WithMessage("Signature must not be null or empty");
+                RuleFor(x => x.UpdateModel.SignatureUrl)
+                    .NotNull().NotEmpty().WithMessage("Signature URL must not be null or empty");
             }
         }
 
@@ -34,7 +34,6 @@ namespace GreenSpace.Application.Features.Contracts.Commands
             private readonly IMapper _mapper;
             private readonly CloudinaryService _cloudinaryService;
             private readonly ILogger<CommandHandler> _logger;
-
 
             public CommandHandler(IUnitOfWork unitOfWork, IMapper mapper,
                 CloudinaryService cloudinaryService, ILogger<CommandHandler> logger)
@@ -48,47 +47,52 @@ namespace GreenSpace.Application.Features.Contracts.Commands
             public async Task<bool> Handle(UpdateContractSignatureCommand request, CancellationToken cancellationToken)
             {
                 var contract = await _unitOfWork.ContractRepository.GetByIdAsync(request.ContractId);
-                
 
-                if (contract is null || string.IsNullOrEmpty(contract.Description))
+                if (contract == null || string.IsNullOrEmpty(contract.Description))
                 {
                     _logger.LogError("Contract {ContractId} does not exist or has no PDF file.", request.ContractId);
                     throw new Exception($"Contract with ID {request.ContractId} does not exist or has no PDF file!");
                 }
-                var user = await _unitOfWork.UserRepository.GetByIdAsync(contract.UserId);
-                var order = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(contract.ServiceOrderId);
-                
+
+                var order = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(contract.ServiceOrderId, x => x.User);
+
+                if (order == null)
+                    throw new Exception($"ServiceOrderID not found with ID {contract.ServiceOrderId}");
+
                 var model = new ContractModel
                 {
-                    UserName = user.Name,
-                    Address = user.Address,
-                    Email = user.Email,
-                    Phone = user.Phone,
+                    UserName = order.User.Name,
+                    Address = order.Address,
+                    Email = order.User.Email,
+                    Phone = order.CusPhone,
                     DesignPrice = order.DesignPrice ?? 0,
                     ServiceOrderId = contract.ServiceOrderId,
-
                 };
 
-                
+               
+                if (string.IsNullOrEmpty(request.UpdateModel.SignatureUrl))
+                {
+                    throw new Exception("Signature URL cannot be null or empty.");
+                }
 
-                byte[] signatureBytes = Convert.FromBase64String(request.UpdateModel.SignatureBase64);
+                var imageBytes = await new HttpClient().GetByteArrayAsync(request.UpdateModel.SignatureUrl);
+                var signedBytes = await GeneratePdfWithSignatureAsync(model, imageBytes);
 
-                // Tái dựng lại hợp đồng bằng QuestPDF với chữ ký bên B
-                var signedBytes = GeneratePdfWithSignature(model, signatureBytes);
-
+                // Upload  PDF to Cloudinary
                 string? newPdfUrl = await _cloudinaryService.UploadPdfAsync(signedBytes, $"contract_signed_{request.ContractId}.pdf");
+
                 if (string.IsNullOrEmpty(newPdfUrl))
                 {
-                    _logger.LogError("Failed to upload signed contract PDF for ContractId: {ContractId}", request.ContractId);
+                   
                     throw new Exception("Failed to upload signed contract PDF.");
                 }
 
-                
-
+                // Update the contract description with the new PDF URL
                 contract.Description = newPdfUrl;
                 _unitOfWork.ContractRepository.Update(contract);
                 return await _unitOfWork.SaveChangesAsync();
             }
+
             public class ContractModel
             {
                 public string UserName { get; set; } = default!;
@@ -98,11 +102,15 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                 public decimal DesignPrice { get; set; }
                 public Guid ServiceOrderId { get; set; } = default!;
             }
-            private byte[] GeneratePdfWithSignature(ContractModel contract, byte[] signatureBytes)
+
+            private async Task<byte[]> GeneratePdfWithSignatureAsync(ContractModel contract, byte[] signatureBytes)
             {
-               
                 using var stream = new MemoryStream();
                 QuestPDF.Settings.License = LicenseType.Community;
+
+               
+                var imageUrl = "https://res.cloudinary.com/dyn6t5fdh/image/upload/v1743350140/u7obnw76tjwmoexzwmkk.jpg";
+                var imageData = await new HttpClient().GetByteArrayAsync(imageUrl);
 
                 QuestPDF.Fluent.Document.Create(container =>
                 {
@@ -156,19 +164,12 @@ namespace GreenSpace.Application.Features.Contracts.Commands
 
                             col.Item().PaddingTop(20).Row(row =>
                             {
-                                row.RelativeItem().AlignCenter().Element(e =>
-                                {
-                                    e.Image(signatureBytes).FitWidth();
-                                    e.Text("\n(Ký và ghi rõ họ tên)").FontSize(10).Italic();
-                                });
+                                // Chữ ký người dùng (từ dữ liệu truyền vào)
+                                row.RelativeItem().AlignCenter().Image(signatureBytes).FitWidth();
 
-                                row.RelativeItem().AlignCenter().Element(e =>
-                                {
-                                    var imageUrl = "https://res.cloudinary.com/dyn6t5fdh/image/upload/v1743350140/u7obnw76tjwmoexzwmkk.jpg";
-                                    var imageData = new HttpClient().GetByteArrayAsync(imageUrl).Result;
-                                    e.Image(imageData).FitWidth();
-                                    e.Text("\n(Đoàn Minh Quang)").FontSize(10).Italic();
-                                });
+                                // Chữ ký cố định (hình ảnh cố định từ URL)
+                                row.RelativeItem().AlignCenter().PaddingLeft(10).Image(imageData).FitWidth();
+                                
                             });
                         });
 
