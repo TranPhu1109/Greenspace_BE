@@ -18,5 +18,6 @@ namespace GreenSpace.Domain.Enum
         DeliveryFail = 7,              // Giao hàng thất bại
         ReDelivery = 8,                // Giao lại
         DeliveredSuccessfully = 9,     // Đã giao hàng thành công
+        Completed = 10,              // Hoàn tất
     }
 }

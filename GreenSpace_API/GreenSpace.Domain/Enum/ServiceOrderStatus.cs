@@ -25,6 +25,7 @@ namespace GreenSpace.Domain.Enum
         OrderCancelled  = 14,           // Đơn hàng đã bị hủy
         Warning = 15,                 // cảnh báo vượt 30%
         Refund =16,
-        DoneRefund = 17
+        DoneRefund = 17,
+        Completed = 18,
     }
 }
