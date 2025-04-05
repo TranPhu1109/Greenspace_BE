@@ -44,7 +44,7 @@ namespace GreenSpace.Application.Features.User.Queries
 
             public async Task<PaginatedList<UserViewModel>> Handle(GetAllDesignerQuery request, CancellationToken cancellationToken)
             {
-                var designer = await _unitOfWork.UserRepository.WhereAsync(x => x.Role.RoleName == RoleEnum.Designer.ToString());
+                var designer = await _unitOfWork.UserRepository.WhereAsync(x => x.Role.RoleName == RoleEnum.Designer.ToString() , x => x.Role);
                 if (designer == null || !designer.Any())
                 {
                     throw new NotFoundException($"There are no Designer in DB.");

@@ -173,7 +173,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                             });
                         });
 
-                        page.Footer().AlignCenter().Text("GreenSpaces - Hợp đồng đã được ký");
+                        page.Footer().AlignCenter().Text($"GreenSpaces - Hợp đồng đã được ký  TPHCM, ngày {DateTime.Now:dd 'tháng' MM 'năm' yyyy}");
                     });
                 }).GeneratePdf(stream);
 
