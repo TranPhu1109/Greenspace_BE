@@ -56,10 +56,10 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 {
                     throw new InvalidOperationException($"Invalid status value: {request.UpdateModel.Status}");
                 }
-                if (design != null && request.UpdateModel.DesignPrice > (double)design.DesignPrice * 1.3 && serviceOrder.ServiceType == ServiceTypeEnum.UsingDesignIdea.ToString())
-                {
-                    request.UpdateModel.Status = (int)ServiceOrderStatus.Warning;
-                }
+                //if (design != null && request.UpdateModel.DesignPrice > (double)design.DesignPrice * 1.3 && serviceOrder.ServiceType == ServiceTypeEnum.UsingDesignIdea.ToString())
+                //{
+                //    request.UpdateModel.Status = (int)ServiceOrderStatus.Warning;
+                //}
 
                 // Cập nhật ảnh
                 if (request.UpdateModel.Image is not null)

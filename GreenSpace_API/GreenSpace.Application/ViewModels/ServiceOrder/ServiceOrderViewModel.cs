@@ -32,6 +32,8 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
 
         public double? MaterialPrice { get; set; } = default!;
 
+        public string Report { get; set; } = string.Empty;
+
         public string Description { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public string DeliveryCode { get; set; } = string.Empty;

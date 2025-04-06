@@ -16,6 +16,8 @@ public class Product :BaseEntity
 
     public int Size { get; set; }
 
+    public string DesignImage1URL { get; set; } = string.Empty;
+
     public Category Category { get; set; } = default!;
 
     public Image Image { get; set; } = default!;

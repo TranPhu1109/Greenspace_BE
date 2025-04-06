@@ -114,6 +114,7 @@ public class MapperConfigurationProfile : Profile
                .ForMember(x => x.Email, opt => opt.MapFrom(x => x.User.Email))
                .ReverseMap(); 
         CreateMap<ServiceOrder, ServiceOrderCreateModel>().ReverseMap();
+        CreateMap<ServiceOrder, ServiceOrderUpdateDesignPriceModel>().ReverseMap();
         CreateMap<ServiceOrder, ServiceOrderNoUsingCreateModel>().ReverseMap();
         CreateMap<ServiceOrder, ServiceOrderUpdateStatusModel>().ReverseMap();
         CreateMap<ServiceOrder, ServiceOrderUpdateModel>()
