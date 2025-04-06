@@ -48,12 +48,35 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
             {
                 _logger.LogInformation("Update status serviceOrder:\n");
 
-                var servicerOrder = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(request.Id);
+                var servicerOrder = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(request.Id ,x => x.ServiceOrderDetails);
                 if (servicerOrder is null) throw new NotFoundException($"servicerOrder with Id-{request.Id} does not exist!");
 
                 if (!Enum.IsDefined(typeof(ServiceOrderStatus), request.UpdateModel.Status))
                 {
                     throw new InvalidOperationException($"Invalid status value: {request.UpdateModel.Status}");
+                }
+                if (request.UpdateModel.Status == 8)
+                {
+                    foreach (var detail in servicerOrder.ServiceOrderDetails)
+                    {
+                        var product = await _unitOfWork.ProductRepository.GetByIdAsync(detail.ProductId);
+                        if (product == null)
+                        {
+                            throw new NotFoundException($"Product with Id-{detail.ProductId} not found!");
+                        }
+
+                        if (product.Stock < 0)
+                        {
+                            throw new InvalidOperationException($"Not enough stock for Product Id {product.Id}");
+                        }
+                        if (product.Stock < detail.Quantity)
+                        {
+                            throw new InvalidOperationException( $"Not enough stock for Product Id {product.Id}. Available: {product.Stock}, Required: {detail.Quantity}");
+                        }
+
+                        product.Stock -= detail.Quantity;
+                        _unitOfWork.ProductRepository.Update(product);
+                    }
                 }
                 _mapper.Map(request.UpdateModel, servicerOrder);
                 _unitOfWork.ServiceOrderRepository.Update(servicerOrder);
