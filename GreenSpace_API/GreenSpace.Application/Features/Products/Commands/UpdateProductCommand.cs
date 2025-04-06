@@ -90,7 +90,9 @@ namespace GreenSpace.Application.Features.Products.Commands
                 _mapper.Map(request.UpdateModel, product);
                 _unitOfWork.ProductRepository.Update(product);
 
-                await _unitOfWork.SaveChangesAsync();
+                var result = await _unitOfWork.SaveChangesAsync() ;
+
+                bool designIdeaUpdated = false;
                 var designIdeaIds = product.ProductDetails.Select(pd => pd.DesignIdeaId).Distinct().ToList();
                 foreach (var designIdeaId in designIdeaIds)
                 {
@@ -104,13 +106,18 @@ namespace GreenSpace.Application.Features.Products.Commands
                         designIdea.MaterialPrice = materialPrice;
                         designIdea.TotalPrice = designIdea.DesignPrice + designIdea.MaterialPrice;
                         _unitOfWork.DesignIdeaRepository.Update(designIdea);
-
+                        designIdeaUpdated = true;
                     }
                 }
 
+                if (designIdeaUpdated)
+                {
+                    var result1 = await _unitOfWork.SaveChangesAsync();
+                    return result1; 
+                }
 
 
-                return await _unitOfWork.SaveChangesAsync();
+                return result;
             }
 
 
