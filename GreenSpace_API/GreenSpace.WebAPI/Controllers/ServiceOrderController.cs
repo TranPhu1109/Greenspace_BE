@@ -50,6 +50,15 @@ namespace GreenSpace.WebAPI.Controllers
 => Ok(await _mediator.Send(new GetAllServiceOrderStatusConsultingQuery { PageNumber = pageNumber, PageSize = pageSize }));
 
 
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("accountant")]
+        public async Task<IActionResult> GetStatusDetermingPrice([FromQuery] int pageNumber = 0,
+                                                     [FromQuery] int pageSize = 10)
+=> Ok(await _mediator.Send(new GetAllServiceOrderStatusDetermingPriceQuery { PageNumber = pageNumber, PageSize = pageSize }));
+
+
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -156,6 +165,21 @@ namespace GreenSpace.WebAPI.Controllers
         {
 
             var result = await _mediator.Send(new UpdateServiceOrderStatusCommand { Id = id, UpdateModel = model });
+            if (!result)
+            {
+                return BadRequest("Update Fail!");
+            }
+            return Ok("Update Successfully!");
+        }
+
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPut("DesignPrice/{id}")]
+        public async Task<IActionResult> UpdateDesignPrice(Guid id, [FromBody] ServiceOrderUpdateDesignPriceModel model)
+        {
+
+            var result = await _mediator.Send(new UpdateServiceOrderDesignPriceCommand { Id = id, UpdateModel = model });
             if (!result)
             {
                 return BadRequest("Update Fail!");
