@@ -19,7 +19,7 @@ namespace GreenSpace.Application.ViewModels.Products
 
         public string Description { get; set; } = string.Empty;
 
-
+        public string DesignImage1URL { get; set; } = string.Empty;
         public int Size { get; set; }
 
         public ImageCreateModel Image  { get; set; } = new ImageCreateModel();

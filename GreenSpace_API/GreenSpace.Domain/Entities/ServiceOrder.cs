@@ -31,6 +31,8 @@ public class ServiceOrder :BaseEntity
     public Guid? RecordSketchId { get; set; } = default!;
     public string DeliveryCode { get; set; } = string.Empty;
 
+    public string Report { get; set; } = string.Empty;
+
     public int Status { get; set; } = default;
     public User User { get; set; } = default!;
     public ICollection<Bill> Bills { get; set; } = new List<Bill>();

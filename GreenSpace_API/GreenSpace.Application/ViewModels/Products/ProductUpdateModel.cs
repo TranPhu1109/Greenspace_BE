@@ -18,7 +18,7 @@ namespace GreenSpace.Application.ViewModels.Products
         public int Stock { get; set; }
 
         public string Description { get; set; } = string.Empty;
-
+        public string DesignImage1URL { get; set; } = string.Empty;
 
         public int Size { get; set; }
 
