@@ -13,5 +13,8 @@ namespace GreenSpace.Application.ViewModels.Contracts
         public Guid ServiceOrderId { get; set; }
         public string? UserName { get; set; }
         public string Description { get; set; } = default!;
+
+        public Guid? ModificatedBy { get; set; } = default!;
+        public DateTime? ModificationDate { get; set; } = null;
     }
 }
