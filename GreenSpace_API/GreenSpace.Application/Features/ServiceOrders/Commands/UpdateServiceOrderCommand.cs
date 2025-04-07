@@ -99,6 +99,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
 
                                 await _unitOfWork.RecordSketchRepository.AddAsync(recordsSketch);
                             }
+                            existRecord = await _unitOfWork.RecordSketchRepository.GetAllAsync(r => r.ServiceOrderId == serviceOrder.Id);
                             // Tạo ảnh record mới từ ảnh  service order
                             var newImage = new Image
                             {
