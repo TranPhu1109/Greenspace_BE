@@ -93,12 +93,14 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                                     Id = Guid.NewGuid(),
                                     ServiceOrderId = serviceOrder.Id,
                                     ImageId = oldImage.Id,
-                                    phase = existRecord.Count + 1,
+                                    phase = 0,
                                     isSelected = false
                                 };
 
                                 await _unitOfWork.RecordSketchRepository.AddAsync(recordsSketch);
+                                existRecord = await _unitOfWork.RecordSketchRepository.WhereAsync(rs => rs.ServiceOrderId == serviceOrder.Id);
                             }
+                            int maxPhase = existRecord.Any() ? existRecord.Max(rs => rs.phase) : 0;
                             // Tạo ảnh record mới từ ảnh  service order
                             var newImage = new Image
                             {
@@ -115,7 +117,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                                 Id = Guid.NewGuid(),
                                 ServiceOrderId = serviceOrder.Id,
                                 ImageId = newImage.Id,
-                                phase = existRecord.Count + 1,
+                                phase = maxPhase + 1,
                                 isSelected = false
                             };
 

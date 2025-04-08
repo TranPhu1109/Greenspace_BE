@@ -3,6 +3,7 @@ using Azure.Core;
 using CloudinaryDotNet.Core;
 using FluentValidation;
 using GreenSpace.Application.Services;
+using GreenSpace.Application.Services.Interfaces;
 using GreenSpace.Application.ViewModels.Contracts;
 using GreenSpace.Domain.Entities;
 using MediatR;
@@ -34,14 +35,16 @@ namespace GreenSpace.Application.Features.Contracts.Commands
             private readonly IMapper _mapper;
             private readonly CloudinaryService _cloudinaryService;
             private readonly ILogger<CommandHandler> _logger;
+            private readonly IClaimsService claimsService;
 
             public CommandHandler(IUnitOfWork unitOfWork, IMapper mapper,
-                CloudinaryService cloudinaryService, ILogger<CommandHandler> logger)
+                CloudinaryService cloudinaryService, ILogger<CommandHandler> logger, IClaimsService claimsService)
             {
                 _unitOfWork = unitOfWork;
                 _mapper = mapper;
                 _cloudinaryService = cloudinaryService;
                 _logger = logger;
+                this.claimsService = claimsService;
             }
 
             public async Task<bool> Handle(UpdateContractSignatureCommand request, CancellationToken cancellationToken)
@@ -67,6 +70,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                     Phone = order.CusPhone,
                     DesignPrice = order.DesignPrice ?? 0,
                     ServiceOrderId = contract.ServiceOrderId,
+                    ModificatedBy = claimsService.GetCurrentUser,
                 };
 
                
@@ -101,6 +105,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                 public string Phone { get; set; } = default!;
                 public decimal DesignPrice { get; set; }
                 public Guid ServiceOrderId { get; set; } = default!;
+                public Guid? ModificatedBy { get; set; } = default!;
             }
 
             private async Task<byte[]> GeneratePdfWithSignatureAsync(ContractModel contract, byte[] signatureBytes)

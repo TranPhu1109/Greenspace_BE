@@ -27,5 +27,8 @@ namespace GreenSpace.Domain.Enum
         Refund =16,
         DoneRefund = 17,
         Completed = 18,
+        ReConsultingAndSketching = 19,     //  phác thảo lại
+        ReDesign = 20,                       // thiết kế lại
+        WaitDeposit = 21,                     // chờ đặt cọc
     }
 }
