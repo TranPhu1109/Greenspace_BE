@@ -1,6 +1,8 @@
 ﻿using GreenSpace.Application.ViewModels.Images;
 using GreenSpace.Application.ViewModels.ProductDetail;
 using GreenSpace.Application.ViewModels.ServiceOrderDetail;
+using GreenSpace.Application.ViewModels.WorkTasks;
+using GreenSpace.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,5 +45,6 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
         public ImageCreateModel? Image { get; set; }
 
         public List<ServiceOrderDetailViewModel> ServiceOrderDetails { get; set; } = new List<ServiceOrderDetailViewModel>();
+        public List<WorkTaskViewModel> WorkTasks { get; set; } = new();
     }
 }

@@ -109,6 +109,7 @@ public class MapperConfigurationProfile : Profile
         CreateMap<ServiceOrder, ServiceOrderViewModel>()
                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
                .ForMember(dest => dest.ServiceOrderDetails, opt => opt.MapFrom(src => src.ServiceOrderDetails))
+               .ForMember(dest => dest.WorkTasks, opt => opt.MapFrom(src => src.WorkTask))
                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => ((ServiceOrderStatus)src.Status).ToString()))
                .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
                .ForMember(x => x.Email, opt => opt.MapFrom(x => x.User.Email))

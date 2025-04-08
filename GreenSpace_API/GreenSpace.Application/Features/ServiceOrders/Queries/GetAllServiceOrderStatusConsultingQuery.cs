@@ -41,7 +41,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Queries
 
             public async Task<PaginatedList<ServiceOrderViewModel>> Handle(GetAllServiceOrderStatusConsultingQuery request, CancellationToken cancellationToken)
             {
-                var ordersService = await _unitOfWork.ServiceOrderRepository.WhereAsync(x => x.Status == 1, x => x.User, x => x.Image, x => x.ServiceOrderDetails);
+                var ordersService = await _unitOfWork.ServiceOrderRepository.WhereAsync(x => x.Status == 1, x => x.User, x => x.Image, x => x.ServiceOrderDetails, x => x.WorkTask);
                 if (ordersService == null || !ordersService.Any())
                 {
                     throw new NotFoundException($"There are no ordersService in DB.");

@@ -39,7 +39,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Queries
             }
             public async Task<ServiceOrderViewModel> Handle(GetServiceOrderByIdQuery request, CancellationToken cancellationToken)
             {
-                var orderServices = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(request.Id, x => x.Image, x => x.ServiceOrderDetails,x=>x.User);
+                var orderServices = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(request.Id, x => x.Image, x => x.ServiceOrderDetails,x=>x.User,x => x.WorkTask);
                 if (orderServices is null) throw new NotFoundException($"Product with ID-{request.Id} is not exist!");
                 var result = _mapper.Map<ServiceOrderViewModel>(orderServices);
                 return result;
