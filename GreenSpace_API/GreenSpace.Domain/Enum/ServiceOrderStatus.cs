@@ -26,7 +26,7 @@ namespace GreenSpace.Domain.Enum
         Warning = 15,                 // cảnh báo vượt 30%
         Refund =16,
         DoneRefund = 17,
-        Completed = 18,
+        StopService = 18,
         ReConsultingAndSketching = 19,     //  phác thảo lại
         ReDesign = 20,                       // thiết kế lại
         WaitDeposit = 21,                     // chờ đặt cọc
