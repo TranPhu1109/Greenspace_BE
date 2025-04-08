@@ -10,7 +10,8 @@ namespace GreenSpace.Domain.Enum
     {
         Withdraw,
         Deposit, 
-        Pay
+        Pay,
+        Refund,
     }
 
     public enum WalletLogStatusEnum

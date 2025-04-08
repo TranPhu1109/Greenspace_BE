@@ -24,23 +24,28 @@ public class WalletsController : BaseController
         return base.Content(html, "text/html");
     }
     /// <summary>
-    ///  Nạp tiền vào ví
+    /// Hoàn lại 30% tiền đặt cọc cho đơn dịch vụ.
     /// </summary>
-    /// <param name="model"></param>
+    /// <param name="id">ServiceOrderId</param>
     /// <returns></returns>
     [Authorize]
-    [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.Created)]
+    [HttpPost("refund")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-    public async Task<IActionResult> AddAccountBalance([FromBody] AddAccountBalanceModel model)
+    public async Task<IActionResult> RefundForUser([FromQuery] Guid id)
     {
-        var result = await mediator.Send(new RefundForUserCommand { Amount = model.Amount });
-        if (result)
+        if (id == Guid.Empty)
         {
-            return StatusCode(201);
+            return BadRequest("ServiceOrderId is required.");
         }
-        else return BadRequest();
+
+        var result = await mediator.Send(new RefundForUserCommand { ServiceOrderId = id });
+
+        if (!result)
+            return StatusCode((int)HttpStatusCode.InternalServerError, "Refund failed.");
+
+        return Ok("Refund successful.");
     }
     [HttpGet("vn-pay/response")]
     public async Task<IActionResult> VNPayResponse([FromQuery] string returnUrl)
