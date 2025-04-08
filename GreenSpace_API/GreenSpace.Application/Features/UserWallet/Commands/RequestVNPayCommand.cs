@@ -44,7 +44,7 @@ public class RequestVNPayCommand : IRequest<string>
             vnpay.AddRequestData("vnp_Version", payRequest.Version);
             vnpay.AddRequestData("vnp_Command", payRequest.Command);
             vnpay.AddRequestData("vnp_TmnCode", appSettings.VnPay.Vnp_TmnCode);
-            vnpay.AddRequestData("vnp_Amount", ((int)request.Amount * 100).ToString());
+            vnpay.AddRequestData("vnp_Amount", ((decimal)request.Amount * 100).ToString());
             string createDate = DateTime.Now.ToString("yyyyMMddHHmmss");
             vnpay.AddRequestData("vnp_CreateDate", createDate);
             //vnpay.AddRequestData("vnp_CreateDate", payRequest.CreateDate);
