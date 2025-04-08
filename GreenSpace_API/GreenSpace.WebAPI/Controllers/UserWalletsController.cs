@@ -35,7 +35,7 @@ public class WalletsController : BaseController
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public async Task<IActionResult> AddAccountBalance([FromBody] AddAccountBalanceModel model)
     {
-        var result = await mediator.Send(new AddAccountBalanceCommand { Amount = model.Amount, Source = model.Source });
+        var result = await mediator.Send(new RefundForUserCommand { Amount = model.Amount });
         if (result)
         {
             return StatusCode(201);

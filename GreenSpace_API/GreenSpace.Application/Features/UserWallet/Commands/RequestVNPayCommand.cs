@@ -35,7 +35,7 @@ public class RequestVNPayCommand : IRequest<string>
 
             if (currentUser?.UsersWallet is null)
             {
-                throw new Exception($"Error {nameof(AddAccountBalanceCommand)}-Wallet is null");
+                throw new Exception($"Error -Wallet is null");
             }
             var tick = DateTime.Now.Ticks.ToString();
             PaymentRequestModel payRequest = new();
