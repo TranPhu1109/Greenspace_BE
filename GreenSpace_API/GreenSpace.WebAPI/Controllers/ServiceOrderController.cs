@@ -59,6 +59,15 @@ namespace GreenSpace.WebAPI.Controllers
 => Ok(await _mediator.Send(new GetAllServiceOrderStatusDetermingPriceQuery { PageNumber = pageNumber, PageSize = pageSize }));
 
 
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("MaterialPrice")]
+        public async Task<IActionResult> GetStatusDetermingMaterialPrice([FromQuery] int pageNumber = 0,
+                                                [FromQuery] int pageSize = 10)
+=> Ok(await _mediator.Send(new GetAllServiceOrderStatusMaterialPriceQuery { PageNumber = pageNumber, PageSize = pageSize }));
+
+
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
