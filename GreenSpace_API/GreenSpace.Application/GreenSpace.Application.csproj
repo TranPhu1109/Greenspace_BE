@@ -41,7 +41,6 @@
   <ItemGroup>
     <Folder Include="Features\Bills\Queries\" />
     <Folder Include="Features\NewFolder\" />
-    <Folder Include="ViewModels\MongoDbs\Notifications\" />
   </ItemGroup>
 
 </Project>
