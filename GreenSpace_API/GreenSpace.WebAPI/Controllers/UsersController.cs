@@ -124,9 +124,18 @@ namespace GreenSpace.WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UserUpdateModel model)
         {
-            await _mediator.Send(new UpdateUserCommand { Model = model, Id = id });
-            return NoContent();
+            var result = await _mediator.Send(new UpdateUserCommand { Model = model, Id = id });
+            if (result is not null)
+            {
+                return CreatedAtAction(
+                    actionName: nameof(GetById),
+                    routeValues: new { id = result.Id },
+                    value: result
+                );
+            }
+            else return BadRequest();
         }
+        
         /// <summary>
         /// Xoá User theo Id - Admin
         /// </summary>
