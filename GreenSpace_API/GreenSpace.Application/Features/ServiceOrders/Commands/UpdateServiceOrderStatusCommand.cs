@@ -55,7 +55,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 {
                     throw new InvalidOperationException($"Invalid status value: {request.UpdateModel.Status}");
                 }
-                if (request.UpdateModel.Status == 8)
+                if (request.UpdateModel.Status == 7 && servicerOrder.IsCustom == true)
                 {
                     foreach (var detail in servicerOrder.ServiceOrderDetails)
                     {
