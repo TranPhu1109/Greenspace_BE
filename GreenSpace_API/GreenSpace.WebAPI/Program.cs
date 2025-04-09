@@ -29,7 +29,7 @@ app.UseHangfireDashboard("/hangfire");
 RecurringJob.AddOrUpdate<GhnJobService>(
     "fetch-ghn-order",
     job => job.FetchGhnOrder(),
-    Cron.HourInterval(5)
+    Cron.MinuteInterval(1)
 );
 ApplyMigration();
 app.MapControllers();
