@@ -72,24 +72,48 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                     await _unitOfWork.ImageRepository.AddAsync(image);
                     serviceOrder.ImageId = image.Id;
                 }
-                
-                    // add danh sach san pham cua designidea vao serviceOrderDetails
-                    if (design != null && design.ProductDetails.Any())
+                foreach (var item in request.CreateModel.Products)
+                {
+                    var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
+                    if (product == null)
                     {
-                        var serviceOrderDetails = design.ProductDetails.Select(pd => new ServiceOrderDetail
-                        {
-                            Id = Guid.NewGuid(), 
-                            ProductId = pd.ProductId,
-                            ServiceOrderId = serviceOrder.Id, 
-                            Quantity = pd.Quantity, 
-                            Price = pd.Price / pd.Quantity,
-                            TotalPrice = pd.Price,
-                        }).ToList();
-
-                        await _unitOfWork.ServiceOrderDetailRepository.AddRangeAsync(serviceOrderDetails);
+                        throw new ApplicationException($"Product with ID {item.ProductId} not found");
                     }
+                    else
+                    {
+                        var serviceOrderDetail = new ServiceOrderDetail
+                        {
+                            Id = Guid.NewGuid(),
+                            ServiceOrderId = serviceOrder.Id,
+                            ProductId = product.Id,
+                            Quantity = item.Quantity,
+                            Price = product.Price,
+                            TotalPrice = product.Price * item.Quantity,
+                        };
+                        await _unitOfWork.ServiceOrderDetailRepository.AddAsync(serviceOrderDetail);
+                        serviceOrder.MaterialPrice += serviceOrderDetail.TotalPrice;
+                        
+                    }
+                    product.Stock -= item.Quantity;   
+                    
+                }
+                // add danh sach san pham cua designidea vao serviceOrderDetails
+                //if (design != null && design.ProductDetails.Any())
+                //    {
+                //        var serviceOrderDetails = design.ProductDetails.Select(pd => new ServiceOrderDetail
+                //        {
+                //            Id = Guid.NewGuid(), 
+                //            ProductId = pd.ProductId,
+                //            ServiceOrderId = serviceOrder.Id, 
+                //            Quantity = pd.Quantity, 
+                //            Price = pd.Price / pd.Quantity,
+                //            TotalPrice = pd.Price,
+                //        }).ToList();
 
-                    serviceOrder.MaterialPrice = design?.ProductDetails.Sum(pd => pd.Price) ?? 0;
+                //        await _unitOfWork.ServiceOrderDetailRepository.AddRangeAsync(serviceOrderDetails);
+                //    }
+
+                //    serviceOrder.MaterialPrice = design?.ProductDetails.Sum(pd => pd.Price) ?? 0;
                 
 
                 await _unitOfWork.ServiceOrderRepository.AddAsync(serviceOrder);

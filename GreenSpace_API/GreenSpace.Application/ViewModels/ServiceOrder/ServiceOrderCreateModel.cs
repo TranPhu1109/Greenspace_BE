@@ -1,9 +1,4 @@
 ﻿using GreenSpace.Application.ViewModels.Images;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GreenSpace.Application.ViewModels.ServiceOrder
 {
@@ -26,5 +21,13 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
 
         public string Description { get; set; } = string.Empty;
         public ImageCreateModel Image { get; set; } = new ImageCreateModel();
+        public List<ListProductViewModel> Products { get; set; } = new List<ListProductViewModel>();
+    }
+    public class ListProductViewModel
+    {
+        public Guid ProductId { get; set; } = Guid.Empty;
+        public int Quantity { get; set; } = default!;
     }
 }
+
+
