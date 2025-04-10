@@ -1,4 +1,5 @@
 ﻿using GreenSpace.Application.ViewModels.Images;
+using GreenSpace.Application.ViewModels.ServiceOrderDetail;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,6 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
 
         public string Description { get; set; } = string.Empty;
         public ImageCreateModel Image { get; set; } = new ImageCreateModel();
+        public List<ServiceOrderDetailCreateModel> ServiceOrderDetails { get; set; } = new List<ServiceOrderDetailCreateModel>();
     }
 }

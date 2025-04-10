@@ -67,6 +67,31 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 serviceOrder.ServiceType = ServiceTypeEnum.NoDesignIdea.ToString();
                 serviceOrder.Status = (int)ServiceOrderStatus.Pending;
 
+                foreach (var item in request.CreateModel.ServiceOrderDetails)
+                {
+                    var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
+                    if (product == null)
+                    {
+                        throw new ApplicationException($"Product with ID {item.ProductId} not found");
+                    }
+                    else
+                    {
+                        var serviceOrderDetail = new ServiceOrderDetail
+                        {
+                            Id = Guid.NewGuid(),
+                            ServiceOrderId = serviceOrder.Id,
+                            ProductId = product.Id,
+                            Quantity = item.Quantity,
+                            Price = product.Price,
+                            TotalPrice = product.Price * item.Quantity,
+                        };
+                        await _unitOfWork.ServiceOrderDetailRepository.AddAsync(serviceOrderDetail);
+                        serviceOrder.MaterialPrice += serviceOrderDetail.TotalPrice;
+
+                    }
+
+                }
+
                 await _unitOfWork.ServiceOrderRepository.AddAsync(serviceOrder);
                 await _unitOfWork.SaveChangesAsync();
                 return _mapper.Map<ServiceOrderViewModel>(serviceOrder);
