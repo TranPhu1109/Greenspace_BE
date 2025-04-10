@@ -4,7 +4,7 @@ on:
     - main
 env:
   DOTNET_CORE_VERSION: 7.0.x
-  CONTAINER_APP_NAME: greenspace.webapi-container-app
+  CONTAINER_APP_NAME: greenspace-webapi-container-app
   CONTAINER_APP_ENVIRONMENT_NAME: greenspace
   RESOURCE_GROUP: DefaultResourceGroup-SEA
   CONTAINER_REGISTRY_NAME: registry20250410065218
