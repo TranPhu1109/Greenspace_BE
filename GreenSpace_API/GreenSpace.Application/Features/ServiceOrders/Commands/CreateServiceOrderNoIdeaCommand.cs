@@ -74,23 +74,21 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                     {
                         throw new ApplicationException($"Product with ID {item.ProductId} not found");
                     }
-                    else
+
+                    var detail = new ServiceOrderDetail
                     {
-                        var serviceOrderDetail = new ServiceOrderDetail
-                        {
-                            Id = Guid.NewGuid(),
-                            ServiceOrderId = serviceOrder.Id,
-                            ProductId = product.Id,
-                            Quantity = item.Quantity,
-                            Price = product.Price,
-                            TotalPrice = product.Price * item.Quantity,
-                        };
-                        await _unitOfWork.ServiceOrderDetailRepository.AddAsync(serviceOrderDetail);
-                        serviceOrder.MaterialPrice += serviceOrderDetail.TotalPrice;
+                        Id = Guid.NewGuid(),
+                        ServiceOrderId = serviceOrder.Id,
+                        ProductId = product.Id,
+                        Quantity = item.Quantity,
+                        Price = product.Price,
+                        TotalPrice = product.Price * item.Quantity
+                    };
 
-                    }
 
+                    serviceOrder.ServiceOrderDetails.Add(detail);
                 }
+                serviceOrder.MaterialPrice = serviceOrder.ServiceOrderDetails.Sum(d => d.TotalPrice);
 
                 await _unitOfWork.ServiceOrderRepository.AddAsync(serviceOrder);
                 await _unitOfWork.SaveChangesAsync();
