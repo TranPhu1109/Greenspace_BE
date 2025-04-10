@@ -66,7 +66,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 serviceOrder.ImageId = image.Id;
                 serviceOrder.ServiceType = ServiceTypeEnum.NoDesignIdea.ToString();
                 serviceOrder.Status = (int)ServiceOrderStatus.Pending;
-
+                serviceOrder.IsCustom = true;
                 foreach (var item in request.CreateModel.ServiceOrderDetails)
                 {
                     var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
