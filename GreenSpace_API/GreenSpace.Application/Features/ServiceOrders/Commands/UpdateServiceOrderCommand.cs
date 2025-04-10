@@ -65,7 +65,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 if (request.UpdateModel.Image is not null)
                 {
                     // tọa ảnh record steck 
-                    if (request.UpdateModel.Status == (int)ServiceOrderStatus.ConsultingAndSketching)
+                    if (request.UpdateModel.Status == (int)ServiceOrderStatus.ConsultingAndSketching || request.UpdateModel.Status == (int)ServiceOrderStatus.ReConsultingAndSketching)
                     {
                         // Đếm số lượng RecordSketch hiện có của ServiceOrder này
                         var existRecord = await _unitOfWork.RecordSketchRepository.WhereAsync(rs => rs.ServiceOrderId == serviceOrder.Id);
@@ -125,7 +125,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                         }
                     }
                     // tọa ảnh record design 
-                    if (request.UpdateModel.Status == (int)ServiceOrderStatus.AssignToDesigner)
+                    if (request.UpdateModel.Status == (int)ServiceOrderStatus.AssignToDesigner || request.UpdateModel.Status == (int)ServiceOrderStatus.ReDesign)
                     {
                         var existDesignRecords = await _unitOfWork.RecordDesignRepository.WhereAsync(rd => rd.ServiceOrderId == serviceOrder.Id);
                         if (existDesignRecords.Count >= 3)

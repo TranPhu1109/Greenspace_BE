@@ -14,6 +14,7 @@ namespace GreenSpace.Domain.Enum
         DoneDesign = 3,
         DesignDetail = 4,
         DoneDesignDetail = 5,
+        Completed = 6,
            
     }
 }

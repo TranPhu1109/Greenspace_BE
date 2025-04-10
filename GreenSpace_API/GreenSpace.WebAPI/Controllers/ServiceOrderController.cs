@@ -196,6 +196,22 @@ namespace GreenSpace.WebAPI.Controllers
             return Ok("Update Successfully!");
         }
 
+
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPut("DesignDetail/{id}")]
+        public async Task<IActionResult> UpdateDesignDetail(Guid id, [FromBody] ServiceOrderUpdateDesignDetailModel model)
+        {
+
+            var result = await _mediator.Send(new UpdateServiceOrderDesignDetailCommand { Id = id, UpdateModel = model });
+            if (!result)
+            {
+                return BadRequest("Update Fail!");
+            }
+            return Ok("Update Successfully!");
+        }
+
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]

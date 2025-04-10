@@ -30,5 +30,7 @@ namespace GreenSpace.Domain.Enum
         ReConsultingAndSketching = 19,     //  phác thảo lại
         ReDesign = 20,                       // thiết kế lại
         WaitDeposit = 21,                     // chờ đặt cọc
+        DoneDeterminingDesignPrice = 22,
+        DoneDeterminingMaterialPrice = 23,
     }
 }
