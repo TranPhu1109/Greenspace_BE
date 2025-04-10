@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     fonts-dejavu-core fonts-liberation fonts-freefont-ttf && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
-USER $APP_UID
+#USER $APP_UID
 WORKDIR /app
 COPY appsettings*.json /app/
 ENV ASPNETCORE_URLS=http://+:8080;https://+:8081
