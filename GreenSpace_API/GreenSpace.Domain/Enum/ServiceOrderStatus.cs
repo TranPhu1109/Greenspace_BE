@@ -32,5 +32,7 @@ namespace GreenSpace.Domain.Enum
         WaitDeposit = 21,                     // chờ đặt cọc
         DoneDeterminingDesignPrice = 22,
         DoneDeterminingMaterialPrice = 23,
+        ReDeterminingDesignPrice = 24,
+        ExchangeProdcut = 25,      
     }
 }
