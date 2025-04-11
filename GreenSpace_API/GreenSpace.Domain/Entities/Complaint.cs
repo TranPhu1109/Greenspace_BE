@@ -20,5 +20,8 @@ namespace GreenSpace.Domain.Entities
         public ServiceOrder? ServiceOrder { get; set; }
         public Order? Order { get; set; }
         public Image Image { get; set; } = null!;
+
+        public ICollection<ComplaintDetail> ComplaintDetails { get; set; } = new List<ComplaintDetail>();
+
     }
 }
