@@ -29,4 +29,5 @@ public class Product :BaseEntity
     public ICollection<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
 
     public ICollection<ServiceOrderDetail> ServiceOrderDetails { get; set; } = new List<ServiceOrderDetail>();
+    public ICollection<ComplaintDetail> ComplaintDetails { get; set; } = new List<ComplaintDetail>();
 }
