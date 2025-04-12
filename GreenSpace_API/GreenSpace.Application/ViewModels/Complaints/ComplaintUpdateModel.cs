@@ -10,5 +10,6 @@ namespace GreenSpace.Application.ViewModels.Complaints
     {
         public int Status { get; set; } = default;
         public int ComplaintType { get; set; } = default!;
+        public string DeliveryCode { get; set; } = string.Empty;
     }
 }

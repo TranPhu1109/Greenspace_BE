@@ -15,7 +15,7 @@ namespace GreenSpace.Domain.Entities
         public string Reason { get; set; } = string.Empty;
         public string ComplaintType { get; set; } = string.Empty;
         public int Status { get; set; } = default;
-
+        public string DeliveryCode { get; set; } = string.Empty;
         public User User { get; set; } = default!;
         public ServiceOrder? ServiceOrder { get; set; }
         public Order? Order { get; set; }

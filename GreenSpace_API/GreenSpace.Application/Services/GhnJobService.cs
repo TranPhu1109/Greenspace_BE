@@ -95,6 +95,41 @@ namespace GreenSpace.Application.Services
                     }
 
                 }
+
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error fetching GHN order for order code: {OrderCode}", item.DeliveryCode);
+                    continue;
+                }
+            }
+            var complaint = await _unitOfWork.ComplaintRepository.WhereAsync(x => x.DeliveryCode != null && x.ComplaintType == ComplaintTypeEnum.ProductReturn.ToString());
+            foreach (var item in complaint)
+            {
+                try
+                {
+                    var requestBody = new { order_code = item.DeliveryCode };
+                    var json = JsonSerializer.Serialize(requestBody);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    var response = await client.PostAsync("/shiip/public-api/v2/shipping-order/detail", content);
+                    var responseData = await response.Content.ReadAsStringAsync();
+                    using var doc = JsonDocument.Parse(responseData);
+                    var status = doc.RootElement.GetProperty("data").GetProperty("status").GetString();
+
+                    ComplaintStatusEnum mappedStatus = status switch
+                    {
+                        "delivering" => ComplaintStatusEnum.Delivery,
+                        "delivered" => ComplaintStatusEnum.delivered,
+                        _ => throw new NotImplementedException("Cannot get status"),
+                    };
+                    if (item.Status != (int)mappedStatus)
+                    {
+                        item.Status = (int)mappedStatus;
+                        _unitOfWork.ComplaintRepository.Update(item);
+                    }
+
+                }
+
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error fetching GHN order for order code: {OrderCode}", item.DeliveryCode);

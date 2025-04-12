@@ -1,4 +1,6 @@
-﻿using GreenSpace.Application.ViewModels.Images;
+﻿using GreenSpace.Application.ViewModels.ComplaintDetail;
+using GreenSpace.Application.ViewModels.Images;
+using GreenSpace.Application.ViewModels.ServiceOrderDetail;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +21,7 @@ namespace GreenSpace.Application.ViewModels.Complaints
 
 
         public ImageCreateModel Image { get; set; } = new ImageCreateModel();
+
+        public List<ComplaintDetailCreateModel> ComplaintDetails { get; set; } = new List<ComplaintDetailCreateModel>();
     }
 }

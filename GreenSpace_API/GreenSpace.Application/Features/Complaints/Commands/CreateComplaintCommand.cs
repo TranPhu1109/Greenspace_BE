@@ -64,6 +64,31 @@ namespace GreenSpace.Application.Features.Complaints.Commands
                 complaint.ImageId = image.Id;
                 complaint.Status = (int)ComplaintStatusEnum.pending;
                 complaint.ComplaintType = ((ComplaintTypeEnum)request.CreateModel.ComplaintType).ToString();
+
+
+                foreach (var item in request.CreateModel.ComplaintDetails)
+                {
+                    var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
+                    if (product == null)
+                    {
+                        throw new ApplicationException($"Product with ID {item.ProductId} not found");
+                    }
+
+                    var detail = new ComplaintDetail
+                    {
+                        Id = Guid.NewGuid(),
+                        ComplaintId = complaint.Id,
+                        ProductId = product.Id,
+                        Quantity = item.Quantity,
+                        Price = product.Price,
+                        TotalPrice = product.Price * item.Quantity
+                    };
+
+
+                    complaint.ComplaintDetails.Add(detail);
+                }
+
+
                 await _unitOfWork.ComplaintRepository.AddAsync(complaint);
   
                 try

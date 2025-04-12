@@ -39,7 +39,7 @@ namespace GreenSpace.Application.Features.Complaints.Queries
             }
             public async Task<ComplaintViewModel> Handle(GetComplaintByIdQuery request, CancellationToken cancellationToken)
             {
-                var complaint = await _unitOfWork.ComplaintRepository.GetByIdAsync(request.Id, x => x.Image , x =>x .User, x => x.ServiceOrder, x => x.Order);
+                var complaint = await _unitOfWork.ComplaintRepository.GetByIdAsync(request.Id, x => x.Image , x =>x .User, x => x.ServiceOrder, x => x.Order ,x =>x.ComplaintDetails);
                 if (complaint is null) throw new NotFoundException($"Blog with ID-{request.Id} is not exist!");
                 var result = _mapper.Map<ComplaintViewModel>(complaint);
                 return result;

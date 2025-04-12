@@ -29,6 +29,7 @@ using GreenSpace.Application.ViewModels.Complaints;
 using CloudinaryDotNet.Core;
 using GreenSpace.Application.ViewModels.OrderDetail;
 using GreenSpace.Application.ViewModels._3PartyShip;
+using GreenSpace.Application.ViewModels.ComplaintDetail;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -197,5 +198,27 @@ public class MapperConfigurationProfile : Profile
 
 
         CreateMap<Order, OrderUpdateStatusModel>().ReverseMap();
+
+
+        CreateMap<Complaint, ComplaintCreateModel>()
+          .ForMember(dest => dest.ComplaintDetails, opt => opt.Ignore())
+          .ReverseMap()
+          .ForMember(dest => dest.ComplaintDetails, opt => opt.Ignore());
+        CreateMap<Complaint, ComplaintUpdateModel>().ReverseMap();
+        CreateMap<Complaint, ComplaintViewModel>()
+            .ForMember(dest => dest.ComplaintDetails, opt => opt.MapFrom(src => src.ComplaintDetails))
+            .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src =>
+                src.Order != null ? src.Order.Address :
+                (src.ServiceOrder != null ? src.ServiceOrder.Address : null)))
+
+            .ForMember(dest => dest.CusPhone, opt => opt.MapFrom(src =>
+                src.Order != null ? src.Order.Phone :
+                (src.ServiceOrder != null ? src.ServiceOrder.CusPhone : null)))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => ((ComplaintStatusEnum)src.Status).ToString()))
+            .ReverseMap();
+        CreateMap<ComplaintDetail, ComplaintDetailCreateModel>().ReverseMap();
+        CreateMap<ComplaintDetail, ComplaintDetailViewModel>().ReverseMap();
+
     }
 }
