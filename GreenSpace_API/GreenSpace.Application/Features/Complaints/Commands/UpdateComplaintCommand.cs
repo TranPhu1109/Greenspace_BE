@@ -3,6 +3,7 @@ using FluentValidation;
 using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
 using GreenSpace.Application.ViewModels.Blogs;
 using GreenSpace.Application.ViewModels.Complaints;
+using GreenSpace.Domain.Entities;
 using GreenSpace.Domain.Enum;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -53,7 +54,7 @@ namespace GreenSpace.Application.Features.Complaints.Commands
             public async Task<bool> Handle(UpdateComplaintCommand request, CancellationToken cancellationToken)
             {
 
-                var complaint = await _unitOfWork.ComplaintRepository.GetByIdAsync(request.Id, p => p.Image ,p => p.User);
+                var complaint = await _unitOfWork.ComplaintRepository.GetByIdAsync(request.Id, p => p.Image ,p => p.User,p => p.ComplaintDetails);
                 if (complaint is null) throw new NotFoundException($"Complain with Id {request.Id} does not exist!");
                 if (!Enum.IsDefined(typeof(ComplaintStatusEnum), request.UpdateModel.Status))
                 {
@@ -61,6 +62,30 @@ namespace GreenSpace.Application.Features.Complaints.Commands
                 }
                 _mapper.Map(request.UpdateModel, complaint);
                 complaint.ComplaintType = ((ComplaintTypeEnum)request.UpdateModel.ComplaintType).ToString();
+
+                if (request.UpdateModel.Status == 7 && complaint.ComplaintType == ComplaintTypeEnum.refund.ToString())
+                {
+                    foreach (var detail in complaint.ComplaintDetails)
+                    {
+                        var product = await _unitOfWork.ProductRepository.GetByIdAsync(detail.ProductId);
+                        if (product == null)
+                        {
+                            throw new NotFoundException($"Product with Id-{detail.ProductId} not found!");
+                        }
+
+                        if (product.Stock < 0)
+                        {
+                            throw new InvalidOperationException($"Not enough stock for Product Id {product.Id}");
+                        }
+                        if (product.Stock < detail.Quantity)
+                        {
+                            throw new InvalidOperationException($"Not enough stock for Product Id {product.Id}. Available: {product.Stock}, Required: {detail.Quantity}");
+                        }
+
+                        product.Stock -= detail.Quantity;
+                        _unitOfWork.ProductRepository.Update(product);
+                    }
+                }
                 _unitOfWork.ComplaintRepository.Update(complaint);
                 return await _unitOfWork.SaveChangesAsync();
             }

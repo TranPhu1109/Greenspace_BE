@@ -64,10 +64,10 @@ namespace GreenSpace.Application.Features.Contracts.Commands
 
                 var model = new ContractModel
                 {
-                    UserName = order.User.Name,
-                    Address = order.Address,
-                    Email = order.User.Email,
-                    Phone = order.CusPhone,
+                    Name = contract.Name,
+                    Address = contract.Address,
+                    Email = contract.Email,
+                    Phone = contract.Phone,
                     DesignPrice = order.DesignPrice ?? 0,
                     ServiceOrderId = contract.ServiceOrderId,
                     ModificatedBy = claimsService.GetCurrentUser,
@@ -99,7 +99,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
 
             public class ContractModel
             {
-                public string UserName { get; set; } = default!;
+                public string Name { get; set; } = default!;
                 public string Address { get; set; } = default!;
                 public string Email { get; set; } = default!;
                 public string Phone { get; set; } = default!;
@@ -143,7 +143,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                             col.Item().Text("Chức vụ: Giám đốc");
 
                             col.Item().PaddingTop(10).Text("BÊN B: KHÁCH HÀNG").Bold();
-                            col.Item().Text($"Họ và tên: {contract.UserName}");
+                            col.Item().Text($"Họ và tên: {contract.Name}");
                             col.Item().Text($"Địa chỉ: {contract.Address}");
                             col.Item().Text($"Email: {contract.Email}");
                             col.Item().Text($"Số điện thoại: {contract.Phone}");

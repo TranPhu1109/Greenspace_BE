@@ -20,7 +20,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
         {
             public CommandValidation()
             {
-                RuleFor(x => x.CreateModel.UserName).NotNull().NotEmpty().WithMessage("User name must not be empty");
+                RuleFor(x => x.CreateModel.Name).NotNull().NotEmpty().WithMessage("User name must not be empty");
                 RuleFor(x => x.CreateModel.Email).NotNull().NotEmpty().EmailAddress().WithMessage("Invalid email");
                 RuleFor(x => x.CreateModel.Phone).NotNull().NotEmpty().WithMessage("Phone must not be empty");
                 RuleFor(x => x.CreateModel.DesignPrice).GreaterThan(0).WithMessage("Price must be greater than zero");
@@ -46,7 +46,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
 
             public async Task<ContractViewModel> Handle(CreateContractCommand request, CancellationToken cancellationToken)
             {
-                _logger.LogInformation("Generating PDF for contract with user: {UserName}", request.CreateModel.UserName);
+                _logger.LogInformation("Generating PDF for contract with user: {UserName}", request.CreateModel.Name);
                 var user = await _unitOfWork.UserRepository.GetByIdAsync(request.CreateModel.UserId);
                 if (user == null)
                 {
@@ -68,6 +68,10 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                 contract.Id = Guid.NewGuid();
                 contract.UserId = request.CreateModel.UserId;
                 contract.ServiceOrderId = request.CreateModel.ServiceOrderId;
+                contract.Name = request.CreateModel.Name;
+                contract.Phone = request.CreateModel.Phone;
+                contract.Email = request.CreateModel.Email;
+                contract.Address = request.CreateModel.Address;
                 contract.Description = pdfUrl;
 
                 await _unitOfWork.ContractRepository.AddAsync(contract);
@@ -90,7 +94,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                 // Tạo model cho PDF
                 var model = new ContractModel
                 {
-                    UserName = contract.UserName,
+                    Name = contract.Name,
                     Address = contract.Address,
                     Email = contract.Email,
                     Phone = contract.Phone,
@@ -109,7 +113,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
 
         public class ContractModel
         {
-            public string UserName { get; set; } = default!;
+            public string Name { get; set; } = default!;
             public string Address { get; set; } = default!;
             public string Email { get; set; } = default!;
             public string Phone { get; set; } = default!;
@@ -155,7 +159,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                         col.Item().Text("Chức vụ: Giám đốc");
 
                         col.Item().PaddingTop(10).Text("BÊN B: KHÁCH HÀNG").Bold();
-                        col.Item().Text($"Họ và tên: {contract.UserName}");
+                        col.Item().Text($"Họ và tên: {contract.Name}");
                         col.Item().Text($"Địa chỉ: {contract.Address}");
                         col.Item().Text($"Email: {contract.Email}");
                         col.Item().Text($"Số điện thoại: {contract.Phone}");

@@ -10,11 +10,12 @@ namespace GreenSpace.Application.ViewModels.Contracts
     {
         public Guid UserId { get; set; }
         public Guid ServiceOrderId { get; set; }
-        public string UserName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string? Phone { get; set; } = default!;
+        public string Name { get; set; } = string.Empty;
 
-        public string? Address { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+        public string Phone { get; set; } = default!;
+
         public decimal? DesignPrice { get; set; } = default!;
 
     }
