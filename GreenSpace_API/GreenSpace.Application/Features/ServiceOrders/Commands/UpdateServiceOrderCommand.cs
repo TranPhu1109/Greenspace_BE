@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
+using GreenSpace.Application.SignalR;
 using GreenSpace.Application.ViewModels.Category;
 using GreenSpace.Application.ViewModels.ServiceOrder;
 using GreenSpace.Domain.Entities;
 using GreenSpace.Domain.Enum;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -33,15 +35,18 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
             private readonly IMapper _mapper;
             private ILogger<CommandHandler> _logger;
             private AppSettings _appSettings;
+            private readonly IHubContext<SignalrHub> _hubContext;
             public CommandHandler(IUnitOfWork unitOfWork,
                     ILogger<CommandHandler> logger,
                     IMapper mapper,
-                    AppSettings appSettings)
+                    AppSettings appSettings,
+                   IHubContext<SignalrHub> hubContext)
             {
                 _unitOfWork = unitOfWork;
                 _logger = logger;
                 _mapper = mapper;
                 _appSettings = appSettings;
+                _hubContext = hubContext;
             }
 
             public async Task<bool> Handle(UpdateServiceOrderCommand request, CancellationToken cancellationToken)
@@ -221,6 +226,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 serviceOrder.ServiceType = ((ServiceTypeEnum)request.UpdateModel.ServiceType).ToString();
                 _unitOfWork.ServiceOrderRepository.Update(serviceOrder);
                 var result = await _unitOfWork.SaveChangesAsync();
+                await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateOrderService", $"{request.Id}");
                 return result;
             }
         }

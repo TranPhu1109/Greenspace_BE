@@ -29,6 +29,20 @@ namespace GreenSpace.Infrastructure.Repositories.MongoDbs
             return cart is not null;
         }
 
+        public async Task<bool> RemoveProductFromCartAsync(Guid userId, Guid productId)
+        {
+            var cart = await cartCollection.Find(x => x.UserId == userId && x.IsCurrent).FirstOrDefaultAsync();
+            var cartItem = cart?.Items.FirstOrDefault(i => i.ProductId == productId);
+
+            if (cartItem != null)
+            {
+                cart.Items.Remove(cartItem);
+                await cartCollection.ReplaceOneAsync(x => x.UserId == userId && x.IsCurrent, cart);
+                return true;
+            }
+            return false;
+        }
+
         public async Task<CartViewModel?> GetCartByUserIdAsync(Guid userId)
         {
             var cart = (await cartCollection.FindAsync(x => x.UserId == userId && x.IsCurrent)).FirstOrDefault();

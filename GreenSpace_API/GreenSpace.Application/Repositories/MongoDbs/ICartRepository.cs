@@ -15,5 +15,7 @@ namespace GreenSpace.Application.Repositories.MongoDbs
         public Task<bool> DeleteCartASync(Guid userId);
         public Task<CartViewModel?> UpdateCartAsync(CartEntity entity);
 
+         public  Task<bool> RemoveProductFromCartAsync(Guid userId, Guid productId);
+
     }
 }

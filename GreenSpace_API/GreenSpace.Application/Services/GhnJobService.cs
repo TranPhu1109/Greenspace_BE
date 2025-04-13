@@ -102,7 +102,7 @@ namespace GreenSpace.Application.Services
                     continue;
                 }
             }
-            var complaint = await _unitOfWork.ComplaintRepository.WhereAsync(x => x.DeliveryCode != null && x.ComplaintType == ComplaintTypeEnum.ProductReturn.ToString());
+            var complaint = await _unitOfWork.ComplaintRepository.WhereAsync(x => x.DeliveryCode != null && x.Status >6);
             foreach (var item in complaint)
             {
                 try

@@ -70,7 +70,10 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
                 foreach (var cartItem in cart.Items)
                 {
                     var product = await _unitOfWork.ProductRepository.GetByIdAsync(cartItem.ProductId);
-
+                    if (!request.CreateModel.SelectedProductIds.Contains(cartItem.ProductId))
+                    {
+                        continue; 
+                    }
                     if (product == null)
                     {
                         throw new ApplicationException($"Product with ID {cartItem.ProductId} not found");
@@ -95,9 +98,11 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
                     product.Stock -= cartItem.Quantity;
                     _unitOfWork.ProductRepository.Update(product);
                     orderedProducts.Add(product);
+                    await _cartRepository.RemoveProductFromCartAsync(request.CreateModel.UserId, cartItem.ProductId);
+
                 }
 
-                await _cartRepository.DeleteCartASync(request.CreateModel.UserId);
+                //await _cartRepository.DeleteCartASync(request.CreateModel.UserId);
 
                 order.TotalAmount = totalAmount + request.CreateModel.ShipPrice;
 

@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using GreenSpace.Application.SignalR;
 using GreenSpace.Application.ViewModels.Category;
 using GreenSpace.Application.ViewModels.Products;
 using GreenSpace.Application.ViewModels.ServiceOrder;
 using GreenSpace.Domain.Entities;
 using GreenSpace.Domain.Enum;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -39,16 +41,18 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
             private readonly IMapper _mapper;
             private ILogger<CommandHandler> _logger;
             private AppSettings _appSettings;
-
+            private readonly IHubContext<SignalrHub> _hubContext;
             public CommandHandler(IUnitOfWork unitOfWork,
-                    IMapper mapper,
                     ILogger<CommandHandler> logger,
-                    AppSettings appSettings)
+                    IMapper mapper,
+                    AppSettings appSettings,
+                   IHubContext<SignalrHub> hubContext)
             {
                 _unitOfWork = unitOfWork;
-                _mapper = mapper;
                 _logger = logger;
+                _mapper = mapper;
                 _appSettings = appSettings;
+                _hubContext = hubContext;
             }
 
             public async Task<ServiceOrderViewModel> Handle(CreateServiceOrderCommand request, CancellationToken cancellationToken)
@@ -118,6 +122,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
 
                 await _unitOfWork.ServiceOrderRepository.AddAsync(serviceOrder);
                 await _unitOfWork.SaveChangesAsync();
+                await _hubContext.Clients.All.SendAsync("messageReceived", "CreateOrderService", $"{serviceOrder.Id}");
                 return _mapper.Map<ServiceOrderViewModel>(serviceOrder);
             }
 

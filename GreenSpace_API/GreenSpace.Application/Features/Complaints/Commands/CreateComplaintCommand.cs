@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using GreenSpace.Application.SignalR;
 using GreenSpace.Application.ViewModels.Blogs;
 using GreenSpace.Application.ViewModels.Complaints;
 using GreenSpace.Application.ViewModels.ServiceOrder;
 using GreenSpace.Domain.Entities;
 using GreenSpace.Domain.Enum;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -38,16 +40,18 @@ namespace GreenSpace.Application.Features.Complaints.Commands
             private readonly IMapper _mapper;
             private ILogger<CommandHandler> _logger;
             private AppSettings _appSettings;
-
+            private readonly IHubContext<SignalrHub> _hubContext;
             public CommandHandler(IUnitOfWork unitOfWork,
-                    IMapper mapper,
                     ILogger<CommandHandler> logger,
-                    AppSettings appSettings)
+                    IMapper mapper,
+                    AppSettings appSettings,
+                   IHubContext<SignalrHub> hubContext)
             {
                 _unitOfWork = unitOfWork;
-                _mapper = mapper;
                 _logger = logger;
+                _mapper = mapper;
                 _appSettings = appSettings;
+                _hubContext = hubContext;
             }
 
             public async Task<ComplaintViewModel> Handle(CreateComplaintCommand request, CancellationToken cancellationToken)
@@ -106,7 +110,7 @@ namespace GreenSpace.Application.Features.Complaints.Commands
 
                 var ViewModel = _mapper.Map<ComplaintViewModel>(complaint);
 
-
+                await _hubContext.Clients.All.SendAsync("messageReceived", "CreateComplaint", $"{complaint.Id}");
                 return ViewModel;
 
             }

@@ -9,5 +9,6 @@ namespace GreenSpace.Application.ViewModels.OrderProducts
         public string Phone { get; set; } = string.Empty;
         public decimal ShipPrice { get; set; }
         //public List<ItemProductViewModel>? Products { get; set; }
+        public List<Guid> SelectedProductIds { get; set; } 
     }
 }

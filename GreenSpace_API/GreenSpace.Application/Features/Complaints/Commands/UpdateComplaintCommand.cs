@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
+using GreenSpace.Application.SignalR;
 using GreenSpace.Application.ViewModels.Blogs;
 using GreenSpace.Application.ViewModels.Complaints;
 using GreenSpace.Domain.Entities;
 using GreenSpace.Domain.Enum;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -37,18 +39,18 @@ namespace GreenSpace.Application.Features.Complaints.Commands
             private readonly IMapper _mapper;
             private ILogger<CommandHandler> _logger;
             private AppSettings _appSettings;
-
-
-
+            private readonly IHubContext<SignalrHub> _hubContext;
             public CommandHandler(IUnitOfWork unitOfWork,
-                IMapper mapper, ILogger<CommandHandler> logger,
-                AppSettings appSettings)
+                    ILogger<CommandHandler> logger,
+                    IMapper mapper,
+                    AppSettings appSettings,
+                   IHubContext<SignalrHub> hubContext)
             {
                 _unitOfWork = unitOfWork;
-                _mapper = mapper;
                 _logger = logger;
+                _mapper = mapper;
                 _appSettings = appSettings;
-
+                _hubContext = hubContext;
             }
 
             public async Task<bool> Handle(UpdateComplaintCommand request, CancellationToken cancellationToken)
@@ -87,6 +89,7 @@ namespace GreenSpace.Application.Features.Complaints.Commands
                     }
                 }
                 _unitOfWork.ComplaintRepository.Update(complaint);
+                await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateComplain", $"{request.Id}");
                 return await _unitOfWork.SaveChangesAsync();
             }
         }
