@@ -6,6 +6,7 @@ using GreenSpace.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
 
 namespace GreenSpace.Application.Features.OrderProduct.Commands
 {
@@ -45,6 +46,18 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
 
             public async Task<OrderProductViewModel> Handle(CreateOrderFromCartCommand request, CancellationToken cancellationToken)
             {
+                var cart = await _cartRepository.GetCartByUserIdAsync(request.CreateModel.UserId);
+
+                if (cart == null || !cart.Items.Any())
+                {
+                    throw new ApplicationException("Cart is empty or not found");
+                }
+
+                var selectedItems = request.CreateModel.Products;
+                if (selectedItems == null || !selectedItems.Any())
+                {
+                    throw new ApplicationException("Không có sản phẩm nào được chọn để thanh toán.");
+                }
                 var order = new Order
                 {
                     Id = Guid.NewGuid(),
@@ -60,28 +73,17 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
                 decimal totalAmount = 0;
                 List<Product> orderedProducts = new List<Product>();
 
-                var cart = await _cartRepository.GetCartByUserIdAsync(request.CreateModel.UserId);
-
-                if (cart == null || !cart.Items.Any())
-                {
-                    throw new ApplicationException("Cart is empty or not found");
-                }
-
-                foreach (var cartItem in cart.Items)
+                foreach (var cartItem in selectedItems)
                 {
                     var product = await _unitOfWork.ProductRepository.GetByIdAsync(cartItem.ProductId);
-                    if (!request.CreateModel.SelectedProductIds.Contains(cartItem.ProductId))
-                    {
-                        continue; 
-                    }
                     if (product == null)
                     {
-                        throw new ApplicationException($"Product with ID {cartItem.ProductId} not found");
+                        throw new ApplicationException($"Sản phẩm với ID {cartItem.ProductId} không tồn tại");
                     }
 
                     if (product.Stock < cartItem.Quantity)
                     {
-                        throw new ApplicationException($"Only {product.Stock} units of {product.Name} are available");
+                        throw new ApplicationException($"Chỉ còn {product.Stock} sản phẩm {product.Name} trong kho");
                     }
 
                     var orderDetail = new OrderDetail
@@ -98,11 +100,10 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
                     product.Stock -= cartItem.Quantity;
                     _unitOfWork.ProductRepository.Update(product);
                     orderedProducts.Add(product);
-                    await _cartRepository.RemoveProductFromCartAsync(request.CreateModel.UserId, cartItem.ProductId);
 
                 }
 
-                //await _cartRepository.DeleteCartASync(request.CreateModel.UserId);
+                await _cartRepository.RemoveItemsAsync(request.CreateModel.UserId, selectedItems.Select(x => x.ProductId).ToList());
 
                 order.TotalAmount = totalAmount + request.CreateModel.ShipPrice;
 

@@ -13,6 +13,7 @@ namespace GreenSpace.Domain.Enum
         Accountant,
         Designer,
         Manager,
-        Admin
+        Admin,
+        Contructor,
     }
 }
