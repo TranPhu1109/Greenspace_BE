@@ -36,7 +36,15 @@ app.MapControllers();
 app.MapHub<SignalrHub>("/hub");
 
 
-app.Run();
+try
+{
+    app.Run();
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex);
+    throw;
+}
 
 
 void ApplyMigration()
