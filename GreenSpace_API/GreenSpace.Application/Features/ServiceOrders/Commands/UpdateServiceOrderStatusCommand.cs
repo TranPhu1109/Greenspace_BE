@@ -87,7 +87,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 _unitOfWork.ServiceOrderRepository.Update(servicerOrder);
 
                 var result = await _unitOfWork.SaveChangesAsync();
-                await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateOrderService", $"{request.Id}");
+                await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateOrderService", $"{request.Id} - {(ServiceOrderStatus)request.UpdateModel.Status}");
                 
                 return result;
             }
