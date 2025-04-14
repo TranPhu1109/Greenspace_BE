@@ -8,6 +8,6 @@ public class WebManagerConfiguration : IEntityTypeConfiguration<WebManager>
 {
     public void Configure(EntityTypeBuilder<WebManager> builder)
     {
-        builder.HasNoKey();
+        builder.HasKey(x => x.Id);
     }
 }

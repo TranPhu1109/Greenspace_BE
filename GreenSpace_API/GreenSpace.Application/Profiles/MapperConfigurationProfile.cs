@@ -30,6 +30,8 @@ using CloudinaryDotNet.Core;
 using GreenSpace.Application.ViewModels.OrderDetail;
 using GreenSpace.Application.ViewModels._3PartyShip;
 using GreenSpace.Application.ViewModels.ComplaintDetail;
+using GreenSpace.Application.ViewModels.Document;
+using GreenSpace.Application.ViewModels.Banner;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -219,6 +221,15 @@ public class MapperConfigurationProfile : Profile
             .ReverseMap();
         CreateMap<ComplaintDetail, ComplaintDetailCreateModel>().ReverseMap();
         CreateMap<ComplaintDetail, ComplaintDetailViewModel>().ReverseMap();
+
+        CreateMap<WebManager, BannerViewModel>().ReverseMap();
+        CreateMap<WebManager, BannerCreateModel>().ReverseMap();
+
+        CreateMap<WebManager, LogoViewModel>().ReverseMap();
+        CreateMap<WebManager, LogoCreateModel>().ReverseMap();
+
+        CreateMap<Document, DocumentViewModel>().ReverseMap();
+        CreateMap<Document, DocumentCreateModel>().ReverseMap();
 
     }
 }

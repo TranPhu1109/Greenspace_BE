@@ -33,4 +33,7 @@ public interface IUnitOfWork
     IOrderDetailRepository OrderDetailRepository { get; }
     IComplaintRepository ComplaintRepository { get; }
 
+    IWebManagerRepository WebManagerRepository { get; }
+    IDocumentRepository DocumentRepository { get; }
+
 }
