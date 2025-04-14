@@ -28,7 +28,7 @@ jobs:
         with:
           creds: ${{ secrets.greenspace_SPN }}
 
-      - name: Deploy Container App (image only)
+      - name: Deploy Container App (build + push + deploy)
         uses: azure/container-apps-deploy-action@v1
         with:
           appSourcePath: ${{ github.workspace }}
@@ -39,13 +39,20 @@ jobs:
           containerAppName: ${{ env.CONTAINER_APP_NAME }}
           containerAppEnvironment: ${{ env.CONTAINER_APP_ENVIRONMENT_NAME }}
           resourceGroup: ${{ env.RESOURCE_GROUP }}
-
-      - name: Set connection string via az CLI 
-        run: |
-          az containerapp update \
-            --name ${{ env.CONTAINER_APP_NAME }} \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            --set-env-vars \
-              ConnectionStrings__DefaultConnection="${{ secrets.DEFAULT_CONNECTION }}" \
-              ASPNETCORE_ENVIRONMENT=Production
-              
+          environmentVariables: |
+            ConnectionStrings__DefaultConnection=${{ secrets.DEFAULT_CONNECTION }}
+            ConnectionStrings__MongoDbConnection=${{ secrets.MONGO_CONNECTION }}
+            JWTOptions__Issuer=green-space
+            JWTOptions__Audience=green-space-client
+            JWTOptions__Secret=${{ secrets.JWT_SECRET }}
+            CloudinarySettings__CloudName=${{ secrets.CLOUD_NAME }}
+            CloudinarySettings__ApiKey=${{ secrets.CLOUD_APIKEY }}
+            CloudinarySettings__ApiSecret=${{ secrets.CLOUD_APISECRET }}
+            GHN__ShopId=${{ secrets.GHN_SHOPID }}
+            GHN__Token=${{ secrets.GHN_TOKEN }}
+            FirebaseSettings__ApiKeY=${{ secrets.FIREBASE_APIKEY }}
+            FirebaseSettings__AuthEmail=${{ secrets.FIREBASE_EMAIL }}
+            FirebaseSettings__AuthPassword=${{ secrets.FIREBASE_PASSWORD }}
+            VnPay__Vnp_TmnCode=${{ secrets.VNP_TMNCODE }}
+            VnPay__Vnp_HashSecret=${{ secrets.VNP_HASHSECRET }}
+            ASPNETCORE_ENVIRONMENT=Production
