@@ -9,9 +9,8 @@ RUN apt-get update && \
 #USER $APP_UID
 WORKDIR /app
 COPY appsettings*.json /app/
-ENV ASPNETCORE_URLS=http://+:8080;https://+:8081
-EXPOSE 8080
-EXPOSE 8081
+ENV ASPNETCORE_URLS=http://+:80
+EXPOSE 80
 
 
 # This stage is used to build the service project
@@ -37,4 +36,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 #ENTRYPOINT ["dotnet", "GreenSpace.WebAPI.dll"]
-ENTRYPOINT ["dotnet", "GreenSpace.WebAPI.dll", "--urls", "http://0.0.0.0:8080"]
+ENTRYPOINT ["dotnet", "GreenSpace.WebAPI.dll"]

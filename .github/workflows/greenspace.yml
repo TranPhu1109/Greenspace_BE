@@ -61,4 +61,5 @@ jobs:
                 FirebaseSettings__AuthPassword="${{ secrets.FIREBASE_PASSWORD }}" \
                 VnPay__Vnp_TmnCode="${{ secrets.VNP_TMNCODE }}" \
                 VnPay__Vnp_HashSecret="${{ secrets.VNP_HASHSECRET }}" \
-                ASPNETCORE_ENVIRONMENT=Production
+                ASPNETCORE_ENVIRONMENT=Production \
+             --target-port 80
