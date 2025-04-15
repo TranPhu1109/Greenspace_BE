@@ -57,14 +57,33 @@ namespace GreenSpace.WebAPI.Controllers
         => Ok(await _mediator.Send(new GetUserByIdQuery{ Id = id }));
 
 
-
+        /// <summary>
+        /// Lấy tất cả designer
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet("Designer")]
         public async Task<IActionResult> GetDesigner([FromQuery] int pageNumber = 0,
                                      [FromQuery] int pageSize = 10)
-=> Ok(await _mediator.Send(new GetAllDesignerQuery { PageNumber = pageNumber, PageSize = pageSize }));
+        => Ok(await _mediator.Send(new GetAllDesignerQuery { PageNumber = pageNumber, PageSize = pageSize }));
+
+        /// <summary>
+        /// Lấy tất cả contructor
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("Contructor")]
+        public async Task<IActionResult> GetContructor([FromQuery] int pageNumber = 0,
+                                     [FromQuery] int pageSize = 10)
+        => Ok(await _mediator.Send(new GetAllContructorQuery { PageNumber = pageNumber, PageSize = pageSize }));
 
 
         /// <summary>

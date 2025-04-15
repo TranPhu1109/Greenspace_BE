@@ -22,7 +22,12 @@ namespace GreenSpace.WebAPI.Controllers
         {
             _mediator = mediator;
         }
-
+        /// <summary>
+        /// Tất cả task
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         #region Queries
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -33,6 +38,35 @@ namespace GreenSpace.WebAPI.Controllers
                                             [FromQuery] int pageSize = 10)
         => Ok(await _mediator.Send(new GetAllWorkTaskQuery { }));
 
+        /// <summary>
+        /// Task của Designer
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("Designer")]
+        public async Task<IActionResult> GetAllDesignerTask(
+                                            [FromQuery] int pageNumber = 0,
+                                            [FromQuery] int pageSize = 10)
+        => Ok(await _mediator.Send(new GetAllDesignTaskQuery { }));
+
+        /// <summary>
+        /// Task của Contructor
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("Contructor")]
+        public async Task<IActionResult> GetAllContructorTask(
+                                            [FromQuery] int pageNumber = 0,
+                                            [FromQuery] int pageSize = 10)
+        => Ok(await _mediator.Send(new GetAllContructTaskQuery { }));
 
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -55,7 +89,7 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [HttpPost]
+        [HttpPost("Design")]
         public async Task<IActionResult> Create([FromBody] WorkTaskCreateModel model)
         {
             var result = await _mediator.Send(new CreateWorkTasksCommand { CreateModel = model });
@@ -66,6 +100,19 @@ namespace GreenSpace.WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { Id = result.Id }, new { Message = " created Successfully", Data = result });
         }
 
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPost("Contruction")]
+        public async Task<IActionResult> CreateContructTask([FromBody] WorkTaskCreateModel model)
+        {
+            var result = await _mediator.Send(new CreateContructTaskCommand { CreateModel = model });
+            if (result is null)
+            {
+                return BadRequest("Create Fail!");
+            }
+            return CreatedAtAction(nameof(GetById), new { Id = result.Id }, new { Message = " created Successfully", Data = result });
+        }
 
 
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
