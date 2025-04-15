@@ -12,7 +12,6 @@ namespace GreenSpace.Application.ViewModels.WorkTasks
 
         public Guid UserId { get; set; }
 
-
         public string Note { get; set; } = string.Empty;
     }
 }

@@ -33,6 +33,12 @@ namespace GreenSpace.Domain.Enum
         DoneDeterminingDesignPrice = 22,
         DoneDeterminingMaterialPrice = 23,
         ReDeterminingDesignPrice = 24,
-        ExchangeProdcut = 25,      
+        ExchangeProdcut = 25,
+        WaitForScheduling = 26,             // chờ lên lịch
+        Installing = 27,                  // đang lắp đặt
+        DoneInstalling = 28,             // đã lắp đặt xong
+        ReInstall = 29,                     // lắp đặt lại
+        CustomerConfirm = 30,                // khách hàng xác nhận
+        Successfully = 31,                // thành công
     }
 }

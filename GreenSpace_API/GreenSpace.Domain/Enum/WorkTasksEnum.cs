@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GreenSpace.Domain.Enum
+﻿namespace GreenSpace.Domain.Enum
 {
     public enum WorkTasksEnum
     {
@@ -14,7 +8,14 @@ namespace GreenSpace.Domain.Enum
         DoneDesign = 3,
         DesignDetail = 4,
         DoneDesignDetail = 5,
-        Completed = 6,
-           
+        Completed = 6,  
+
+    }
+    public enum  ContructTaksEnum
+    {
+        Installing = 0,
+        DoneInstalling = 1,
+        ReInstall = 2,
+        Completed = 3,
     }
 }
