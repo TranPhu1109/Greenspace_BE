@@ -81,7 +81,7 @@ namespace GreenSpace.WebAPI.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [HttpGet("{id}/Users")]
-        public async Task<IActionResult> GetProductsByCategoryId([FromRoute] Guid id)
+        public async Task<IActionResult> GetWorkTaskByUserId([FromRoute] Guid id)
         => Ok(await _mediator.Send(new GetWorkTaskByUserIdQuery { UserId = id}));
         #endregion
 

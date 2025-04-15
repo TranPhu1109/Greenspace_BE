@@ -3,6 +3,7 @@ using GreenSpace.Application.Features.Blogs.Queries;
 using GreenSpace.Application.Features.Complaints.Commands;
 using GreenSpace.Application.Features.Complaints.Queries;
 using GreenSpace.Application.Features.ServiceOrders.Queries;
+using GreenSpace.Application.Features.WorkTasks.Queries;
 using GreenSpace.Application.ViewModels.Blogs;
 using GreenSpace.Application.ViewModels.Complaints;
 using MediatR;
@@ -33,7 +34,12 @@ namespace GreenSpace.WebAPI.Controllers
                                              [FromQuery] int pageSize = 10)
         => Ok(await _mediator.Send(new GetAllComplaintQuery { PageNumber = pageNumber, PageSize = pageSize }));
 
-
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpGet("{id}/Users")]
+        public async Task<IActionResult> GetComplaintByUserId([FromRoute] Guid id)
+=> Ok(await _mediator.Send(new GetComplaintByUserIdQuery { UserId = id }));
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]

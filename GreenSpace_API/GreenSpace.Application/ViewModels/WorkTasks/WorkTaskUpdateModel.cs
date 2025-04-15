@@ -12,7 +12,8 @@ namespace GreenSpace.Application.ViewModels.WorkTasks
         public Guid ServiceOrderId { get; set; }
 
         public Guid UserId { get; set; }
-
+        public DateOnly? DateAppointment { get; set; }
+        public TimeOnly? TimeAppointment { get; set; }
         public int Status { get; set; } = default!;
         public string Note { get; set; } = string.Empty;
     }

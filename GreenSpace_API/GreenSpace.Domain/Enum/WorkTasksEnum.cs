@@ -13,9 +13,10 @@
     }
     public enum  ContructTaksEnum
     {
-        Installing = 0,
-        DoneInstalling = 1,
-        ReInstall = 2,
-        Completed = 3,
+        Pending = 0,                 // chờ xử lí
+        Installing = 1,               // đang hỗ trợ lắp đặt
+        DoneInstalling = 2,              // hoàn thành lắp đặt
+        ReInstall = 3,                     // làm lại
+        Completed = 4,                   
     }
 }
