@@ -49,6 +49,30 @@ public class WalletsController : BaseController
     }
 
     /// <summary>
+    /// Hoàn tiền
+    /// </summary>
+    /// <param name="id">ServiceOrderId</param>
+    /// <returns></returns>
+    [Authorize]
+    [HttpPost("refund-complaint")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> RefundForComplaint([FromQuery] Guid id)
+    {
+        if (id == Guid.Empty)
+        {
+            return BadRequest("ServiceOrderId is required.");
+        }
+
+        var result = await mediator.Send(new RefundForComplaintCommand { ComplaintId = id });
+
+        if (!result)
+            return StatusCode((int)HttpStatusCode.InternalServerError, "Refund failed.");
+
+        return Ok("Refund successful.");
+    }
+    /// <summary>
     /// Hoàn lại tiền  cho đơn hàng.
     /// </summary>
     /// <param name="id">ServiceOrderId</param>
