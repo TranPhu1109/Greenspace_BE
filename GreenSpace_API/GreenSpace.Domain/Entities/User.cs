@@ -39,6 +39,7 @@ namespace GreenSpace.Domain.Entities
 
         public Guid WalletId { get; set; }
         public UsersWallet UsersWallet { get; set; } = default!;
+        public ICollection<Address> Addresses { get; set; } = new List<Address>();
 
     }
 }
