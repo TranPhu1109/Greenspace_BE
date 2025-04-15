@@ -65,7 +65,7 @@ namespace GreenSpace.WebAPI.Controllers
             {
                 return BadRequest("Create Fail!");
             }
-            return Ok("create successful");
+            return CreatedAtAction(nameof(GetById), new { Id = result.Id }, new { Message = " created Successfully", Data = result });
         }
 
         [ProducesResponseType((int)HttpStatusCode.Created)]
@@ -79,7 +79,7 @@ namespace GreenSpace.WebAPI.Controllers
             {
                 return BadRequest("Create Fail!");
             }
-            return Ok();
+            return CreatedAtAction(nameof(GetById), new { Id = result.Id }, new { Message = " created Successfully", Data = result });
         }
 
 
