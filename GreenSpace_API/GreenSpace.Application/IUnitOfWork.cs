@@ -32,5 +32,6 @@ public interface IUnitOfWork
     IOrderRepository OrderRepository { get; }
     IOrderDetailRepository OrderDetailRepository { get; }
     IComplaintRepository ComplaintRepository { get; }
+    IAddressRepository AddressRepository { get; }
 
 }

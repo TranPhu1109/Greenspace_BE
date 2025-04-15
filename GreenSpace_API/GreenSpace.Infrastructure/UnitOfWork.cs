@@ -37,7 +37,8 @@ public class UnitOfWork : IUnitOfWork
     IOrderDetailRepository orderDetailRepository,
     IComplaintRepository complaintRepository,
     IWebManagerRepository webManagerRepository,
-    IDocumentRepository documentRepository
+    IDocumentRepository documentRepository,
+    IAddressRepository addressRepository
     )
     {
         _dbContext = dbcontext;
@@ -68,6 +69,7 @@ public class UnitOfWork : IUnitOfWork
         ComplaintRepository = complaintRepository;
         WebManagerRepository = webManagerRepository;
         DocumentRepository = documentRepository;
+        AddressRepository = addressRepository;
     }
     public IUserRepository UserRepository { get; }
     public IProductRepository ProductRepository { get; }
@@ -98,6 +100,7 @@ public class UnitOfWork : IUnitOfWork
     public IComplaintRepository ComplaintRepository { get; }
     public IWebManagerRepository WebManagerRepository { get; }
     public IDocumentRepository DocumentRepository { get; }
+    public IAddressRepository AddressRepository { get; }
     public async Task<bool> SaveChangesAsync() => (await _dbContext.SaveChangesAsync()) > 0;
 
 }
