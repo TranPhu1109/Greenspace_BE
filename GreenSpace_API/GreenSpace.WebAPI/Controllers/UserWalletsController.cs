@@ -47,6 +47,33 @@ public class WalletsController : BaseController
 
         return Ok("Refund successful.");
     }
+
+    /// <summary>
+    /// Hoàn lại tiền  cho đơn hàng.
+    /// </summary>
+    /// <param name="id">ServiceOrderId</param>
+    /// <returns></returns>
+    [Authorize]
+    [HttpPost("refund-order")]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    public async Task<IActionResult> RefundOrder([FromQuery] Guid id)
+    {
+        if (id == Guid.Empty)
+        {
+            return BadRequest("OrderId is required.");
+        }
+
+        var result = await mediator.Send(new RefundOrderCommand { OrderId = id });
+
+        if (!result)
+            return StatusCode((int)HttpStatusCode.InternalServerError, "Refund failed.");
+
+        return Ok("Refund successful.");
+    }
+
+
     [HttpGet("vn-pay/response")]
     public async Task<IActionResult> VNPayResponse([FromQuery] string returnUrl)
     {
