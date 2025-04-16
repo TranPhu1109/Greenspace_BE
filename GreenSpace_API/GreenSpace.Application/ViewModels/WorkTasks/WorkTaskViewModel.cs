@@ -17,6 +17,8 @@ namespace GreenSpace.Application.ViewModels.WorkTasks
 
         public string  Status { get; set; } = string.Empty;
         public string Note { get; set; } = string.Empty;
+        public DateOnly? DateAppointment { get; set; }
+        public TimeOnly? TimeAppointment { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime? ModificationDate { get; set; }
         public ServiceOrderViewModel ServiceOrder { get; set; } = null!;

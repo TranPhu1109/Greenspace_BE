@@ -27,8 +27,8 @@ public class ServiceOrder :BaseEntity
     public string Description { get; set; } = string.Empty;
 
     public Guid? ImageId { get; set; } = default!;
-    public Guid? RecordDesignId { get; set; } = default!;
-    public Guid? RecordSketchId { get; set; } = default!;
+    //public Guid? RecordDesignId { get; set; } = default!;
+    //public Guid? RecordSketchId { get; set; } = default!;
     public string DeliveryCode { get; set; } = string.Empty;
 
     public string Report { get; set; } = string.Empty;
@@ -41,7 +41,8 @@ public class ServiceOrder :BaseEntity
 
     public ICollection<ServiceOrderDetail> ServiceOrderDetails { get; set; } = new List<ServiceOrderDetail>();
 
- 
+    public ICollection<RecordDesign> RecordDesigns { get; set; } = new List<RecordDesign>();
+    public ICollection<RecordSketch> RecordSketches { get; set; } = new List<RecordSketch>();
 
     public ICollection<WorkTask> WorkTask { get; set; } = new List<WorkTask>();
     public ICollection<ServiceFeedback> ServiceFeedbacks { get; set; } = new List<ServiceFeedback>();
