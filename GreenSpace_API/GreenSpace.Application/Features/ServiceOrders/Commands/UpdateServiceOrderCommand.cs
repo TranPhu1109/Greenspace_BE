@@ -74,11 +74,11 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                     {
                         // Đếm số lượng RecordSketch hiện có của ServiceOrder này
                         var existRecord = await _unitOfWork.RecordSketchRepository.WhereAsync(rs => rs.ServiceOrderId == serviceOrder.Id);
-                        if (existRecord.Count >= 3)
+                        if (existRecord.Count > 3)
                         {
                             throw new NotFoundException($"Sorry, you have reached the maximum number of edits!");
                         }
-                        if (existRecord.Count <= 2) 
+                        if (existRecord.Count <= 3) 
                         {
                             // Nếu chưa có bản ghi thiết kế nào thì lưu ảnh cũ vào RecordSketch 
                             if (existRecord.Count == 0)
@@ -133,12 +133,12 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                     if (request.UpdateModel.Status == (int)ServiceOrderStatus.AssignToDesigner || request.UpdateModel.Status == (int)ServiceOrderStatus.ReDesign)
                     {
                         var existDesignRecords = await _unitOfWork.RecordDesignRepository.WhereAsync(rd => rd.ServiceOrderId == serviceOrder.Id);
-                        if (existDesignRecords.Count >= 3)
+                        if (existDesignRecords.Count > 3)
                         {
                             throw new NotFoundException($"Sorry, you have reached the maximum number of edits!");
                         }
 
-                        if (existDesignRecords.Count <= 2)
+                        if (existDesignRecords.Count <= 3)
                         {
 
                             // lưu ảnh mới vào RecordDesign

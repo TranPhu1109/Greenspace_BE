@@ -34,6 +34,8 @@ public class ServiceOrder :BaseEntity
     public string Report { get; set; } = string.Empty;
 
     public int Status { get; set; } = default;
+    public decimal DepositPercentage { get; set; } = decimal.One;
+    public decimal RefundPercentage { get; set; } = decimal.One;
     public User User { get; set; } = default!;
     public ICollection<Bill> Bills { get; set; } = new List<Bill>();
 
