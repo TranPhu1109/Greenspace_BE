@@ -32,6 +32,7 @@ using GreenSpace.Application.ViewModels._3PartyShip;
 using GreenSpace.Application.ViewModels.ComplaintDetail;
 using GreenSpace.Application.ViewModels.Document;
 using GreenSpace.Application.ViewModels.Banner;
+using GreenSpace.Application.ViewModels.Address;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -231,6 +232,9 @@ public class MapperConfigurationProfile : Profile
 
         CreateMap<Document, DocumentViewModel>().ReverseMap();
         CreateMap<Document, DocumentCreateModel>().ReverseMap();
+
+        CreateMap<Address, CreateAddressModel>().ReverseMap();
+        CreateMap<Address, AddressViewModel>().ReverseMap();
 
     }
 }
