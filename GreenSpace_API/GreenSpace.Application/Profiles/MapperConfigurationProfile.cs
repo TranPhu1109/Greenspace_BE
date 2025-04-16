@@ -32,6 +32,7 @@ using GreenSpace.Application.ViewModels._3PartyShip;
 using GreenSpace.Application.ViewModels.ComplaintDetail;
 using GreenSpace.Application.ViewModels.Document;
 using GreenSpace.Application.ViewModels.Banner;
+using GreenSpace.Application.ViewModels.Address;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -119,6 +120,7 @@ public class MapperConfigurationProfile : Profile
                .ReverseMap(); 
         CreateMap<ServiceOrder, ServiceOrderCreateModel>().ReverseMap();
         CreateMap<ServiceOrder, ServiceOrderUpdateDesignPriceModel>().ReverseMap();
+        CreateMap<ServiceOrder, ServiceOrderUpdateDepositModel>().ReverseMap();
         CreateMap<ServiceOrder, ServiceOrderUpdateDesignDetailModel>().ReverseMap();
         CreateMap<ServiceOrder, ServiceOrderNoUsingCreateModel>()
              .ForMember(dest => dest.ServiceOrderDetails, opt => opt.Ignore())
@@ -230,6 +232,9 @@ public class MapperConfigurationProfile : Profile
 
         CreateMap<Document, DocumentViewModel>().ReverseMap();
         CreateMap<Document, DocumentCreateModel>().ReverseMap();
+
+        CreateMap<Address, CreateAddressModel>().ReverseMap();
+        CreateMap<Address, AddressViewModel>().ReverseMap();
 
     }
 }

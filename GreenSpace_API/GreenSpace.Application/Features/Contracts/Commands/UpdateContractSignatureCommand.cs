@@ -57,7 +57,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                     throw new Exception($"Contract with ID {request.ContractId} does not exist or has no PDF file!");
                 }
 
-                var order = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(contract.ServiceOrderId, x => x.User);
+                var order = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(contract.ServiceOrderId);
 
                 if (order == null)
                     throw new Exception($"ServiceOrderID not found with ID {contract.ServiceOrderId}");
@@ -70,6 +70,8 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                     Phone = contract.Phone,
                     DesignPrice = order.DesignPrice ?? 0,
                     ServiceOrderId = contract.ServiceOrderId,
+                    DepositPercentage = order.DepositPercentage,
+                    RefundPercentage = order.RefundPercentage,
                     ModificatedBy = claimsService.GetCurrentUser,
                 };
 
@@ -105,6 +107,8 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                 public string Phone { get; set; } = default!;
                 public decimal DesignPrice { get; set; }
                 public Guid ServiceOrderId { get; set; } = default!;
+                public decimal DepositPercentage { get; set; }
+                public decimal RefundPercentage { get; set; }
                 public Guid? ModificatedBy { get; set; } = default!;
             }
 
@@ -116,6 +120,8 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                
                 var imageUrl = "https://res.cloudinary.com/dyn6t5fdh/image/upload/v1743350140/u7obnw76tjwmoexzwmkk.jpg";
                 var imageData = await new HttpClient().GetByteArrayAsync(imageUrl);
+
+             
 
                 QuestPDF.Fluent.Document.Create(container =>
                 {
@@ -148,16 +154,21 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                             col.Item().Text($"Email: {contract.Email}");
                             col.Item().Text($"Số điện thoại: {contract.Phone}");
 
+                            decimal deposit = contract.DesignPrice * contract.DepositPercentage / 100;
+                            decimal refund = deposit * contract.RefundPercentage / 100;
+                            decimal remaining = contract.DesignPrice - deposit;
+
                             col.Item().PaddingTop(10).Text("Nội dung hợp đồng").Bold();
                             col.Item().Text("Bên B được sửa tối đa 2 lần ở giai đoạn phát thảo.");
                             col.Item().Text("Bên B được sửa tối đa 3 lần ở giai đoạn thiết kế không gian.");
                             col.Item().Text($"Tổng tiền thiết kế: {contract.DesignPrice:N0} VNĐ.");
-                            col.Item().Text($"Đặt cọc 50%: {contract.DesignPrice / 2:N0} VNĐ.");
-                            col.Item().Text($"Hoàn trả nếu ngưng giữa chừng: {((contract.DesignPrice / 2) * 0.3m):N0} VNĐ.");
-                            col.Item().Text($"Nếu ngưng khi đã hoàn tất thiết kế: phải trả đủ {contract.DesignPrice / 2:N0} VNĐ.");
+                            col.Item().Text($"Đặt cọc {contract.DepositPercentage:0}% tiền thiết kế: {deposit:N0} VNĐ.");
+                            col.Item().Text($"Hoàn trả {contract.RefundPercentage:0}% tiền đặt cọc nếu ngưng giữa chừng giai đoạn thiết kế: {refund:N0} VNĐ.");
+                            col.Item().Text($"Nếu ngưng khi đã hoàn tất thiết kế chi tiết: phải trả đủ phần còn lại {remaining:N0} VNĐ.");
 
                             col.Item().PaddingTop(10).Text("ĐIỀU KHOẢN CHUNG").Bold();
                             col.Item().Text("Hai bên cam kết thực hiện đúng các điều khoản của hợp đồng.");
+                            col.Item().Text("Lưu ý hợp đồng chưa bao gồm các chi phí vật liệu và chi phí hỗ trợ lắp đặt.");
                             col.Item().Text("Hợp đồng có hiệu lực kể từ ngày ký kết.");
 
                             col.Item().PaddingTop(20).Text("ĐẠI DIỆN CÁC BÊN").Bold();
@@ -170,7 +181,11 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                             col.Item().PaddingTop(20).Row(row =>
                             {
                                 // Chữ ký người dùng (từ dữ liệu truyền vào)
-                                row.RelativeItem().AlignCenter().Image(signatureBytes).FitWidth();
+                                row.RelativeItem().AlignCenter().Column(colLeft =>
+                                {
+                                    colLeft.Item().Image(signatureBytes).FitWidth(); 
+                                    colLeft.Item().Text(contract.Name).Italic().FontSize(14); 
+                                });
 
                                 // Chữ ký cố định (hình ảnh cố định từ URL)
                                 row.RelativeItem().AlignCenter().PaddingLeft(10).Image(imageData).FitWidth();

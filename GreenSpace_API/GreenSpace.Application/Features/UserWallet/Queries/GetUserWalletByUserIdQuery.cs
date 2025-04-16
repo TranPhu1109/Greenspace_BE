@@ -34,7 +34,7 @@ namespace GreenSpace.Application.Features.UserWallet.Queries
             public async Task<WalletViewModel> Handle(GetUserWalletByUserIdQuery request, CancellationToken cancellationToken)
             {
 
-                var wallet = await _unitOfWork.WalletRepository.FirstOrDefaultAsync(x => x.UserId == request.UserId);
+                var wallet = await _unitOfWork.WalletRepository.FirstOrDefaultAsync(x => x.UserId == request.UserId,x => x.WalletLogs);
                 if (wallet is null) throw new BadRequestException($"User-{request.UserId} is not exist any Wallet!");
 
                 var result = _mapper.Map<WalletViewModel>(wallet);
