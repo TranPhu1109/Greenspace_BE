@@ -114,6 +114,8 @@ public class MapperConfigurationProfile : Profile
                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
                .ForMember(dest => dest.ServiceOrderDetails, opt => opt.MapFrom(src => src.ServiceOrderDetails))
                .ForMember(dest => dest.WorkTasks, opt => opt.MapFrom(src => src.WorkTask))
+               .ForMember(dest => dest.RecordSketches, opt => opt.MapFrom(src => src.RecordSketches))
+               .ForMember(dest => dest.RecordDesigns, opt => opt.MapFrom(src => src.RecordDesigns))
                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => ((ServiceOrderStatus)src.Status).ToString()))
                .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
                .ForMember(x => x.Email, opt => opt.MapFrom(x => x.User.Email))

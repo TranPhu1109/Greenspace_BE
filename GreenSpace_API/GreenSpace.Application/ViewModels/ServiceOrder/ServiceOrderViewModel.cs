@@ -1,5 +1,7 @@
 ﻿using GreenSpace.Application.ViewModels.Images;
 using GreenSpace.Application.ViewModels.ProductDetail;
+using GreenSpace.Application.ViewModels.RecordDesign;
+using GreenSpace.Application.ViewModels.RecordSketch;
 using GreenSpace.Application.ViewModels.ServiceOrderDetail;
 using GreenSpace.Application.ViewModels.WorkTasks;
 using GreenSpace.Domain.Entities;
@@ -48,5 +50,7 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
 
         public List<ServiceOrderDetailViewModel> ServiceOrderDetails { get; set; } = new List<ServiceOrderDetailViewModel>();
         public List<WorkTaskViewModel> WorkTasks { get; set; } = new();
+        public List<RecordSketchViewModel> RecordSketches { get; set; } = new();
+        public List<RecordDesignViewModel> RecordDesigns{ get; set; } = new();
     }
 }
