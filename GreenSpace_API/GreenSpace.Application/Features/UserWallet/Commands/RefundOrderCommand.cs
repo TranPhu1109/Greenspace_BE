@@ -29,7 +29,7 @@ public class RefundOrderCommand : IRequest<bool>
 
             if (request.OrderId == Guid.Empty)
             {
-                throw new Exception("ServiceOrderId is required.");
+                throw new Exception("OrderId is required.");
             }
             var bill = await unitOfWork.BillRepository.FirstOrDefaultAsync(x => x.OrderId == request.OrderId);
             if (bill == null)
@@ -54,7 +54,7 @@ public class RefundOrderCommand : IRequest<bool>
             var walletLog = new WalletLog
             {
                 Amount = refundAmount,
-                Source = $"Refund 30% for ServiceOrder {request.OrderId}",
+                Source = $"Refund 30% for Order {request.OrderId}",
                 TxnRef = DateTime.Now.Ticks.ToString(),
                 Type = nameof(WalletLogTypeEnum.Refund),
                 WalletId = userWallet.Id

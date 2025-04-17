@@ -117,7 +117,7 @@ public class MapperConfigurationProfile : Profile
                .ForMember(dest => dest.RecordSketches, opt => opt.MapFrom(src => src.RecordSketches))
                .ForMember(dest => dest.RecordDesigns, opt => opt.MapFrom(src => src.RecordDesigns))
                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => ((ServiceOrderStatus)src.Status).ToString()))
-               .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
+               //.ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
                .ForMember(x => x.Email, opt => opt.MapFrom(x => x.User.Email))
                .ReverseMap(); 
         CreateMap<ServiceOrder, ServiceOrderCreateModel>().ReverseMap();
@@ -189,7 +189,7 @@ public class MapperConfigurationProfile : Profile
         CreateMap<CartItemUpdateModel, CartItemEntity>().ReverseMap();
 
         CreateMap<Order, OrderProductViewModel>()
-             .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
+             //.ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
            
             .ReverseMap();
         //bill

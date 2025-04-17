@@ -3,7 +3,7 @@
 public class Order : BaseEntity
 {
     public Guid UserId { get; set; }
-
+    public string UserName { get; set; } = string.Empty;
     public DateTime OrderDate { get; set; }
 
     public decimal? TotalAmount { get; set; } = default!;

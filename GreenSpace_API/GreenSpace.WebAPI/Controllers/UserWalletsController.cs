@@ -62,7 +62,7 @@ public class WalletsController : BaseController
     {
         if (id == Guid.Empty)
         {
-            return BadRequest("ServiceOrderId is required.");
+            return BadRequest("ComplaintId is required.");
         }
 
         var result = await mediator.Send(new RefundForComplaintCommand { ComplaintId = id });
