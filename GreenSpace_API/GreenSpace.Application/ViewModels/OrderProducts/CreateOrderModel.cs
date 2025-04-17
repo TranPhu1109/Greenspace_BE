@@ -9,6 +9,7 @@ namespace GreenSpace.Application.ViewModels.OrderProducts
     public class CreateOrderModel
     {
         public Guid UserId { get; set; }
+        public string UserName { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public decimal ShipPrice { get; set; }

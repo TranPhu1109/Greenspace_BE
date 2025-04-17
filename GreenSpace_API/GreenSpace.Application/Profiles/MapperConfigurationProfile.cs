@@ -192,6 +192,7 @@ public class MapperConfigurationProfile : Profile
              //.ForMember(x => x.UserName, opt => opt.MapFrom(x => x.User.Name))
            
             .ReverseMap();
+
         //bill
         CreateMap<Bill, BillViewModel>()
             .ForMember(x => x.UserWalletId, opt => opt.MapFrom(x => x.UsersWalletId))

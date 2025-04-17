@@ -62,6 +62,7 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
                 {
                     Id = Guid.NewGuid(),
                     UserId = request.CreateModel.UserId,
+                    UserName = request.CreateModel.UserName,
                     Address = request.CreateModel.Address,
                     Phone = request.CreateModel.Phone,
                     ShipPrice = request.CreateModel.ShipPrice,
