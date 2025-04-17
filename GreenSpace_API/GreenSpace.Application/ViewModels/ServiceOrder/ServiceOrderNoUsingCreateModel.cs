@@ -12,7 +12,7 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
     {
         public Guid UserId { get; set; }
 
-
+        public string UserName { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
 
         public string CusPhone { get; set; } = string.Empty;

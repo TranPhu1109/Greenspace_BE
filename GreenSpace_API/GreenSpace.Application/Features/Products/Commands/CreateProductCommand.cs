@@ -61,6 +61,15 @@ namespace GreenSpace.Application.Features.Products.Commands
             {
                 _logger.LogInformation("Creating a new product: {ProductName}", request.CreateModel.Name);
 
+                // Kiểm tra tên sản phẩm đã tồn tại
+                var existProduct = await _unitOfWork.ProductRepository.FirstOrDefaultAsync(p => p.Name.ToLower() == request.CreateModel.Name.ToLower());
+
+                if (existProduct != null)
+                {
+
+                    throw new InvalidOperationException($"Product with name '{request.CreateModel.Name}' already exists.");
+                }
+
                 // Tạo mới Image
                 var image = _mapper.Map<Domain.Entities.Image>(request.CreateModel.Image);
                 image.Id = Guid.NewGuid();

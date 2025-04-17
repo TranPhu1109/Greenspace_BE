@@ -41,8 +41,8 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
         public string Description { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public string DeliveryCode { get; set; } = string.Empty;
-        public Guid? RecordDesignId { get; set; } = default!;
-        public Guid? RecordSketchId { get; set; } = default!;
+        //public Guid? RecordDesignId { get; set; } = default!;
+        //public Guid? RecordSketchId { get; set; } = default!;
         public decimal DepositPercentage { get; set; } = decimal.One;
         public decimal RefundPercentage { get; set; } = decimal.One;
         public DateTime CreationDate { get; set; }
