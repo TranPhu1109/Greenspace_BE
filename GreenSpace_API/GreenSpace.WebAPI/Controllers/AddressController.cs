@@ -1,5 +1,6 @@
 ﻿using GreenSpace.Application.Features.Address.Command;
 using GreenSpace.Application.Features.Address.Queries;
+using GreenSpace.Application.Features.Blogs.Commands;
 using GreenSpace.Application.Features.WorkTasks.Queries;
 using GreenSpace.Application.ViewModels.Address;
 using MediatR;
@@ -57,6 +58,20 @@ namespace GreenSpace.WebAPI.Controllers
             var command = new CreateAddressCommand { CreateModel = createModel };
             var result = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetAddressById), new { id = result.Id }, result);
+        }
+
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _mediator.Send(new DeleteAddressCommand { Id = id });
+            if (!result)
+            {
+                return BadRequest("Delete Fail!");
+            }
+            return Ok("Delete Successfully!");
         }
     }
 }
