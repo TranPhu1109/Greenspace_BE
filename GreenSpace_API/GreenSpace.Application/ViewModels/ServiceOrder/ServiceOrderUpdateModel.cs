@@ -17,7 +17,8 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
         public string Description { get; set; } = string.Empty;
         public int   Status { get; set; } = default!;
         public string Report { get; set; } = string.Empty;
-
+        public string? ReportManger { get; set; } = string.Empty;
+        public string? ReportAccoutant { get; set; } =  string.Empty ;
         public ImageCreateModel? Image { get; set; }
 
         public List<ServiceOrderDetailCreateModel> ServiceOrderDetails { get; set; } = new List<ServiceOrderDetailCreateModel>();

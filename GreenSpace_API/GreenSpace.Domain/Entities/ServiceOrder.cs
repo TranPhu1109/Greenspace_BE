@@ -32,7 +32,8 @@ public class ServiceOrder :BaseEntity
     public string DeliveryCode { get; set; } = string.Empty;
 
     public string Report { get; set; } = string.Empty;
-
+    public string? ReportManger { get; set; } 
+    public string? ReportAccoutant { get; set; } 
     public int Status { get; set; } = default;
     public decimal DepositPercentage { get; set; } = decimal.One;
     public decimal RefundPercentage { get; set; } = decimal.One;
