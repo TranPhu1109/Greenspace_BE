@@ -69,6 +69,23 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 // Cập nhật ảnh
                 if (request.UpdateModel.Image is not null)
                 {
+                    //update record
+                    if (request.UpdateModel.Status == (int)ServiceOrderStatus.ReDeterminingDesignPrice)
+                    {
+                        var records = await _unitOfWork.RecordSketchRepository.WhereAsync(rs => rs.ServiceOrderId == serviceOrder.Id ,x =>x.Image);
+                        var late = records.OrderByDescending(rs => rs.phase).FirstOrDefault();
+
+                        if (late != null)
+                        {
+                            late.Image.ImageUrl = request.UpdateModel.Image.ImageUrl;
+                            late.Image.Image2 = request.UpdateModel.Image.Image2;
+                            late.Image.Image3 = request.UpdateModel.Image.Image3;
+
+                            _unitOfWork.RecordSketchRepository.Update(late);
+                        }
+                    }
+
+
                     // tọa ảnh record steck 
                     if (request.UpdateModel.Status == (int)ServiceOrderStatus.ConsultingAndSketching || request.UpdateModel.Status == (int)ServiceOrderStatus.ReConsultingAndSketching)
                     {
