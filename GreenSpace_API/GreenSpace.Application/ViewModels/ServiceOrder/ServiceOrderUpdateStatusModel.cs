@@ -10,5 +10,8 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
     {
         public int Status { get; set; } = default!;
         public string DeliveryCode { get; set; } = string.Empty;
+        public string? ReportManger { get; set; } = string.Empty;
+        public string? ReportAccoutant { get; set; } = string.Empty;
+
     }
 }
