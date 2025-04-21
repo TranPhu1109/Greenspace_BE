@@ -115,7 +115,7 @@ public class WalletsController : BaseController
 
     [Authorize]
     [HttpPost("vn-pay")]
-    public async Task<IActionResult> VNPayCallBack([FromForm] decimal amount, bool isMobile)
+    public async Task<IActionResult> VNPayCallBack([FromBody] decimal amount, bool isMobile)
     {
         var result = await mediator.Send(new RequestVNPayCommand { Amount = amount, IsMobile = isMobile });
         return Ok(result);
