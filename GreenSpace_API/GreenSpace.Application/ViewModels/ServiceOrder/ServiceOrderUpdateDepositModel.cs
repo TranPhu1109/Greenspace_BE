@@ -8,7 +8,7 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
 {
     public class ServiceOrderUpdateDepositModel
     {
-        public decimal DepositPercentage { get; set; } = decimal.One;
-        public decimal RefundPercentage { get; set; } = decimal.One;
+        public decimal DepositPercentage { get; set; } = 100m;
+        public decimal RefundPercentage { get; set; } = 100m;
     }
 }

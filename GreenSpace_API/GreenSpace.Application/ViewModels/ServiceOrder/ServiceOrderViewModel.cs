@@ -45,8 +45,12 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
         //public Guid? RecordSketchId { get; set; } = default!;
         public string? ReportManger { get; set; } = string.Empty;
         public string? ReportAccoutant { get; set; } = string.Empty;
-        public decimal DepositPercentage { get; set; } = decimal.One;
-        public decimal RefundPercentage { get; set; } = decimal.One;
+        public decimal DepositPercentage { get; set; } = 100m;
+        public decimal RefundPercentage { get; set; } = 100m;
+        public string SkecthReport { get; set; } = string.Empty;
+        public DateOnly? ContructionDate { get; set; }
+        public TimeOnly? ContructionTime { get; set; }
+        public decimal ContructionPrice { get; set; } = default!;
         public DateTime CreationDate { get; set; }
         public ImageCreateModel? Image { get; set; }
 

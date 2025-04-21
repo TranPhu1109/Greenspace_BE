@@ -124,6 +124,7 @@ public class MapperConfigurationProfile : Profile
         CreateMap<ServiceOrder, ServiceOrderUpdateDesignPriceModel>().ReverseMap();
         CreateMap<ServiceOrder, ServiceOrderUpdateDepositModel>().ReverseMap();
         CreateMap<ServiceOrder, ServiceOrderUpdateDesignDetailModel>().ReverseMap();
+        CreateMap<ServiceOrder, ServiceOrderUpdateContructorModel>().ReverseMap();
         CreateMap<ServiceOrder, ServiceOrderNoUsingCreateModel>()
              .ForMember(dest => dest.ServiceOrderDetails, opt => opt.Ignore())
              .ReverseMap()

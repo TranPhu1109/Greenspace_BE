@@ -14,30 +14,20 @@ using System.Threading.Tasks;
 
 namespace GreenSpace.Application.Features.ServiceOrders.Commands
 {
-  
-    public class UpdateServiceOrderForManagerCommand : IRequest<bool>
+    public class UpdateServiceOrderForContructorCommand : IRequest<bool>
     {
         public Guid Id { get; set; }
-        public ServiceOrderUpdateDepositModel UpdateModel { get; set; } = default!;
-        public class CommmandValidation : AbstractValidator<UpdateServiceOrderForManagerCommand>
+        public ServiceOrderUpdateContructorModel UpdateModel { get; set; } = default!;
+        public class CommmandValidation : AbstractValidator<UpdateServiceOrderForContructorCommand>
         {
             public CommmandValidation()
             {
                 RuleFor(x => x.Id).NotNull().NotEmpty().WithMessage("Id must not null or empty");
-                RuleFor(x => x.UpdateModel.DepositPercentage)
-                       .GreaterThanOrEqualTo(30)
-                       .WithMessage("Deposit must be at least 30%")
-                       .LessThanOrEqualTo(80)
-                       .WithMessage("Deposit must not exceed 80%");
-                RuleFor(x => x.UpdateModel.RefundPercentage)
-                       .GreaterThanOrEqualTo(10)
-                       .WithMessage("Refund must be at least 10%")
-                       .LessThanOrEqualTo(50)
-                       .WithMessage("Refund must not exceed 50%");
+
             }
         }
 
-        public class CommandHandler : IRequestHandler<UpdateServiceOrderForManagerCommand, bool>
+        public class CommandHandler : IRequestHandler<UpdateServiceOrderForContructorCommand, bool>
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly IMapper _mapper;
@@ -56,10 +46,9 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 _appSettings = appSettings;
                 _hubContext = hubContext;
             }
-
-            public async Task<bool> Handle(UpdateServiceOrderForManagerCommand request, CancellationToken cancellationToken)
+            public async Task<bool> Handle(UpdateServiceOrderForContructorCommand request, CancellationToken cancellationToken)
             {
-                _logger.LogInformation("Update ContructionPrice  serviceOrder:\n");
+                _logger.LogInformation("Update  serviceOrder:\n");
 
                 var servicerOrder = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(request.Id);
                 if (servicerOrder is null) throw new NotFoundException($"servicerOrder with Id-{request.Id} does not exist!");

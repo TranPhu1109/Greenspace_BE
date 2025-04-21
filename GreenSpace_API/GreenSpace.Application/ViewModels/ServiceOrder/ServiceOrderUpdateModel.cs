@@ -13,7 +13,7 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
     
         public int ServiceType { get; set; } = default!;
         public double? DesignPrice { get; set; } = default!;
-
+        public string SkecthReport { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public int   Status { get; set; } = default!;
         public string Report { get; set; } = string.Empty;
