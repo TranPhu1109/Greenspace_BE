@@ -26,7 +26,7 @@ namespace GreenSpace.Application.Services
             client.DefaultRequestHeaders.Add("Token", "3dd45171-07cc-11f0-9f28-eacfdef119b3"); 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var order = await _unitOfWork.OrderRepository.WhereAsync(x => x.DeliveryCode != null && x.Status != 2 && x.Status != 3 && x.Status >= 9);
+            var order = await _unitOfWork.OrderRepository.WhereAsync(x => x.DeliveryCode != null && x.Status != 2 && x.Status != 3 && x.Status > 9);
             foreach (var item in order)
             {
                 try
@@ -102,7 +102,7 @@ namespace GreenSpace.Application.Services
                     continue;
                 }
             }
-            var complaint = await _unitOfWork.ComplaintRepository.WhereAsync(x => x.DeliveryCode != null && x.Status >6);
+            var complaint = await _unitOfWork.ComplaintRepository.WhereAsync(x => x.DeliveryCode != null && x.Status !=5);
             foreach (var item in complaint)
             {
                 try
