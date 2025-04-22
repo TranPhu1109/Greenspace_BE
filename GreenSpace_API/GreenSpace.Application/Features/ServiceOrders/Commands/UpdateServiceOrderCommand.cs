@@ -236,6 +236,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                         serviceOrder.ServiceOrderDetails.Remove(d);
                         await _unitOfWork.ServiceOrderDetailRepository.RemoveServiceOrderDetail(d);
                     }
+                    serviceOrder.ServiceOrderDetails = existingDetails;
                 }
                 serviceOrder.MaterialPrice = serviceOrder.ServiceOrderDetails.Sum(d => d.TotalPrice);
 
