@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using GreenSpace.Application.Repositories.MongoDbs;
+using GreenSpace.Application.SignalR;
 using GreenSpace.Application.ViewModels.OrderProducts;
 using GreenSpace.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
@@ -29,19 +31,22 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
             private readonly ILogger<CommandHandler> _logger;
             private readonly AppSettings _appSettings;
             private readonly ICartRepository _cartRepository;
+            private readonly IHubContext<SignalrHub> _hubContext;
 
             public CommandHandler(
                 IUnitOfWork unitOfWork,
                 IMapper mapper,
                 ILogger<CommandHandler> logger,
                 AppSettings appSettings, 
-                ICartRepository cartRepository)
+                ICartRepository cartRepository,
+                 IHubContext<SignalrHub> hubContext)
             {
                 _unitOfWork = unitOfWork;
                 _mapper = mapper;
                 _logger = logger;
                 _appSettings = appSettings;
                 _cartRepository = cartRepository;
+                _hubContext = hubContext;
             }
 
             public async Task<OrderProductViewModel> Handle(CreateOrderFromCartCommand request, CancellationToken cancellationToken)
@@ -121,7 +126,7 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
 
                 var orderViewModel = _mapper.Map<OrderProductViewModel>(order);
                 //orderViewModel.Products = orderedProducts;
-
+                await _hubContext.Clients.All.SendAsync("messageReceived", "CreateOrder", $"{order.Id}");
                 return orderViewModel;
             }
         }

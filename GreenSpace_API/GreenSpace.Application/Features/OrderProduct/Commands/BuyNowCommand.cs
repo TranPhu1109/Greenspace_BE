@@ -1,8 +1,10 @@
 ﻿using GreenSpace.Application.Repositories;
 using GreenSpace.Application.Services.Interfaces;
+using GreenSpace.Application.SignalR;
 using GreenSpace.Application.ViewModels.OrderProducts;
 using GreenSpace.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +24,16 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
             private readonly IOrderDetailRepository orderDetailRepository;
             private readonly IProductRepository productRepository;
             private readonly IClaimsService claimsService;
+            private readonly IHubContext<SignalrHub> _hubContext;
 
-            public Handler(IUnitOfWork unitOfWork, IOrderRepository orderRepository, IProductRepository productRepository, IClaimsService claimsService, IOrderDetailRepository orderDetailRepository)
+            public Handler(IUnitOfWork unitOfWork, IOrderRepository orderRepository, IProductRepository productRepository, IClaimsService claimsService, IOrderDetailRepository orderDetailRepository, IHubContext<SignalrHub> hubContext)
             {
                 this.unitOfWork = unitOfWork;
                 this.orderRepository = orderRepository;
                 this.productRepository = productRepository;
                 this.claimsService = claimsService;
                 this.orderDetailRepository = orderDetailRepository;
+                _hubContext = hubContext;
             }
 
             public async Task<OrderProductViewModel> Handle(BuyNowCommand request, CancellationToken cancellationToken)
@@ -73,7 +77,7 @@ namespace GreenSpace.Application.Features.OrderProduct.Commands
 
                 await orderDetailRepository.AddAsync(orderDetail);
                 await unitOfWork.SaveChangesAsync();
-
+                await _hubContext.Clients.All.SendAsync("messageReceived", "CreateOrder", $"{order.Id}");
                 return unitOfWork.Mapper.Map<OrderProductViewModel>(order);
             }
         }
