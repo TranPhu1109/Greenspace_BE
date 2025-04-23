@@ -23,6 +23,7 @@ namespace GreenSpace.Application.ViewModels.Complaints
         public string Reason { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public string ComplaintType { get; set; } = string.Empty;
+        public string DeliveryCode { get; set; } = string.Empty;
         public DateTime CreationDate { get; set; }
         public DateTime? ModificationDate { get; set; }
         public ServiceOrderViewModel? ServiceOrder { get; set; } 
