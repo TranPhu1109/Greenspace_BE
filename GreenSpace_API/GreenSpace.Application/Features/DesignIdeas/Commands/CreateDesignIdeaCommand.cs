@@ -2,10 +2,12 @@
 using FluentValidation;
 using GreenSpace.Application.Features.Products.Commands;
 using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
+using GreenSpace.Application.SignalR;
 using GreenSpace.Application.ViewModels.DesignIdea;
 using GreenSpace.Application.ViewModels.Products;
 using GreenSpace.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -39,15 +41,18 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
             private readonly IMapper _mapper;
             private ILogger<CommandHandler> _logger;
             private AppSettings _appSettings;
+            private readonly IHubContext<SignalrHub> _hubContext;
             public CommandHandler(IUnitOfWork unitOfWork,
-                    IMapper mapper,
                     ILogger<CommandHandler> logger,
-                    AppSettings appSettings)
+                    IMapper mapper,
+                    AppSettings appSettings,
+                   IHubContext<SignalrHub> hubContext)
             {
                 _unitOfWork = unitOfWork;
-                _mapper = mapper;
                 _logger = logger;
+                _mapper = mapper;
                 _appSettings = appSettings;
+                _hubContext = hubContext;
             }
 
             public async Task<DesignIdeaViewModel> Handle(CreateDesignIdeaCommand request, CancellationToken cancellationToken)
@@ -84,7 +89,7 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
                 await _unitOfWork.DesignIdeaRepository.AddAsync(design);
 
                 await _unitOfWork.SaveChangesAsync();
-
+                await _hubContext.Clients.All.SendAsync("messageReceived", "CreateDesign", $"{design.Id}");
                 _logger.LogInformation("Design Idea created successfully with ID: {DesignIdeaId}", design.Id);
 
                 var viewModle = _mapper.Map<DesignIdeaViewModel>(design);  

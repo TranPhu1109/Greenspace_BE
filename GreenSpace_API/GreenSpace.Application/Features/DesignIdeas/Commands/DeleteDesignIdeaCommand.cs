@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
+using GreenSpace.Application.SignalR;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +26,11 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
         public class CommandHandler : IRequestHandler<DeleteDesignIdeaCommand, bool>
         {
             private readonly IUnitOfWork _unitOfWork;
-
-            public CommandHandler(IUnitOfWork unitOfWork)
+            private readonly IHubContext<SignalrHub> _hubContext;
+            public CommandHandler(IUnitOfWork unitOfWork, IHubContext<SignalrHub> hubContext)
             {
                 _unitOfWork = unitOfWork;
+                _hubContext = hubContext;
             }
 
             public async Task<bool> Handle(DeleteDesignIdeaCommand request, CancellationToken cancellationToken)
@@ -35,7 +38,9 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
                 var design = await _unitOfWork.DesignIdeaRepository.GetByIdAsync(request.Id);
                 if (design is null) throw new NotFoundException($"DesignIdea with Id-{request.Id} is not exist!");
                 _unitOfWork.DesignIdeaRepository.SoftRemove(design);
-                return await _unitOfWork.SaveChangesAsync();
+                var result = await _unitOfWork.SaveChangesAsync();
+                await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateDesignIdea", $"{request.Id}");
+                return result;
             }
         }
     }

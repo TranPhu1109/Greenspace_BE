@@ -89,8 +89,10 @@ namespace GreenSpace.Application.Features.Complaints.Commands
                     }
                 }
                 _unitOfWork.ComplaintRepository.Update(complaint);
-                await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateComplain", $"{request.Id}");
-                return await _unitOfWork.SaveChangesAsync();
+       
+                var result = await _unitOfWork.SaveChangesAsync();
+                await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateComplaint", $"{request.Id}");
+                return result;
             }
         }
 

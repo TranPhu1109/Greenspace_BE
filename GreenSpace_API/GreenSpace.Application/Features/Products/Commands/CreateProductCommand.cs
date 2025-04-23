@@ -11,6 +11,8 @@ using GreenSpace.Domain.Entities;
 using GreenSpace.Application.ViewModels.Products;
 using static System.Net.Mime.MediaTypeNames;
 using GreenSpace.Application.ViewModels.Images;
+using GreenSpace.Application.SignalR;
+using Microsoft.AspNetCore.SignalR;
 
 namespace GreenSpace.Application.Features.Products.Commands
 {
@@ -44,16 +46,18 @@ namespace GreenSpace.Application.Features.Products.Commands
             private readonly IMapper _mapper;
             private ILogger<CommandHandler> _logger;
             private AppSettings _appSettings;
-
+            private readonly IHubContext<SignalrHub> _hubContext;
             public CommandHandler(IUnitOfWork unitOfWork,
-                    IMapper mapper,
                     ILogger<CommandHandler> logger,
-                    AppSettings appSettings)
+                    IMapper mapper,
+                    AppSettings appSettings,
+                   IHubContext<SignalrHub> hubContext)
             {
                 _unitOfWork = unitOfWork;
-                _mapper = mapper;
                 _logger = logger;
+                _mapper = mapper;
                 _appSettings = appSettings;
+                _hubContext = hubContext;
             }
 
 
@@ -82,7 +86,7 @@ namespace GreenSpace.Application.Features.Products.Commands
 
                 await _unitOfWork.ProductRepository.AddAsync(product);
                 await _unitOfWork.SaveChangesAsync();
-
+                await _hubContext.Clients.All.SendAsync("messageReceived", "CreateProduct", $"{product.Id}");
                 _logger.LogInformation("Product created successfully with ID: {ProductId}", product.Id);
 
                 

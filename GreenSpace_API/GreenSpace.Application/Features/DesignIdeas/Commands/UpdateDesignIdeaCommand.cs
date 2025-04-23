@@ -2,9 +2,11 @@
 using FluentValidation;
 using GreenSpace.Application.Features.Products.Commands;
 using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
+using GreenSpace.Application.SignalR;
 using GreenSpace.Application.ViewModels.DesignIdea;
 using GreenSpace.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Microsoft.Extensions.Logging;
@@ -41,18 +43,18 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
             private readonly IMapper _mapper;
             private ILogger<CommandHandler> _logger;
             private AppSettings _appSettings;
-
-
-
+            private readonly IHubContext<SignalrHub> _hubContext;
             public CommandHandler(IUnitOfWork unitOfWork,
-                IMapper mapper, ILogger<CommandHandler> logger,
-                AppSettings appSettings)
+                    ILogger<CommandHandler> logger,
+                    IMapper mapper,
+                    AppSettings appSettings,
+                   IHubContext<SignalrHub> hubContext)
             {
                 _unitOfWork = unitOfWork;
-                _mapper = mapper;
                 _logger = logger;
+                _mapper = mapper;
                 _appSettings = appSettings;
-
+                _hubContext = hubContext;
             }
 
             public async Task<bool> Handle(UpdateDesignIdeaCommand request, CancellationToken cancellationToken)
@@ -134,7 +136,10 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
                 _mapper.Map(request.UpdateModel, design);
                 _unitOfWork.DesignIdeaRepository.Update(design);
 
-                return await _unitOfWork.SaveChangesAsync();
+                var result = await _unitOfWork.SaveChangesAsync();
+                await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateDesignIdea", $"{request.Id}");
+                return result;
+
 
             }
 
