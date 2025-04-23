@@ -1,4 +1,7 @@
-﻿using GreenSpace.Domain.Enum;
+﻿using Azure.Core;
+using GreenSpace.Application.SignalR;
+using GreenSpace.Domain.Enum;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
 using System.Text;
@@ -11,12 +14,14 @@ namespace GreenSpace.Application.Services
         private readonly ILogger<GhnJobService> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IHubContext<SignalrHub> _hubContext;
 
-        public GhnJobService(ILogger<GhnJobService> logger, IHttpClientFactory httpClientFactory, IUnitOfWork unitOfWork)
+        public GhnJobService(ILogger<GhnJobService> logger, IHttpClientFactory httpClientFactory, IUnitOfWork unitOfWork, IHubContext<SignalrHub> hubContext)
         {
             _logger = logger;
             _httpClientFactory = httpClientFactory;
             _unitOfWork = unitOfWork;
+            _hubContext = hubContext;
         }
 
         public async Task FetchGhnOrder()
@@ -54,8 +59,9 @@ namespace GreenSpace.Application.Services
                     {
                         item.Status = (int)mappedStatus;
                         _unitOfWork.OrderRepository.Update(item);
+                        await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateOrder", new { item.Id, Status = (int)mappedStatus });
                     }
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -92,6 +98,7 @@ namespace GreenSpace.Application.Services
                     {
                         item.Status = (int)mappedStatus;
                         _unitOfWork.ServiceOrderRepository.Update(item);
+                        await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateOrderService", new { item.Id, Status = (int)mappedStatus });
                     }
 
                 }
@@ -126,6 +133,8 @@ namespace GreenSpace.Application.Services
                     {
                         item.Status = (int)mappedStatus;
                         _unitOfWork.ComplaintRepository.Update(item);
+                        await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateComplaint", new { item.OrderId, Status = (int)mappedStatus });
+
                     }
 
                 }
