@@ -54,7 +54,7 @@ public class RefundForUserCommand : IRequest<bool>
             var walletLog = new WalletLog
             {
                 Amount = refundAmount,
-                Source = $"Refund 30% for ServiceOrder {request.ServiceOrderId}",
+                Source = $"Hoàn tiền  30% cho đơn dịch vụ {request.ServiceOrderId}",
                 TxnRef = DateTime.Now.Ticks.ToString(),
                 Type = nameof(WalletLogTypeEnum.Refund),
                 WalletId = userWallet.Id

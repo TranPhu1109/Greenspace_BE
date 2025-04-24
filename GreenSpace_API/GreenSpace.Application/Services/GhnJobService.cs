@@ -59,7 +59,7 @@ namespace GreenSpace.Application.Services
                     {
                         item.Status = (int)mappedStatus;
                         _unitOfWork.OrderRepository.Update(item);
-                        await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateOrder", new { item.Id, Status = (int)mappedStatus });
+                     //   await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateOrder", new { item.Id, Status = (int)mappedStatus });
                     }
 
                 }
@@ -98,7 +98,7 @@ namespace GreenSpace.Application.Services
                     {
                         item.Status = (int)mappedStatus;
                         _unitOfWork.ServiceOrderRepository.Update(item);
-                        await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateOrderService", new { item.Id, Status = (int)mappedStatus });
+                       // await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateOrderService", new { item.Id, Status = (int)mappedStatus });
                     }
 
                 }
@@ -133,7 +133,7 @@ namespace GreenSpace.Application.Services
                     {
                         item.Status = (int)mappedStatus;
                         _unitOfWork.ComplaintRepository.Update(item);
-                        await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateComplaint", new { item.OrderId, Status = (int)mappedStatus });
+                        //await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateComplaint", new { item.OrderId, Status = (int)mappedStatus });
 
                     }
 
@@ -146,8 +146,10 @@ namespace GreenSpace.Application.Services
                 }
             }
             await _unitOfWork.SaveChangesAsync();
+            await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateJob");
+
         }
-        
+
     }
 
 }
