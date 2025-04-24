@@ -84,14 +84,14 @@ namespace GreenSpace.Application.Services
                     using var doc = JsonDocument.Parse(responseData);
                     var status = doc.RootElement.GetProperty("data").GetProperty("status").GetString();
 
-                    OrderProductStatus mappedStatus = status switch
+                    ServiceOrderStatus mappedStatus = status switch
                     {
-                        "ready_to_pick" => OrderProductStatus.Processing,
-                        "delivering" => OrderProductStatus.PickedPackageAndDelivery,
-                        "delivery_fail" => OrderProductStatus.DeliveryFail,
-                        "return" => OrderProductStatus.ReDelivery,
-                        "delivered" => OrderProductStatus.DeliveredSuccessfully,
-                        "cancel" => OrderProductStatus.Cancelled,
+                        "ready_to_pick" => ServiceOrderStatus.Processing,
+                        "delivering" => ServiceOrderStatus.PickedPackageAndDelivery,
+                        "delivery_fail" => ServiceOrderStatus.DeliveryFail,
+                        "return" => ServiceOrderStatus.ReDelivery,
+                        "delivered" => ServiceOrderStatus.DeliveredSuccessfully,
+                        "cancel" => ServiceOrderStatus.OrderCancelled,
                         _ => throw new NotImplementedException("Cannot get status"),
                     };
                     if (item.Status != (int)mappedStatus)
