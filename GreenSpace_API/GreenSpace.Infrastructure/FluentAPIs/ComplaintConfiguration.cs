@@ -18,6 +18,7 @@ namespace GreenSpace.Infrastructure.FluentAPIs
             builder.HasOne(x => x.ServiceOrder).WithMany().HasForeignKey(x => x.ServiceOrderId).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(x => x.Order).WithMany().HasForeignKey(x => x.OrderId).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(x => x.Image).WithMany().HasForeignKey(x => x.ImageId).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(x => x.ComplaintReason).WithMany().HasForeignKey(x => x.ComplaintReasonId).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

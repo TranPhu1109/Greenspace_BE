@@ -12,6 +12,7 @@ namespace GreenSpace.Domain.Entities
         public Guid? ServiceOrderId { get; set; }
         public Guid? OrderId { get; set; }
         public Guid ImageId { get; set; }
+        public Guid? ComplaintReasonId { get; set; }
         public string Reason { get; set; } = string.Empty;
         public string ComplaintType { get; set; } = string.Empty;
         public int Status { get; set; } = default;
@@ -20,8 +21,8 @@ namespace GreenSpace.Domain.Entities
         public ServiceOrder? ServiceOrder { get; set; }
         public Order? Order { get; set; }
         public Image Image { get; set; } = null!;
-
+        public ComplaintReason? ComplaintReason { get; set; }
         public ICollection<ComplaintDetail> ComplaintDetails { get; set; } = new List<ComplaintDetail>();
-
+        
     }
 }
