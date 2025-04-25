@@ -59,6 +59,14 @@ namespace GreenSpace.Application.Features.DesignIdeas.Commands
             {
                 _logger.LogInformation("Creating a new design idea:{DesignIdeaName}", request.CreateModel.Name);
 
+                var exist = await _unitOfWork.DesignIdeaRepository.FirstOrDefaultAsync(p => p.Name.ToLower() == request.CreateModel.Name.ToLower());
+
+                if (exist != null)
+                {
+
+                    throw new InvalidOperationException($"DesignIdea  with name '{request.CreateModel.Name}' already exists.");
+                }
+
                 var image = _mapper.Map<Image>(request.CreateModel.Image);
                 image.Id = Guid.NewGuid();
                 await _unitOfWork.ImageRepository.AddAsync(image);
