@@ -20,6 +20,8 @@ namespace GreenSpace.Application.ViewModels.Complaints
         public string CusPhone { get; set; } = string.Empty;
         public Guid ServiceOrderId { get; set; }
         public Guid OrderId { get; set; }
+        public Guid? ComplaintReasonId { get; set; }
+        public string ComplaintReason { get; set; } = string.Empty;
         public string Reason { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public string ComplaintType { get; set; } = string.Empty;

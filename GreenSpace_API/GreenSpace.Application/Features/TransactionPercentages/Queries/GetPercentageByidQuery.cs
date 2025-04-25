@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
-using GreenSpace.Application.ViewModels.Blogs;
-using GreenSpace.Application.ViewModels.Complaints;
+using GreenSpace.Application.ViewModels.Banner;
+using GreenSpace.Application.ViewModels.TransactionPercentage;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,13 +11,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GreenSpace.Application.Features.Complaints.Queries
+namespace GreenSpace.Application.Features.TransactionPercentages.Queries
 {
-    public class GetComplaintByIdQuery : IRequest<ComplaintViewModel>
+    public class GetPercentageByidQuery : IRequest<TransactionPercentageViewModel>
     {
         public Guid Id { get; set; } = default!;
 
-        public class QueryValidation : AbstractValidator<GetComplaintByIdQuery>
+        public class QueryValidation : AbstractValidator<GetPercentageByidQuery>
         {
             public QueryValidation()
             {
@@ -25,7 +25,7 @@ namespace GreenSpace.Application.Features.Complaints.Queries
             }
         }
 
-        public class QueryHandler : IRequestHandler<GetComplaintByIdQuery, ComplaintViewModel>
+        public class QueryHandler : IRequestHandler<GetPercentageByidQuery, TransactionPercentageViewModel>
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly IMapper _mapper;
@@ -37,11 +37,11 @@ namespace GreenSpace.Application.Features.Complaints.Queries
                 _mapper = mapper;
                 _logger = logger;
             }
-            public async Task<ComplaintViewModel> Handle(GetComplaintByIdQuery request, CancellationToken cancellationToken)
+            public async Task<TransactionPercentageViewModel> Handle(GetPercentageByidQuery request, CancellationToken cancellationToken)
             {
-                var complaint = await _unitOfWork.ComplaintRepository.GetByIdAsync(request.Id, x => x.Image , x =>x .User, x => x.ServiceOrder, x => x.Order ,x =>x.ComplaintDetails, x => x.ComplaintReason);
-                if (complaint is null) throw new NotFoundException($"Blog with ID-{request.Id} is not exist!");
-                var result = _mapper.Map<ComplaintViewModel>(complaint);
+                var tage = await _unitOfWork.TransactionPercentageRepository.GetByIdAsync(request.Id);
+                if (tage is null) throw new NotFoundException($"percentages with ID-{request.Id} is not exist!");
+                var result = _mapper.Map<TransactionPercentageViewModel>(tage);
                 return result;
             }
         }

@@ -36,7 +36,7 @@ namespace GreenSpace.Application.Features.Complaints.Queries
 
 
 
-                var complains = await _unitOfWork.ComplaintRepository.GetAllAsync(x => x.Image,x => x.User , x => x.ComplaintDetails, x => x.ServiceOrder, x => x.Order);
+                var complains = await _unitOfWork.ComplaintRepository.GetAllAsync(x => x.Image,x => x.User , x => x.ComplaintDetails, x => x.ServiceOrder, x => x.Order, x => x.ComplaintReason);
                 if (complains.Count == 0) throw new NotFoundException("There are no complaint in DB!");
                 var viewModels = _mapper.Map<List<ComplaintViewModel>>(complains);
 

@@ -33,6 +33,8 @@ using GreenSpace.Application.ViewModels.ComplaintDetail;
 using GreenSpace.Application.ViewModels.Document;
 using GreenSpace.Application.ViewModels.Banner;
 using GreenSpace.Application.ViewModels.Address;
+using GreenSpace.Application.ViewModels.ComplaintReason;
+using GreenSpace.Application.ViewModels.TransactionPercentage;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -224,6 +226,7 @@ public class MapperConfigurationProfile : Profile
                 src.Order != null ? src.Order.Phone :
                 (src.ServiceOrder != null ? src.ServiceOrder.CusPhone : null)))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => ((ComplaintStatusEnum)src.Status).ToString()))
+             .ForMember(x => x.ComplaintReason, opt => opt.MapFrom(x => x.ComplaintReason.Reason))
             .ReverseMap();
         CreateMap<ComplaintDetail, ComplaintDetailCreateModel>().ReverseMap();
         CreateMap<ComplaintDetail, ComplaintDetailViewModel>().ReverseMap();
@@ -239,6 +242,12 @@ public class MapperConfigurationProfile : Profile
 
         CreateMap<Address, CreateAddressModel>().ReverseMap();
         CreateMap<Address, AddressViewModel>().ReverseMap();
+
+        CreateMap<ComplaintReason, ComplaintReasonViewModel>().ReverseMap();
+        CreateMap<ComplaintReason, ComplaintReasonCreateModel>().ReverseMap();
+
+        CreateMap<TransactionPercentage, TransactionPercentageViewModel>().ReverseMap();
+        CreateMap<TransactionPercentage, TransactionPercentageCreateModel>().ReverseMap();
 
     }
 }

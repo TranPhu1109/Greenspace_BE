@@ -61,7 +61,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
 
                 if (order == null)
                     throw new Exception($"ServiceOrderID not found with ID {contract.ServiceOrderId}");
-
+   
                 var model = new ContractModel
                 {
                     Name = contract.Name,
@@ -70,8 +70,8 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                     Phone = contract.Phone,
                     DesignPrice = order.DesignPrice ?? 0,
                     ServiceOrderId = contract.ServiceOrderId,
-                    DepositPercentage = order.DepositPercentage,
-                    RefundPercentage = order.RefundPercentage,
+                    DepositPercentage = contract.DepositPercentage,
+                    RefundPercentage = contract.RefundPercentage,
                     ModificatedBy = claimsService.GetCurrentUser,
                 };
 

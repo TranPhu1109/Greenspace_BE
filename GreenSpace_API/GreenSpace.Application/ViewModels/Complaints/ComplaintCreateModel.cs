@@ -17,6 +17,7 @@ namespace GreenSpace.Application.ViewModels.Complaints
 
         public Guid? OrderId { get; set; } = default!;
         public int ComplaintType { get; set; } = default!;
+        public Guid? ComplaintReasonId { get; set; }
         public string Reason { get; set; } = string.Empty;
 
 

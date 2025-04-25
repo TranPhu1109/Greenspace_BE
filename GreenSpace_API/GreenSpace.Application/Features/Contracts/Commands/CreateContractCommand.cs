@@ -73,7 +73,16 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                 contract.Phone = request.CreateModel.Phone;
                 contract.Email = request.CreateModel.Email;
                 contract.Address = request.CreateModel.Address;
+                var allData = await _unitOfWork.TransactionPercentageRepository.GetAllAsync();
+                var service = allData.FirstOrDefault();
+                if (service != null)
+                {
+                    contract.DepositPercentage = service.DepositPercentage;
+                    contract.RefundPercentage = service.RefundPercentage;
+                }
+
                 contract.Description = pdfUrl;
+                
 
                 await _unitOfWork.ContractRepository.AddAsync(contract);
                 await _unitOfWork.SaveChangesAsync();
@@ -91,10 +100,11 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                 // Tải ảnh chữ ký từ Cloudinary
                 string imageUrl = "https://res.cloudinary.com/dyn6t5fdh/image/upload/v1743350140/u7obnw76tjwmoexzwmkk.jpg";
                 byte[] signatureImage = await new HttpClient().GetByteArrayAsync(imageUrl);
-                var service = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(contract.ServiceOrderId);
+                var allData = await _unitOfWork.TransactionPercentageRepository.GetAllAsync();
+                var service = allData.FirstOrDefault();
                 if (service == null)
                 {
-                    throw new Exception("Service order not found.");
+                    throw new Exception(" not found.");
                 }
                 // Tạo model cho PDF
                 var model = new ContractModel

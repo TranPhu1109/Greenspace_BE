@@ -43,7 +43,7 @@ namespace GreenSpace.Application.Features.Complaints.Queries
 
             public async Task<PaginatedList<ComplaintViewModel>> Handle(GetAllComplainProductReturnQuery request, CancellationToken cancellationToken)
             {
-                var complaint = await _unitOfWork.ComplaintRepository.WhereAsync(x => x.ComplaintType == ComplaintTypeEnum.ProductReturn.ToString(), x => x.User, x => x.Image , x => x.ComplaintDetails, x => x.ServiceOrder, x => x.Order);
+                var complaint = await _unitOfWork.ComplaintRepository.WhereAsync(x => x.ComplaintType == ComplaintTypeEnum.ProductReturn.ToString(), x => x.User, x => x.Image , x => x.ComplaintDetails, x => x.ServiceOrder, x => x.Order,x => x.ComplaintReason);
                 if (complaint == null || !complaint.Any())
                 {
                     throw new NotFoundException($"There are no complaint in DB.");

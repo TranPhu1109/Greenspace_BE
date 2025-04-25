@@ -10,6 +10,7 @@ public class Contract : BaseEntity
     public string Phone { get; set; } = default!;
     public string Description { get; set; } = string.Empty;
     public Guid ServiceOrderId { get; set; }
-
+    public decimal DepositPercentage { get; set; } = 100m;
+    public decimal RefundPercentage { get; set; } = 100m;
     public User User { get; set; } = default!;
 }

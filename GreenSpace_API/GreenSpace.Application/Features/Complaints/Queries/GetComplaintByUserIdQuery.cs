@@ -44,7 +44,7 @@ namespace GreenSpace.Application.Features.Complaints.Queries
 
             public async Task<List<ComplaintViewModel>> Handle(GetComplaintByUserIdQuery request, CancellationToken cancellationToken)
             {
-                var complaints = await _unitOfWork.ComplaintRepository.WhereAsync(x => x.UserId == request.UserId, x => x.Image, x => x.User, x => x.ServiceOrder, x => x.Order, x => x.ComplaintDetails);
+                var complaints = await _unitOfWork.ComplaintRepository.WhereAsync(x => x.UserId == request.UserId, x => x.Image, x => x.User, x => x.ServiceOrder, x => x.Order, x => x.ComplaintDetails, x => x.ComplaintReason);
                 if (complaints == null || !complaints.Any())
                 {
                     throw new NotFoundException($"No Tasks found for User ID {request.UserId}.");

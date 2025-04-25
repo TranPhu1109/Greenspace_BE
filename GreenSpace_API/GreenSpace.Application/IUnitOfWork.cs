@@ -36,5 +36,7 @@ public interface IUnitOfWork
 
     IWebManagerRepository WebManagerRepository { get; }
     IDocumentRepository DocumentRepository { get; }
+    IComplaintReasonRepository ComplaintReasonRepository { get; }
+    ITransactionPercentageRepository TransactionPercentageRepository { get; }
 
 }
