@@ -48,8 +48,8 @@ namespace GreenSpace.Application.Features.Documents.Commands
 
             public async Task<DocumentViewModel> Handle(CreatePolicyCommand request, CancellationToken cancellationToken)
             {
-                var documents = await _unitOfWork.DocumentRepository.GetAllAsync();
-                if (documents.Count >0) throw new Exception("There are policy in the database exsit !");
+                //var documents = await _unitOfWork.DocumentRepository.GetAllAsync();
+                //if (documents.Count >0) throw new Exception("There are policy in the database exsit !");
 
                 var policy = _mapper.Map<Document>(request.CreateModel);
                 policy.Id = Guid.NewGuid();

@@ -74,6 +74,19 @@ namespace GreenSpace.WebAPI.Controllers
             }
             return Ok("Update Successfully!");
         }
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _mediator.Send(new DeletePolicyCommand { Id = id });
+            if (!result)
+            {
+                return BadRequest("Delete Fail!");
+            }
+            return Ok("Delete Successfully!");
+        }
 
         #endregion
     }

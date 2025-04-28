@@ -9,6 +9,7 @@ namespace GreenSpace.Application.ViewModels.Document
     public class DocumentViewModel
     {
         public Guid Id { get; set; }
+        public string DocumentName { get; set; } = string.Empty;
         public string Document1 { get; set; } = string.Empty;
         public DateTime? ModificationDate { get; set; } = null;
         public Guid? ModificatedBy { get; set; } = default!;
