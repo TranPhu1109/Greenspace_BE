@@ -65,7 +65,7 @@ namespace GreenSpace.Application.Features.Complaints.Commands
                 _mapper.Map(request.UpdateModel, complaint);
                 complaint.ComplaintType = ((ComplaintTypeEnum)request.UpdateModel.ComplaintType).ToString();
 
-                if (request.UpdateModel.Status == 7 && complaint.ComplaintType == ComplaintTypeEnum.refund.ToString())
+                if (request.UpdateModel.Status == 7 && complaint.ComplaintType == ComplaintTypeEnum.ProductReturn.ToString())
                 {
                     foreach (var detail in complaint.ComplaintDetails)
                     {
