@@ -24,10 +24,10 @@ namespace GreenSpace.Application.Services
                 return null;
 
             await using var stream = file.OpenReadStream();
-            var uploadParams = new ImageUploadParams
+            var uploadParams = new RawUploadParams
             {
                 File = new FileDescription(file.FileName, stream),
-                Transformation = new Transformation().Quality(80) // Giảm dung lượng ảnh
+               
             };
 
             var uploadResult = await _cloudinary.UploadAsync(uploadParams);
