@@ -35,6 +35,7 @@ using GreenSpace.Application.ViewModels.Banner;
 using GreenSpace.Application.ViewModels.Address;
 using GreenSpace.Application.ViewModels.ComplaintReason;
 using GreenSpace.Application.ViewModels.TransactionPercentage;
+using GreenSpace.Application.ViewModels.ExternalProduct;
 
 namespace GreenSpace.Application.Profiles;
 
@@ -249,5 +250,9 @@ public class MapperConfigurationProfile : Profile
         CreateMap<TransactionPercentage, TransactionPercentageViewModel>().ReverseMap();
         CreateMap<TransactionPercentage, TransactionPercentageCreateModel>().ReverseMap();
 
+        CreateMap<ExternalProducts, ExternalProductsViewModel>().ReverseMap();
+        CreateMap<ExternalProducts, ExternalProductsCreateModel>().ReverseMap();
+        CreateMap<ExternalProducts, ExternalProductsUpdateModel>().ReverseMap();
+        CreateMap<ExternalProducts, ExternalProductsUpdatePriceModel>().ReverseMap();
     }
 }

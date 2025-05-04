@@ -38,5 +38,6 @@ public interface IUnitOfWork
     IDocumentRepository DocumentRepository { get; }
     IComplaintReasonRepository ComplaintReasonRepository { get; }
     ITransactionPercentageRepository TransactionPercentageRepository { get; }
+    IExternalProductsRepository ExternalProductsRepository { get; }
 
 }

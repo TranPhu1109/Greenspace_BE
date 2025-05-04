@@ -1,4 +1,5 @@
-﻿using GreenSpace.Application.ViewModels.Images;
+﻿using GreenSpace.Application.ViewModels.ExternalProduct;
+using GreenSpace.Application.ViewModels.Images;
 using GreenSpace.Application.ViewModels.ProductDetail;
 using GreenSpace.Application.ViewModels.RecordDesign;
 using GreenSpace.Application.ViewModels.RecordSketch;
@@ -58,5 +59,6 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
         public List<WorkTaskViewModel> WorkTasks { get; set; } = new();
         public List<RecordSketchViewModel> RecordSketches { get; set; } = new();
         public List<RecordDesignViewModel> RecordDesigns{ get; set; } = new();
+        public List<ExternalProductsViewModel> ExternalProducts { get; set; } = new List<ExternalProductsViewModel>();
     }
 }

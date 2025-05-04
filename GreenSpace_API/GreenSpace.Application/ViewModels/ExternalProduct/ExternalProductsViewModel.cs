@@ -4,20 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GreenSpace.Domain.Entities
+namespace GreenSpace.Application.ViewModels.ExternalProduct
 {
-    public class ExternalProducts : BaseEntity
+    public class ExternalProductsViewModel
     {
+        public Guid Id { get; set; }
         public Guid ServiceOrderId { get; set; }
-
         public string Name { get; set; } = string.Empty;
         public int Quantity { get; set; }
 
-        public decimal Price { get; set; } = default!;
+        public decimal Price { get; set; }
         public string Description { get; set; } = string.Empty;
-        public string ImageURL { get; set; } = string.Empty ;
-        public decimal TotalPrice { get; set; } = default!;
+        public string ImageURL { get; set; } = string.Empty;
+        public decimal TotalPrice { get; set; }
         public bool IsSell { get; set; } = false;
-        public virtual ServiceOrder ServiceOrder { get; set; } = null!;
     }
 }

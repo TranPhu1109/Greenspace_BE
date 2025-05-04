@@ -42,11 +42,18 @@ namespace GreenSpace.Application.Features.ServiceOrders.Queries
 
             public async Task<PaginatedList<ServiceOrderViewModel>> Handle(GetAllServiceOrderNoUsingIdeaQuery request, CancellationToken cancellationToken)
             {
-                var ordersService = await _unitOfWork.ServiceOrderRepository.WhereAsync(x => x.ServiceType == ServiceTypeEnum.NoDesignIdea.ToString(), x => x.User, x => x.Image, x => x.ServiceOrderDetails, x => x.WorkTask, x => x.RecordDesigns, x => x.RecordSketches);
+                var ordersService = await _unitOfWork.ServiceOrderRepository.WhereAsync(x => x.ServiceType == ServiceTypeEnum.NoDesignIdea.ToString(), x => x.User, x => x.Image, x => x.ServiceOrderDetails, x => x.WorkTask, x => x.RecordDesigns, x => x.RecordSketches, x => x.ExternalProducts);
                 if (ordersService == null || !ordersService.Any())
                 {
                     throw new NotFoundException($"There are no ordersService in DB.");
                 }
+                foreach (var order in ordersService)
+                {
+
+                    order.ExternalProducts = order.ExternalProducts.Where(d => !d.IsDeleted).ToList();
+                    order.WorkTask = order.WorkTask.Where(d => !d.IsDeleted).ToList();
+                }
+
                 var viewModels = _mapper.Map<List<ServiceOrderViewModel>>(ordersService);
                 return PaginatedList<ServiceOrderViewModel>.Create(
                     source: viewModels.AsQueryable(),
