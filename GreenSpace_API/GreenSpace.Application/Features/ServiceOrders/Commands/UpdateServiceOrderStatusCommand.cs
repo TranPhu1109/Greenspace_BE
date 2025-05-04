@@ -4,6 +4,7 @@ using GreenSpace.Application.GlobalExceptionHandling.Exceptions;
 using GreenSpace.Application.SignalR;
 using GreenSpace.Application.ViewModels.Category;
 using GreenSpace.Application.ViewModels.ServiceOrder;
+using GreenSpace.Domain.Entities;
 using GreenSpace.Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
@@ -53,7 +54,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
             {
                 _logger.LogInformation("Update status serviceOrder:\n");
 
-                var servicerOrder = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(request.Id ,x => x.ServiceOrderDetails);
+                var servicerOrder = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(request.Id ,x => x.ServiceOrderDetails,x => x.ExternalProducts);
                 if (servicerOrder is null) throw new NotFoundException($"servicerOrder with Id-{request.Id} does not exist!");
 
                 if (!Enum.IsDefined(typeof(ServiceOrderStatus), request.UpdateModel.Status))
@@ -83,6 +84,28 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                         _unitOfWork.ProductRepository.Update(product);
                     }
                 }
+                if (request.UpdateModel.Status == 14 )
+                {
+                    foreach (var detail in servicerOrder.ServiceOrderDetails)
+                    {
+                        var product = await _unitOfWork.ProductRepository.GetByIdAsync(detail.ProductId);
+                        if (product == null)
+                        {
+                            throw new NotFoundException($"Product with Id-{detail.ProductId} not found!");
+                        }
+
+                        // Cộng lại số lượng vào kho
+                        product.Stock += detail.Quantity;
+                        _unitOfWork.ProductRepository.Update(product);
+                    }
+                }
+                if(request.UpdateModel.Status > 4)
+                {
+                    servicerOrder.MaterialPrice = servicerOrder.ServiceOrderDetails.Sum(d => d.TotalPrice);
+                    var totalExternal = servicerOrder.ExternalProducts.Where(e => !e.IsDeleted).Sum(e => e.TotalPrice);
+                    servicerOrder.TotalCost = (servicerOrder.MaterialPrice ?? 0) + (servicerOrder.DesignPrice ?? 0) + totalExternal;
+                }
+               
                 _mapper.Map(request.UpdateModel, servicerOrder);
                 _unitOfWork.ServiceOrderRepository.Update(servicerOrder);
 
