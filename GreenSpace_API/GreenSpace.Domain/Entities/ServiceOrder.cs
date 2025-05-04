@@ -51,5 +51,6 @@ public class ServiceOrder :BaseEntity
 
     public ICollection<WorkTask> WorkTask { get; set; } = new List<WorkTask>();
     public ICollection<ServiceFeedback> ServiceFeedbacks { get; set; } = new List<ServiceFeedback>();
+    public virtual ICollection<ExternalProducts> ExternalProducts { get; set; } = new List<ExternalProducts>();
     public Image Image { get; set; } = default!;
 }
