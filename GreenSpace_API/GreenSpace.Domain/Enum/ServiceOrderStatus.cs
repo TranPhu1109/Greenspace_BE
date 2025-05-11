@@ -40,5 +40,7 @@ namespace GreenSpace.Domain.Enum
         ReInstall = 29,                     // lắp đặt lại
         CustomerConfirm = 30,                // khách hàng xác nhận
         Successfully = 31,                // thành công
+        ReDetermineMaterialPrice = 32,
+        MaterialPriceConfirmed = 33
     }
 }

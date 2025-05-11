@@ -52,7 +52,7 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
             public async Task<bool> Handle(UpdateServiceOrderCommand request, CancellationToken cancellationToken)
             {
                 _logger.LogInformation("Update ServiceOrder:\n");
-                var serviceOrder = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(request.Id,p => p.Image,p => p.ServiceOrderDetails);
+                var serviceOrder = await _unitOfWork.ServiceOrderRepository.GetByIdAsync(request.Id,p => p.Image,p => p.ServiceOrderDetails,p => p.ExternalProducts);
                 if (serviceOrder is null) throw new NotFoundException($"ServiceOrder with Id-{request.Id} is not exist!");
                 var design = serviceOrder.DesignIdeaId.HasValue ?
                            await _unitOfWork.DesignIdeaRepository.GetByIdAsync(serviceOrder.DesignIdeaId.Value) : null;
@@ -238,7 +238,11 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                     }
                     serviceOrder.ServiceOrderDetails = existingDetails;
                 }
-                serviceOrder.MaterialPrice = serviceOrder.ServiceOrderDetails.Sum(d => d.TotalPrice);
+                //serviceOrder.MaterialPrice = serviceOrder.ServiceOrderDetails.Sum(d => d.TotalPrice);
+                serviceOrder.MaterialPrice = serviceOrder.ServiceOrderDetails.Sum(d => d.TotalPrice)
+                                                   + serviceOrder.ExternalProducts.Where(e => !e.IsDeleted).Sum(e => e.TotalPrice);
+
+                serviceOrder.TotalCost = (serviceOrder.MaterialPrice ?? 0) + (serviceOrder.DesignPrice ?? 0);
 
                 _mapper.Map(request.UpdateModel, serviceOrder);
                 serviceOrder.ServiceType = ((ServiceTypeEnum)request.UpdateModel.ServiceType).ToString();

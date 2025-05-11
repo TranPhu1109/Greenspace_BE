@@ -53,6 +53,7 @@ namespace GreenSpace.Application.ViewModels.ServiceOrder
         public TimeOnly? ContructionTime { get; set; }
         public decimal ContructionPrice { get; set; } = default!;
         public DateTime CreationDate { get; set; }
+        public DateTime? ModificationDate { get; set; } = null;
         public ImageCreateModel? Image { get; set; }
 
         public List<ServiceOrderDetailViewModel> ServiceOrderDetails { get; set; } = new List<ServiceOrderDetailViewModel>();

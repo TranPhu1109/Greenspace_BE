@@ -101,9 +101,12 @@ namespace GreenSpace.Application.Features.ServiceOrders.Commands
                 }
                 if(request.UpdateModel.Status > 4)
                 {
-                    servicerOrder.MaterialPrice = servicerOrder.ServiceOrderDetails.Sum(d => d.TotalPrice);
-                    var totalExternal = servicerOrder.ExternalProducts.Where(e => !e.IsDeleted).Sum(e => e.TotalPrice);
-                    servicerOrder.TotalCost = (servicerOrder.MaterialPrice ?? 0) + (servicerOrder.DesignPrice ?? 0) + totalExternal;
+                    //servicerOrder.MaterialPrice = servicerOrder.ServiceOrderDetails.Sum(d => d.TotalPrice);
+                    //var totalExternal = servicerOrder.ExternalProducts.Where(e => !e.IsDeleted).Sum(e => e.TotalPrice);
+                    servicerOrder.MaterialPrice = servicerOrder.ServiceOrderDetails.Sum(d => d.TotalPrice)
+                                                    + servicerOrder.ExternalProducts.Where(e => !e.IsDeleted).Sum(e => e.TotalPrice);
+
+                    servicerOrder.TotalCost = (servicerOrder.MaterialPrice ?? 0) + (servicerOrder.DesignPrice ?? 0);
                 }
                
                 _mapper.Map(request.UpdateModel, servicerOrder);
