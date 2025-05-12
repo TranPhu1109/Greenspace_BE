@@ -5,6 +5,7 @@ using GreenSpace.Application.Features.Complaints.Queries;
 using GreenSpace.Application.Features.ServiceOrders.Queries;
 using GreenSpace.Application.Features.WorkTasks.Queries;
 using GreenSpace.Application.ViewModels.Blogs;
+using GreenSpace.Application.ViewModels.ComplaintDetail;
 using GreenSpace.Application.ViewModels.Complaints;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -98,6 +99,21 @@ namespace GreenSpace.WebAPI.Controllers
         {
 
             var result = await _mediator.Send(new UpdateComplaintCommand { Id = id, UpdateModel = model });
+            if (!result)
+            {
+                return BadRequest("Update Fail!");
+            }
+            return Ok("Update Successfully!");
+        }
+
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [HttpPut("complaintDetail/{id}")]
+        public async Task<IActionResult> UpdateDetail(Guid id, [FromBody] ComplaintDetailsUpdateModel model)
+        {
+
+            var result = await _mediator.Send(new UpdateComplaintDetailCommand { Id = id, UpdateModel = model });
             if (!result)
             {
                 return BadRequest("Update Fail!");

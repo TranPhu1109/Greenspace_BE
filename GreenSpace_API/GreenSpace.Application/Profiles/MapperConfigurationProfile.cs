@@ -232,6 +232,9 @@ public class MapperConfigurationProfile : Profile
         CreateMap<ComplaintDetail, ComplaintDetailCreateModel>().ReverseMap();
         CreateMap<ComplaintDetail, ComplaintDetailViewModel>().ReverseMap();
 
+        CreateMap<Complaint, ComplaintDetailsUpdateModel>()
+            .ReverseMap();
+          
         CreateMap<WebManager, BannerViewModel>().ReverseMap();
         CreateMap<WebManager, BannerCreateModel>().ReverseMap();
 

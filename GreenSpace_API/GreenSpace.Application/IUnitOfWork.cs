@@ -40,4 +40,6 @@ public interface IUnitOfWork
     ITransactionPercentageRepository TransactionPercentageRepository { get; }
     IExternalProductsRepository ExternalProductsRepository { get; }
 
+    IComplaintDetailRepository ComplaintDetailRepository { get; }
+
 }

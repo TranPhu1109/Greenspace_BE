@@ -41,7 +41,8 @@ public class UnitOfWork : IUnitOfWork
     IAddressRepository addressRepository,
     IComplaintReasonRepository complaintReasonRepository,
     ITransactionPercentageRepository transactionPercentageRepository,
-    IExternalProductsRepository externalProductsRepository
+    IExternalProductsRepository externalProductsRepository,
+    IComplaintDetailRepository complaintDetaislRepository
     )
     {
         _dbContext = dbcontext;
@@ -76,6 +77,8 @@ public class UnitOfWork : IUnitOfWork
         ComplaintReasonRepository = complaintReasonRepository;
         TransactionPercentageRepository = transactionPercentageRepository;
         ExternalProductsRepository = externalProductsRepository;
+        ComplaintDetailRepository = complaintDetaislRepository;
+        
     }
     public IUserRepository UserRepository { get; }
     public IProductRepository ProductRepository { get; }
@@ -111,6 +114,7 @@ public class UnitOfWork : IUnitOfWork
     public IComplaintReasonRepository ComplaintReasonRepository { get; }
     public ITransactionPercentageRepository TransactionPercentageRepository { get; }
     public IExternalProductsRepository ExternalProductsRepository { get; }
+    public IComplaintDetailRepository ComplaintDetailRepository {  get; }
     public async Task<bool> SaveChangesAsync() => (await _dbContext.SaveChangesAsync()) > 0;
 
 }
