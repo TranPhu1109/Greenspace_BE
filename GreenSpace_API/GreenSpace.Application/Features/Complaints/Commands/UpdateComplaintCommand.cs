@@ -69,6 +69,11 @@ namespace GreenSpace.Application.Features.Complaints.Commands
                 {
                     foreach (var detail in complaint.ComplaintDetails)
                     {
+                        if (!detail.IsCheck)
+                        {
+                            continue;
+                        }
+
                         var product = await _unitOfWork.ProductRepository.GetByIdAsync(detail.ProductId);
                         if (product == null)
                         {
