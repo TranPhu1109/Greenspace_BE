@@ -85,7 +85,8 @@ namespace GreenSpace.Application.Features.Complaints.Commands
                         ProductId = product.Id,
                         Quantity = item.Quantity,
                         Price = product.Price,
-                        TotalPrice = product.Price * item.Quantity
+                        TotalPrice = product.Price * item.Quantity,
+                        IsCheck = false
                     };
 
 
