@@ -51,7 +51,7 @@ namespace GreenSpace.Application.Features.WorkTasks.Commands
                 _logger.LogInformation("Create Task:\n");
                 var task = _mapper.Map<WorkTask>(request.CreateModel);
                 task.Id = Guid.NewGuid();
-                task.Status = (int)ContructTaksEnum.Installing;
+                task.Status = (int)WorkTasksEnum.Pending;
                 await _unitOfWork.WorkTaskRepository.AddAsync(task);
                 await _unitOfWork.SaveChangesAsync();
                 await _hubContext.Clients.All.SendAsync("messageReceived", "CreateTask", $"{task.Id}");
