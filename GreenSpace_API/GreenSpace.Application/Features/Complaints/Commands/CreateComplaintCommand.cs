@@ -29,7 +29,7 @@ namespace GreenSpace.Application.Features.Complaints.Commands
                 RuleFor(x => x.CreateModel.UserId).NotNull().NotEmpty().WithMessage("userId  must not be null or empty");
 
                 RuleFor(x => x.CreateModel.ComplaintType).NotNull().WithMessage("Type must not be empty");
-                RuleFor(x => x.CreateModel.Reason).NotNull().NotEmpty().WithMessage("Reason  must not be null or empty");
+                RuleFor(x => x.CreateModel.ComplaintReasonId).NotNull().NotEmpty().WithMessage("Reason  must not be null or empty");
 
 
             }
