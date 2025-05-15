@@ -23,7 +23,7 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
             if (failures.Count != 0)
             {
                 var errList = string.Join("\\n", failures);
-                throw new ValidationException(errList);
+                //throw new ValidationException(errList);
             }
         }
         return await next().ConfigureAwait(false);
