@@ -31,7 +31,7 @@ public class RefundOrderCommand : IRequest<bool>
             {
                 throw new Exception("OrderId is required.");
             }
-            var bill = await unitOfWork.BillRepository.FirstOrDefaultAsync(x => x.OrderId == request.OrderId,x => x.Order);
+            var bill = await unitOfWork.BillRepository.FirstOrDefaultAsync(x => x.OrderId == request.OrderId);
             if (bill == null)
             {
                 throw new Exception($"No Bill found for ServiceOrderId: {request.OrderId}");
