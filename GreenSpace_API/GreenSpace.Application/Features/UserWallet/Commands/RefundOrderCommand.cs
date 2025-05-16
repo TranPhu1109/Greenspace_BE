@@ -31,7 +31,7 @@ public class RefundOrderCommand : IRequest<bool>
             {
                 throw new Exception("OrderId is required.");
             }
-            var bill = await unitOfWork.BillRepository.FirstOrDefaultAsync(x => x.OrderId == request.OrderId);
+            var bill = await unitOfWork.BillRepository.FirstOrDefaultAsync(x => x.OrderId == request.OrderId,x => x.Order);
             if (bill == null)
             {
                 throw new Exception($"No Bill found for ServiceOrderId: {request.OrderId}");
@@ -45,7 +45,7 @@ public class RefundOrderCommand : IRequest<bool>
             }
             
             // số tiền hoàn lại
-            var refundAmount = bill.Price;
+            var refundAmount = bill.Price + (bill.Order.ShipPrice ?? 0);
 
             // Cộng tiền vào ví
             userWallet.Amount += refundAmount;

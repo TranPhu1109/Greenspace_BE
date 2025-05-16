@@ -45,7 +45,7 @@ public class RefundForComplaintCommand : IRequest<bool>
             }
             
             // Tính 30% số tiền hoàn lại
-            var listcomplaintDetail = complaint.ComplaintDetails.ToList();
+            var listcomplaintDetail = complaint.ComplaintDetails.Where(x => x.IsCheck == true).ToList();
             var sum = listcomplaintDetail.Sum(x => x.TotalPrice);
 
             // Cộng tiền vào ví
