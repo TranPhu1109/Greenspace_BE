@@ -106,6 +106,17 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                 {
                     throw new Exception(" not found.");
                 }
+                var selectedPharse = await _unitOfWork.RecordSketchRepository.FirstOrDefaultAsync(x => x.ServiceOrderId == contract.ServiceOrderId && x.isSelected == true,x => x.Image);
+
+                //image phác thảo
+
+                var httpClient = new HttpClient();
+
+                byte[] Image1 = await new HttpClient().GetByteArrayAsync(selectedPharse.Image.ImageUrl);
+                byte[] Image2 = await new HttpClient().GetByteArrayAsync(selectedPharse.Image.Image2);
+                byte[] Image3 = await new HttpClient().GetByteArrayAsync(selectedPharse.Image.Image3);
+
+
                 // Tạo model cho PDF
                 var model = new ContractModel
                 {
@@ -117,7 +128,11 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                     ServiceOrderId = contract.ServiceOrderId,
                     DepositPercentage = service.DepositPercentage,
                     RefundPercentage = service.RefundPercentage,
-                    SignatureImageBytes = signatureImage
+                    SignatureImageBytes = signatureImage,
+                    Pharse = selectedPharse.phase,
+                    SketchImage1 = Image1,
+                    SketchImage2 = Image2,
+                    SketchImage3 = Image3
                 };
 
                 // Render PDF bằng QuestPDF
@@ -138,6 +153,10 @@ namespace GreenSpace.Application.Features.Contracts.Commands
             public Guid ServiceOrderId { get; set; } = default!;
             public decimal DepositPercentage { get; set; }
             public decimal RefundPercentage { get; set; }
+            public int Pharse { get; set; }
+            public byte[]? SketchImage1 { get; set; }
+            public byte[]? SketchImage2 { get; set; }
+            public byte[]? SketchImage3 { get; set; }
             public byte[] SignatureImageBytes { get; set; } = default!;
         }
 
@@ -159,9 +178,9 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                 {
                     page.Size(PageSizes.A4);
                     page.Margin(2, QuestPDF.Infrastructure.Unit.Centimetre);
-                    page.DefaultTextStyle(x => x.FontSize(12));
+                    page.DefaultTextStyle(x => x.FontSize(14));
 
-                    page.Header().Column(col =>
+                    page.Header().ShowOnce().Column(col =>
                     {
                         col.Item().AlignCenter().Text("CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM").Bold();
                         col.Item().AlignCenter().Text("Độc lập - Tự do - Hạnh phúc").Italic().Underline();
@@ -169,7 +188,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                         col.Item().AlignCenter().Text("HỢP ĐỒNG DỊCH VỤ THIẾT KẾ").FontSize(18).Bold();
                         col.Item().AlignCenter().Text($"DỊCH VỤ THIẾT KẾ: {contract.ServiceOrderId}").FontSize(14);
                     });
-
+                   
                     page.Content().Column(col =>
                     {
                         col.Item().Text("BÊN A: BÊN CUNG CẤP DỊCH VỤ").Bold();
@@ -195,12 +214,24 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                         col.Item().Text($"Đặt cọc {contract.DepositPercentage:0}% tiền thiết kế: {deposit:N0} VNĐ.");
                         col.Item().Text($"Hoàn trả {contract.RefundPercentage:0}% tiền đặt cọc nếu ngưng giữa chừng giai đoạn thiết kế: {refund:N0} VNĐ.");
                         col.Item().Text($"Nếu ngưng khi đã hoàn tất thiết kế chi tiết: phải trả đủ phần còn lại {remaining:N0} VNĐ.");
+                         col.Item().Text($"Bảng phác thảo được chọn: {contract.Pharse}.");
+                        col.Item().PaddingTop(10).Text("Ảnh phác thảo").Bold();
+
+                        col.Item().Row(row =>
+                        {
+                            row.RelativeItem().Image(contract.SketchImage1).FitWidth();
+                            row.RelativeItem().Image(contract.SketchImage2).FitWidth();
+                            row.RelativeItem().Image(contract.SketchImage3).FitWidth();
+                        });
+
+
 
                         col.Item().PaddingTop(10).Text("ĐIỀU KHOẢN CHUNG").Bold();
                         col.Item().Text("Hai bên cam kết thực hiện đúng các điều khoản của hợp đồng.");
-                        col.Item().Text("Lưu ý hợp đồng chưa bao gồm các chi phí vật liệu và chi phí hỗ trợ lắp đặt.");
+                        col.Item().Text("Lưu ý hợp đồng chưa bao gồm các chi phí vật liệu !");
                         col.Item().Text("Hợp đồng có hiệu lực kể từ ngày ký kết.");
 
+                        col.Item().PageBreak();
                         col.Item().PaddingTop(20).Text("ĐẠI DIỆN CÁC BÊN").Bold();
                         col.Item().Row(row =>
                         {
@@ -217,6 +248,7 @@ namespace GreenSpace.Application.Features.Contracts.Commands
                                                 .FitWidth()
                                                 );
                         });
+
                     });
 
                     page.Footer().AlignCenter().Text("GreenSpaces - Hợp đồng được tạo tự động");

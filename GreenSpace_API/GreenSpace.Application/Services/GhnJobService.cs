@@ -30,7 +30,7 @@ namespace GreenSpace.Application.Services
             client.BaseAddress = new Uri("https://dev-online-gateway.ghn.vn/");
             client.DefaultRequestHeaders.Add("Token", "3dd45171-07cc-11f0-9f28-eacfdef119b3"); 
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            bool hasChanges = false;
             var order = await _unitOfWork.OrderRepository.WhereAsync(x => x.DeliveryCode != null && x.Status != 2 && x.Status != 3 && x.Status !=10);
             foreach (var item in order)
             {
@@ -59,7 +59,8 @@ namespace GreenSpace.Application.Services
                     {
                         item.Status = (int)mappedStatus;
                         _unitOfWork.OrderRepository.Update(item);
-                     //   await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateOrder", new { item.Id, Status = (int)mappedStatus });
+                        hasChanges = true;
+                        //   await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateOrder", new { item.Id, Status = (int)mappedStatus });
                     }
 
                 }
@@ -98,7 +99,8 @@ namespace GreenSpace.Application.Services
                     {
                         item.Status = (int)mappedStatus;
                         _unitOfWork.ServiceOrderRepository.Update(item);
-                       // await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateOrderService", new { item.Id, Status = (int)mappedStatus });
+                        hasChanges = true;
+                        // await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateOrderService", new { item.Id, Status = (int)mappedStatus });
                     }
 
                 }
@@ -133,6 +135,7 @@ namespace GreenSpace.Application.Services
                     {
                         item.Status = (int)mappedStatus;
                         _unitOfWork.ComplaintRepository.Update(item);
+                        hasChanges = true;
                         //await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateComplaint", new { item.OrderId, Status = (int)mappedStatus });
 
                     }
@@ -145,8 +148,13 @@ namespace GreenSpace.Application.Services
                     continue;
                 }
             }
-            await _unitOfWork.SaveChangesAsync();
-            await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateJob");
+            var result = await _unitOfWork.SaveChangesAsync();
+
+            if (hasChanges)
+            {
+                await _hubContext.Clients.All.SendAsync("messageReceived", "UpdateJob");
+                _logger.LogInformation("SignalR message sent: UpdateJob");
+            }
 
         }
 
