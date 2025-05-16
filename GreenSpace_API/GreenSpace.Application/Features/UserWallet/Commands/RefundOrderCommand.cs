@@ -45,7 +45,7 @@ public class RefundOrderCommand : IRequest<bool>
             }
             
             // số tiền hoàn lại
-            var refundAmount = bill.Price + (bill.Order.ShipPrice ?? 0);
+            var refundAmount = bill.Price;
 
             // Cộng tiền vào ví
             userWallet.Amount += refundAmount;
